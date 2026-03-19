@@ -1,141 +1,92 @@
 import streamlit as st
 import os
 import base64
-from datetime import datetime
 
-# --- 1. CONFIGURACIÓN DE LA APP ---
-st.set_page_config(page_title="App Grupo JPL | Acceso Seguro", layout="wide", initial_sidebar_state="expanded")
+# --- 1. CONFIGURACIÓN E IDENTIDAD ---
+st.set_page_config(page_title="Grupo JPL | Sistema 0312", layout="wide")
 
-def get_base64(bin_file):
-    if os.path.exists(bin_file):
-        with open(bin_file, 'rb') as f:
-            data = f.read()
-        return base64.b64encode(data).decode()
-    return None
-
-logo_b64 = get_base64("Logos/Logo_robot_2007.jpg")
-fondo_b64 = get_base64("Logos/fondo.jpg")
-
-# --- 2. ESTILOS DE APLICACIÓN (AJUSTE ROJO) ---
-st.html(f"""
+# --- 2. ESTILOS INSTITUCIONALES (CORREGIDOS PARA CELULARES) ---
+st.markdown("""
 <style>
-    .stApp {{ background-color: #f4f7f6 !important; }}
+    .stApp { background-color: #FFFFFF !important; }
     
-    /* Barra Superior Estilo Software */
-    .app-header {{
-        display: flex; justify-content: space-between; align-items: center;
-        padding: 10px 30px; background: linear-gradient(180deg, #f0f0f0 0%, #bdbdbd 100%);
-        border-bottom: 2px solid #555; position: sticky; top: 0; z-index: 99;
-    }}
-    #reloj-app {{ font-family: 'Courier New', monospace; font-weight: bold; color: #111; }}
+    /* Sidebar Vinotinto */
+    [data-testid="stSidebar"] { 
+        background-color: #800000 !important; 
+        border-right: 2px solid #4F4F4F;
+    }
+    [data-testid="stSidebar"] * { color: #FFFFFF !important; }
 
-    /* FORMULARIO DE LOGIN */
-    .login-box {{
-        background: white; padding: 40px; border-radius: 15px;
-        box-shadow: 0px 10px 30px rgba(0,0,0,0.1); border-top: 5px solid #d32f2f;
-    }}
-    
-    /* --- CAMBIO SOLICITADO: MENÚ LATERAL EN ROJO --- */
-    [data-testid="stSidebar"] {{
-        background-color: #b71c1c !important; /* Rojo Intenso */
-    }}
-    
-    /* Color del texto y radio buttons en el menú lateral para que resalten en blanco */
-    [data-testid="stSidebar"] .stMarkdown p, [data-testid="stSidebar"] label, [data-testid="stSidebar"] span {{
+    /* Botón de Ingreso RESALTADO */
+    div.stButton > button:first-child {
+        background-color: #800000 !important; 
         color: white !important;
         font-weight: bold !important;
-    }}
-    
-    /* Estilo para los botones dentro del sidebar */
-    [data-testid="stSidebar"] button {{
-        background-color: #ffffff !important;
-        color: #b71c1c !important;
-        border-radius: 8px !important;
-    }}
+        border-radius: 5px !important;
+        border: 2px solid #000000 !important;
+        width: 100% !important;
+        height: 3em !important;
+    }
 
-    h1, h2, h3, p, label {{ font-family: 'Comic Sans MS', cursive !important; color: #111 !important; }}
+    /* Encabezado Negro */
+    .app-header {
+        padding: 15px; background-color: #000000;
+        border-bottom: 4px solid #800000; color: #FFFFFF;
+        text-align: center; font-weight: bold;
+    }
+
+    h1, h2, h3 { color: #000000 !important; }
 </style>
+""", unsafe_allow_html=True)
 
-<script>
-    function updateClock() {{
-        const now = new Date();
-        document.getElementById('reloj-app').innerHTML = now.toLocaleTimeString('es-CO', {{ hour12: false }});
-    }}
-    setInterval(updateClock, 1000);
-</script>
-""")
-
-# --- 3. MÓDULO DE SEGURIDAD (LOGIN) ---
+# --- 3. LÓGICA DE ACCESO (LOGIN FLEXIBLE) ---
 if 'autenticado' not in st.session_state:
     st.session_state['autenticado'] = False
 
-def check_login():
-    if st.session_state['usuario'].lower() == "gerardo" and st.session_state['clave'] == "mym2007":
-        st.session_state['autenticado'] = True
-    else:
-        st.error("❌ Credenciales incorrectas para el Grupo JPL")
-
 if not st.session_state['autenticado']:
-    st.html('<div style="height: 50px;"></div>')
-    col_l1, col_l2, col_l3 = st.columns([1, 1.2, 1])
-    with col_l2:
-        st.html('<div class="login-box">')
-        if logo_b64:
-            st.image(f"data:image/jpeg;base64,{logo_b64}", width=150)
-        st.title("🛡️ Grupo JPL")
-        st.subheader("Acceso SST")
-        st.text_input("Usuario:", key="usuario")
-        st.text_input("Contraseña:", type="password", key="clave")
-        st.button("Ingresar a la App", on_click=check_login, use_container_width=True)
-        st.html('</div>')
+    col1, col2, col3 = st.columns([1, 1, 1])
+    with col2:
+        st.markdown("### 🛡️ ACCESO GRUPO JPL")
+        # El .strip() elimina espacios accidentales que ponen los celulares
+        usuario = st.text_input("Usuario:").strip().lower()
+        clave = st.text_input("Clave:", type="password").strip()
+        
+        if st.button("INGRESAR A LA APP"):
+            if usuario == "gerardo" and clave == "mym2007":
+                st.session_state['autenticado'] = True
+                st.rerun()
+            else:
+                st.error("❌ Credenciales incorrectas")
     st.stop()
 
-# --- 4. CUERPO DE LA APP (POST-LOGIN) ---
-
-st.html(f"""
-<div class="app-header">
-    <div style="font-weight: bold; color: #b71c1c;">🛡️ GRUPO JPL | COMMAND CENTER v2.1</div>
-    <div id="reloj-app">00:00:00</div>
-</div>
-""")
+# --- 4. CUERPO DE LA APP (DASHBOARD) ---
+st.html('<div class="app-header">GRUPO JPL | Jplprevencionistas - Gestión de Riesgos</div>')
 
 with st.sidebar:
-    st.html('<h2 style="color:white !important;">Menú de Gestión</h2>')
-    menu = st.radio("MÓDULOS:", ["📊 Dashboard", "📝 Res. 0312", "📁 Documentos", "🔔 Alertas"])
-    st.markdown("---")
-    if st.button("Cerrar Sesión"):
+    st.markdown("### 📱 CONTACTO OFICIAL")
+    st.write("📞 **Tel:** 301 6015891")
+    st.write("📧 **Email:** jplprevencionistas@gmail.com")
+    st.write("🌐 **FB:** Jplprevencionistas")
+    st.divider()
+    menu = st.radio("MÓDULOS:", ["📊 Dashboard", "🛡️ Auditoría 60 Ítems", "🔔 Alertas"])
+    if st.button("SALIR"):
         st.session_state['autenticado'] = False
         st.rerun()
 
-# --- LÓGICA DE MÓDULOS ---
-if menu == "📊 Dashboard":
-    st.header("Tablero de Mandos SST")
-    c1, c2, c3 = st.columns(3)
-    c1.metric("Estándares Verificados", "18/60", "Faltan 42")
-    c2.metric("Próxima Dotación", "Abril", "15 días")
-    c3.metric("Comités", "Al día", "Marzo")
-    
-    st.divider()
-    st.error("**ALERTA DE LEY:** Se requiere actualizar la firma de la política anual.")
-
-elif menu == "📝 Res. 0312":
-    st.header("Checklist: Resolución 0312")
-    st.info("Seleccione los ítems cumplidos para el Grupo JPL")
-    with st.container(border=True):
-        st.checkbox("Asignación de Responsable (Licencia)")
-        st.checkbox("Recursos Financieros")
-        st.checkbox("Afiliación Social Integral")
-        st.button("Actualizar Base de Datos")
-
-elif menu == "📁 Documentos":
-    st.header("Archivo Digital")
-    st.file_uploader("Cargar RUT, CC o Actas", type=['pdf', 'jpg'])
+# --- CONTENIDO DE MÓDULOS ---
+if menu == "🛡️ Auditoría 60 Ítems":
+    st.header("📋 Evaluación Res. 0312")
+    marcados = 0
+    with st.expander("FASE 1: Recursos (15 Items)"):
+        for i in range(1, 16):
+            if st.checkbox(f"Estándar {i}"): marcados += 1
+    st.metric("Cumplimiento Total", f"{int((marcados/60)*100)}%")
 
 elif menu == "🔔 Alertas":
-    st.header("Tiempos de Notificación")
-    st.slider("Días de pre-aviso (Dotación):", 1, 60, 30)
-    st.slider("Días de pre-aviso (Comités):", 1, 15, 5)
+    st.header("🔔 Alertas Algorítmicas")
+    st.error("🚨 MENSUAL: Acta de COPASST")
+    st.warning("⚠️ CUATRIMESTRAL: Entrega de EPP")
 
-# --- 5. FOOTER ---
-st.markdown("---")
-st.caption("Grupo JPL | Alianza MyM & Juan Prieto © 2026")
+else:
+    st.header("Dashboard General")
+    st.info("Bienvenido a la terminal de gestión del Grupo JPL.")
