@@ -14,10 +14,10 @@ def get_base64(bin_file):
     return None
 
 # Recursos Visuales (Ruta: Logos/)
-logo_original_b64 = get_base64("Logos/Logo_robot_2007.jpg")
+logo_original_b64 = get_base64("Logos/logo_robot_2007.jpg")
 fondo_b64 = get_base64("Logos/fondo.jpg")
 
-# --- 2. ESTILOS CSS (NEÓN, BOTONES Y REDES) ---
+# --- 2. ESTILOS CSS (NEÓN Y DISEÑO MyM) ---
 st.markdown(f"""
 <style>
     .stApp {{
@@ -74,8 +74,6 @@ st.html(f"""
 </div>
 """)
 
-# ... (Mantén tus secciones 1, 2 y 3 exactamente igual)
-
 # --- 4. LÓGICA DE NAVEGACIÓN ---
 if 'seccion' not in st.session_state:
     st.session_state.seccion = "INICIO"
@@ -87,13 +85,13 @@ with c1:
     if st.button("⚖️ HABEAS DATA", use_container_width=True):
         st.session_state.seccion = "LEGAL"
 with c2:
-    if st.button("🔧 SOPORTE TÉCNICO", use_container_width=True):
+    if st.button("🔧 TÉCNICO M&M", use_container_width=True):
         st.session_state.seccion = "TECNICO"
 with c3:
-    if st.button("💰 COTIZADOR MyM", use_container_width=True):
+    if st.button("💰 COTIZADOR", use_container_width=True):
         st.session_state.seccion = "COTIZADOR"
 with c4:
-    if st.button("📅 AGENDAR CITA", use_container_width=True):
+    if st.button("📅 CITAS", use_container_width=True):
         st.session_state.seccion = "CITAS"
 
 st.divider()
@@ -101,71 +99,108 @@ st.divider()
 # --- 5. DESPLIEGUE DE CONTENIDO ---
 
 if st.session_state.seccion == "LEGAL":
-    st.subheader("⚖️ Gestión de Habeas Data & Reclamaciones")
-    
-    # NUEVO: Evaluador de Viabilidad
-    st.info("🔍 **Evaluador de Viabilidad Legal**")
-    col_l1, col_l2 = st.columns(2)
-    with col_l1:
-        tiempo_mora = st.number_input("Años de mora o reporte:", min_value=0, max_value=20, step=1)
-    with col_l2:
-        ya_pago = st.checkbox("¿La deuda ya fue pagada?")
-    
-    if tiempo_mora >= 8:
-        st.success("✅ **DIAGNÓSTICO:** Viable por CADUCIDAD (Ley 2157). El reporte debe ser borrado.")
-    elif ya_pago:
-        st.success("✅ **DIAGNÓSTICO:** Viable por PAGO. Se solicita actualización inmediata.")
-    else:
-        st.warning("⚠️ Requiere análisis detallado de la historia crediticia.")
+    st.subheader("🛡️ Escudo Anti-Abuso y Habeas Data")
+    tab1, tab2, tab3 = st.tabs(["🔍 Evaluador", "📞 ¿Qué responder?", "📝 Petición"])
 
-    st.divider()
-    u_nom = st.text_input("Nombre Completo:").upper()
-    u_ent = st.text_input("Entidad a Reclamar:").upper()
-    if u_nom and u_ent:
-        doc = f"Bogotá, {ahora.strftime('%d/%m/%Y')}\n\nSeñores {u_ent}:\n\nYo, {u_nom}, en ejercicio del derecho de Habeas Data..."
-        st.text_area("Borrador de Documento:", value=doc, height=150)
-        st.download_button("📥 Descargar Petición", doc, file_name=f"Peticion_{u_nom}.txt")
+    with tab1:
+        st.info("📊 **Análisis de Viabilidad de la Deuda**")
+        col_l1, col_l2 = st.columns(2)
+        with col_l1:
+            fecha_vence = st.number_input("Años desde la mora:", min_value=0, max_value=20, step=1)
+            tipo_d = st.selectbox("Tipo de Deuda:", ["Tarjeta/Banco", "Celular/Internet", "Revistas/Varios", "Sistecrédito/Ropa"])
+        with col_l2:
+            ya_pago = st.checkbox("¿Ya pagó la deuda?")
+            acoso = st.checkbox("¿Acoso telefónico? (Ley 2300)")
 
+        if fecha_vence >= 8:
+            st.success("✅ **CADUCIDAD:** El reporte debe ser borrado (Ley 2157).")
+        elif fecha_vence >= 3 and tipo_d != "Tarjeta/Banco":
+            st.warning("⚠️ **POSIBLE PRESCRIPCIÓN:** No reconozca la deuda sin asesoría.")
+        if acoso:
+            st.error("🚫 **ABUSO:** Están violando la Ley 'Dejen de Fregar'.")
+
+    with tab2:
+        st.markdown("### 🗣️ Respuestas Legales Inmediatas")
+        with st.expander("1. Si exigen pago de deuda vieja (+4 años)"):
+            st.info("Diga: 'Solicite el soporte del títulovalor (pagaré) antes de negociar. Me acojo al derecho de inspección.'")
+        with st.expander("2. Si llaman en horarios prohibidos"):
+            st.info("Diga: 'Está incumpliendo la Ley 2300 de 2023. Procederé a denunciar ante la SIC si persiste.'")
+
+    with tab3:
+        st.markdown("### 📝 Datos para la Radicación")
+        col_d1, col_d2 = st.columns(2)
+        
+        with col_d1:
+            u_nom = st.text_input("Nombre Completo:").upper()
+            u_ced = st.text_input("Número de Cédula de Ciudadanía:")
+            u_tel = st.text_input("Teléfono de Contacto:")
+        
+        with col_d2:
+            u_ent = st.text_input("Casa de Cobranza / Entidad:").upper()
+            u_cor = st.text_input("Correo Electrónico para notificación:")
+            u_dir = st.text_input("Dirección de Residencia (Bogotá):")
+
+        if u_nom and u_ced and u_ent:
+            # Cuerpo del documento con todos los datos integrados
+            doc = (
+                f"Bogotá D.C., {ahora.strftime('%d/%m/%Y')}\n\n"
+                f"Señores:\n{u_ent}\nE. S. D.\n\n"
+                f"ASUNTO: RECLAMACIÓN DIRECTA - EJERCICIO DERECHO DE HABEAS DATA\n\n"
+                f"Yo, {u_nom}, identificado(a) con Cédula de Ciudadanía No. {u_ced}, "
+                f"residente en la dirección {u_dir}, con correo electrónico {u_cor} y teléfono {u_tel}; "
+                f"amparado en la Ley 1266 de 2008 y la Ley 2157 de 2021 (Borrón y Cuenta Nueva), "
+                f"solicito de manera respetuosa la ELIMINACIÓN, CORRECCIÓN O ACTUALIZACIÓN del reporte negativo "
+                f"presente en las centrales de riesgo (DataCrédito/Cifín) asociado a su entidad.\n\n"
+                f"Lo anterior debido a que la obligación ha cumplido el término de permanencia legal "
+                f"o presenta inconsistencias en su reporte.\n\n"
+                f"Quedo atento a su respuesta en los términos de ley (15 días hábiles).\n\n"
+                f"Cordialmente,\n\n"
+                f"{u_nom}\n"
+                f"C.C. {u_ced}"
+            )
+            
+            st.text_area("📄 Vista Previa del Documento:", value=doc, height=250)
+            
+            # Botón de descarga con el nombre del cliente para tu archivo
+            st.download_button(
+                label="📥 Descargar Petición Lista",
+                data=doc,
+                file_name=f"Reclamacion_{u_nom.replace(' ', '_')}.txt",
+                mime="text/plain"
+            )
 elif st.session_state.seccion == "TECNICO":
-    st.subheader("🔧 Mantenimiento Preventivo y Correctivo")
-    st.write("Especialistas en Computadores y Electrodomésticos.")
+    st.subheader("🔧 Soporte Técnico: Computadores y Electrodomésticos")
     col_t1, col_t2 = st.columns(2)
     with col_t1:
-        tipo_equipo = st.selectbox("Tipo de Equipo:", ["Computador PC/Portátil", "Nevera / Refrigeración", "Lavadora", "Otro Electrodoméstico"])
-        serial = st.text_input("Serial o Modelo:")
+        tipo_eq = st.selectbox("Equipo:", ["PC/Portátil", "Nevera", "Lavadora", "Otro"])
+        serial = st.text_input("Serial / Modelo:")
     with col_t2:
-        falla = st.text_area("Descripción de la Falla:")
-    st.button("Registrar Ingreso a Laboratorio")
+        falla = st.text_area("Diagnóstico inicial:")
+    st.button("Registrar en Base de Datos")
 
 elif st.session_state.seccion == "COTIZADOR":
     st.subheader("💰 Generador de Precios MyM")
     col_c1, col_c2 = st.columns(2)
     with col_c1:
-        serv_tipo = st.selectbox("Tipo de Servicio:", ["Mantenimiento Preventivo", "Mantenimiento Correctivo", "Diagnóstico Técnico"])
         modalidad = st.radio("Lugar del Servicio:", ["En Oficina", "A Domicilio"])
-    
-    # Lógica de Precios Gerardo M&M
-    tarifa_base = 40000
-    domicilio = 20000 if modalidad == "A Domicilio" else 0
-    total = tarifa_base + domicilio
-    
+        recargo = 20000 if modalidad == "A Domicilio" else 0
+        total = 40000 + recargo
     with col_c2:
         st.metric("Total a Cobrar", f"${total:,} COP")
-        st.caption(f"Base: ${tarifa_base:,} + Domicilio: ${domicilio:,}")
-        if st.button("Generar PDF de Cotización"):
-            st.write("Generando documento...")
+        st.caption(f"Base Mínima: $40.000 + Domicilio: ${recargo}")
 
 elif st.session_state.seccion == "CITAS":
-    st.subheader("📅 Agendamiento de Servicios")
-    st.write("Seleccione la modalidad para su visita técnica o legal.")
+    st.subheader("📅 Agendamiento MyM")
     ca1, ca2 = st.columns(2)
     with ca1:
-        if st.button("📍 CITA EN OFICINA (Base $40.000)", use_container_width=True):
-            st.success("✅ Solicitud recibida. Lo esperamos en nuestra oficina en Bogotá.")
+        if st.button("📍 CITA EN OFICINA"):
+            st.success("✅ Agendado en Oficina. Valor base: $40.000")
     with ca2:
-        if st.button("🏠 VISITA DOMICILIARIA ($60.000)", use_container_width=True):
-            st.warning("✅ Solicitud recibida. Un técnico se desplazará a su ubicación ($40k + $20k transporte).")
+        if st.button("🏠 VISITA DOMICILIARIA"):
+            st.warning("✅ Agendada Visita. Valor total: $60.000")
 
-# --- PIE DE PÁGINA ---
+else:
+    st.info("Seleccione un servicio arriba para desplegar las herramientas.")
+
 st.divider()
 st.caption(f"L.I.N.A. V15.4 | © {ahora.year} Soluciones M&M - Gerardo Martinez Lemus")
