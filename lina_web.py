@@ -138,8 +138,12 @@ if st.session_state.seccion == "LEGAL":
         with col_d2:
             u_ent = st.text_input("Casa de Cobranza / Entidad:").upper()
             u_cor = st.text_input("Correo Electrónico para notificación:")
-            u_dir = st.text_input("Dirección de Residencia (Bogotá):")
+            u_dir = st.text_input("Dirección de Residencia (Bogotá):") 
+            st.markdown("---")
+            foto_cedula = st.file_uploader("📂 Adjuntar Foto de Cédula (Opcional)", type=['jpg', 'png', 'pdf'])
 
+        if foto_cedula is not None:
+            st.success(f"✅ Archivo '{foto_cedula.name}' cargado con éxito.")
         if u_nom and u_ced and u_ent:
             # Cuerpo del documento con todos los datos integrados
             doc = (
