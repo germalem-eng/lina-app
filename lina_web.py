@@ -2,7 +2,11 @@ import streamlit as st
 import os
 import base64
 import datetime
+import pytz # Agrega esto al inicio de tu archivo (Línea 1 o 2)
 
+# Reemplaza tu línea 60 por esta:
+zona_bogota = pytz.timezone('America/Bogota')
+ahora = datetime.datetime.now(zona_bogota)
 # --- 1. CONFIGURACIÓN DEL SISTEMA ---
 st.set_page_config(page_title="LINA V15.4 | Gestión MyM", layout="wide")
 
@@ -49,19 +53,28 @@ st.markdown(f"""
 </style>
 """, unsafe_allow_html=True)
 
-# --- 3. BARRA SUPERIOR E IDENTIDAD ---
-ahora = datetime.datetime.now()
+# --- 3. BARRA SUPERIOR CON RELOJ SINCRONIZADO ---
+# Usamos un componente de Streamlit para capturar la hora del cliente
+from streamlit_autorefresh import st_autorefresh
+
+# Actualiza el componente cada 1 segundo (1000 ms)
+st_autorefresh(interval=1000, key="daterefresh")
+
+# Ajuste manual para Colombia (UTC-5) si el servidor está en UTC
+ahora = datetime.datetime.now() - datetime.timedelta(hours=5)
+
 st.html(f"""
 <div class="nav-bar-silver">
-    <div style="font-family: monospace; font-weight: bold;">📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')}</div>
+    <div style="font-family: monospace; font-weight: bold; font-size: 16px;">
+        📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')}
+    </div>
     <div class="social-links">
         <a href="https://web.facebook.com/MyMsolucionesdetecnologia/" target="_blank">FACEBOOK</a>
-        <a href="https://wa.me/573114759768" target="_blank">WHATSAPP</a>
-        <a href="#">X</a> <a href="#">INSTAGRAM</a> <a href="#">TIKTOK</a> <a href="#">YOUTUBE</a> <a href="#">TELEGRAM</a>
+        <a href="https://wa.me/573114759768?text=Hola%20Gerardo%2C%20necesito%20asesoría" target="_blank">WHATSAPP</a>
+        <a href="#">INSTAGRAM</a> <a href="#">TIKTOK</a> <a href="#">YOUTUBE</a>
     </div>
 </div>
 """)
-
 logo_img = f'<img src="data:image/jpeg;base64,{logo_original_b64}" style="width: 150px; border-radius: 50%; border: 4px solid #00d4ff;">' if logo_original_b64 else "🤖"
 st.html(f"""
 <div style="display: flex; align-items: center; gap: 40px; padding: 20px 60px;">
