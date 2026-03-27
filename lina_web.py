@@ -7,7 +7,7 @@ from datetime import timedelta
 from streamlit_autorefresh import st_autorefresh
 
 # --- 1. CONFIGURACIÓN DEL SISTEMA ---
-st.set_page_config(page_title="LINA V16.9 | Soluciones Tecnológicas M Y M", layout="wide", page_icon="🤖")
+st.set_page_config(page_title="LINA V17.0 | Soluciones Tecnológicas M Y M", layout="wide", page_icon="🤖")
 st_autorefresh(interval=1000, key="daterefresh")
 ahora = datetime.datetime.now() - datetime.timedelta(hours=5)
 
@@ -27,7 +27,7 @@ def get_base64(bin_file):
 logo_robot_b64 = get_base64("Logos/logo_robot_2007.jpg")
 fondo_b64 = get_base64("Logos/fondo.jpg")
 
-# --- 4. ESTILOS CSS (CENTRADO ABSOLUTO) ---
+# --- 4. ESTILOS CSS (DISEÑO ESCALONADO Y CENTRADO) ---
 st.markdown(f"""
 <style>
     .stApp {{
@@ -39,35 +39,38 @@ st.markdown(f"""
     .nav-bar-silver {{
         display: flex; justify-content: space-between; align-items: center;
         padding: 10px 20px; background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
-        border-bottom: 3px solid #666; border-radius: 8px; margin-bottom: 10px;
+        border-bottom: 3px solid #666; border-radius: 8px; margin-bottom: 15px;
     }}
     .social-tag {{
         padding: 4px 12px; border-radius: 15px; text-decoration: none;
         color: white !important; font-weight: bold; font-size: 13px; margin-left: 8px;
     }}
     
-    /* Contenedor de Títulos Centrados */
+    /* Bloque de Texto Centrado y Escalonado */
     .contenedor-titulos {{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        height: 100%;
-        width: 100%;
+        display: flex; flex-direction: column; justify-content: center;
+        align-items: center; text-align: center; width: 100%;
     }}
 
     .titulo-lina-final {{
         font-family: 'Comic Sans MS', cursive; 
-        font-size: clamp(60px, 10vw, 130px);
+        font-size: clamp(60px, 10vw, 120px);
         color: #000; text-shadow: 0 0 20px #7FFFD4, 0 0 40px #7FFFD4; 
-        margin: 0; line-height: 1;
+        margin: 0; line-height: 0.9;
     }}
     
     .logo-redondo-final {{
-        width: 200px; height: 200px;
+        width: 220px; height: 220px;
         border-radius: 50%; border: 5px solid #7FFFD4; 
         box-shadow: 0 0 25px #7FFFD4; object-fit: cover;
+    }}
+
+    .sub-laboratorio {{
+        color: #008fb3; font-size: 28px; font-weight: bold; line-height: 1.2; margin-top: 10px;
+    }}
+    
+    .sub-mym {{
+        color: #444; font-size: 20px; font-weight: 500; margin-top: 5px;
     }}
 </style>
 """, unsafe_allow_html=True)
@@ -96,11 +99,11 @@ with col_titulos:
     st.markdown(f"""
     <div class="contenedor-titulos">
         <h1 class="titulo-lina-final">L.I.N.A.</h1>
-        <div style="color:#008fb3; font-size:26px; font-weight:bold; margin-top:10px;">
-            Laboratorio de Inteligencia y Nuevos Algoritmos
+        <div class="sub-laboratorio">
+            Laboratorio de Inteligencia<br>y Nuevos Algoritmos
         </div>
-        <div style="color:#444; font-size:18px; margin-top:5px; border-top: 1px solid #ccc; padding-top:5px; width: 80%;">
-            Soluciones Tecnológicas M Y M | Desde 2007
+        <div class="sub-mym">
+            Soluciones Tecnológicas MYM<br>Desde 2007
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -125,54 +128,35 @@ with c4:
 
 st.divider()
 
-# --- 7. LÓGICA DE SECCIONES ---
+# --- 7. COTIZADOR (CON TU LÓGICA DE PRECIOS) ---
 if st.session_state.seccion == "COTIZADOR":
-    st.subheader("💰 Cotizador Inteligente de Servicios")
+    st.subheader("💰 Cotizador Inteligente")
     col_precios, col_calc = st.columns([1, 2])
-    
     with col_precios:
         st.markdown("""
         <div style="background-color: #f8f9fa; padding: 15px; border-radius: 10px; border: 2px solid #00d4ff;">
-            <h4 style="text-align:center;">📋 Tarifas Oficiales</h4>
+            <h4 style="text-align:center;">📋 Tarifas MyM</h4>
             <ul style="font-size: 14px;">
-                <li><b>Revisión Técnica:</b> $40.000<br><small>(Gratis si realiza el proceso)</small></li>
-                <li><b>Trámite Legal:</b> 10% del ahorro conseguido.</li>
-                <li><b>Recargo Domicilio:</b> $20.000</li>
+                <li><b>Revisión:</b> $40.000 (Gratis con servicio)</li>
+                <li><b>Legal:</b> 10% del ahorro</li>
+                <li><b>Domicilio:</b> $20.000</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
-
     with col_calc:
-        tipo_ser = st.selectbox("Seleccione el Servicio:", ["Mantenimiento Preventivo", "Mantenimiento Correctivo", "Asesoría Legal / Habeas Data"])
-        modalidad = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
-        
-        base_revision = 40000
-        recargo_dom = 20000 if modalidad == "A Domicilio" else 0
-        
-        if "Mantenimiento" in tipo_ser:
-            total = (base_revision * 1.20) + recargo_dom
-            st.info("✅ **¡REVISIÓN GRATIS!** El valor incluye mano de obra y peritaje especializado.")
-        else:
-            total = base_revision + recargo_dom
-            st.info("⚖️ **DEFENSA LEGAL:** Se cobra el 10% del ahorro solo si el resultado es exitoso.")
-            
+        ser = st.selectbox("Servicio:", ["Mantenimiento Preventivo", "Mantenimiento Correctivo", "Asesoría Legal"])
+        mod = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
+        base = 40000
+        dom = 20000 if mod == "A Domicilio" else 0
+        total = (base * 1.20) + dom if "Mantenimiento" in ser else base + dom
         st.metric("Inversión Total", f"${total:,.0f} COP")
         st.link_button("📅 AGENDAR CITA", f"https://wa.me/573114759768")
 
-elif st.session_state.seccion == "GESTION":
-    st.subheader("⚖️ Seguimiento a Casos Generados")
-    if os.path.exists(archivo_casos):
-        st.dataframe(pd.read_csv(archivo_casos), use_container_width=True)
-
-elif st.session_state.seccion == "RADICACION":
-    st.subheader("📝 Generador de Peticiones")
-    st.text_area("Vista Previa:", value=st.session_state.doc_final, height=250)
-
 elif st.session_state.seccion == "FINANZAS":
-    st.subheader("🏠 Control Personal MyM")
+    st.subheader("🏠 Control Personal")
     st.metric("Meta Sistecrédito", "$898.771")
 
-# --- 8. PIE DE PÁGINA ---
+# --- 8. PIE DE PÁGINA (EJECUTIVO) ---
 st.markdown(f"""
 <div style="background-color: #f1f1f1; padding: 15px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 20px;">
     <b>⚠️ Nota de Honorarios:</b> Nuestros honorarios se basan estrictamente en el éxito conseguido. 
