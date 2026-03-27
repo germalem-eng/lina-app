@@ -28,13 +28,23 @@ logo_robot_b64 = get_base64("Logos/logo_robot_2007.jpg")
 # Usamos el fondo de código binario de image_3.png
 fondo_binario_b64 = get_base64("Logos/fondo_binario.png")
 
-# --- 4. ESTILOS CSS (FONDO 50% TRANSPARENTE Y DISEÑO AZUL) ---
+# --- 4. ESTILOS CSS (FONDO CON RUTA DIRECTA Y TRANSPARENCIA) ---
+# Primero convertimos la imagen de la ruta a base64 para que el navegador la lea
+def get_image_base64(path):
+    import base64
+    with open(path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode()
+
+# Cargamos el fondo desde la ruta Logos/fondo.jpg
+fondo_path = "Logos/fondo.jpg"
+fondo_b64 = get_image_base64(fondo_path)
+
 st.markdown(f"""
 <style>
-    /* 1. FONDO DE CÓDIGO BINARIO CON 50% DE TRANSPARENCIA */
+    /* 1. FONDO CON TRANSPARENCIA DEL 50% */
     .stApp {{
         background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
-                          url("data:image/png;base64,{fondo_binario_b64}");
+                          url("data:image/jpeg;base64,{fondo_b64}");
         background-size: cover !important;
         background-attachment: fixed !important;
     }}
@@ -43,80 +53,49 @@ st.markdown(f"""
     .nav-bar-silver {{
         display: flex; justify-content: space-between; align-items: center;
         padding: 10px 20px; background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
-        border-bottom: 3px solid #666; border-radius: 8px; margin-bottom: 15px;
-    }}
-    .social-tag {{
-        padding: 4px 12px; border-radius: 15px; text-decoration: none;
-        color: white !important; font-weight: bold; font-size: 13px; margin-left: 8px;
+        border-bottom: 3px solid #666; border-radius: 8px; margin-bottom: 20px;
     }}
     
-    /* 3. BLOQUE DE TEXTO CENTRADO Y ESCALONADO */
-    .contenedor-titulos {{
-        display: flex; flex-direction: column; justify-content: center;
-        align-items: center; text-align: center; width: 100%; height: 100%;
+    /* 3. LOGO MONUMENTAL CON NEÓN AZUL */
+    .logo-redondo-final {{
+        display: block; margin: 0 auto; width: 300px; height: 300px;
+        border-radius: 50%; border: 6px solid #00FFFF;
+        box-shadow: 0 0 30px #00FFFF, 0 0 60px #00FFFF;
+        object-fit: cover;
     }}
-
-    /* 4. LINA MONUMENTAL AZUL (TAMAÑO 220px) */
+    
+    /* 4. TÍTULOS CENTRADOS Y ESCALONADOS */
     .titulo-lina-final {{
         font-family: 'Comic Sans MS', cursive; 
-        font-size: clamp(100px, 18vw, 220px);
-        color: #004d61; /* Azul Profundo MyM */
-        text-shadow: 0 0 30px #00FFFF, 0 0 60px #00FFFF, 0 0 90px #00FFFF;
-        margin: 0; line-height: 0.8;
+        font-size: 110px; color: #004d61; text-align: center;
+        text-shadow: 0 0 20px #00FFFF; margin: 15px 0; line-height: 0.8;
     }}
-    
-    /* 5. LOGO IMPONENTE AZUL (DIÁMETRO 270px) */
-    .logo-redondo-final {{
-        width: 270px; height: 270px;
-        border-radius: 50%; border: 6px solid #00FFFF;
-        box-shadow: 0 0 35px #00FFFF; object-fit: cover;
+    .subtitulo-azul {{
+        color: #008fb3; font-size: 32px; font-weight: bold; text-align: center; line-height: 1.1;
     }}
-
-    /* 6. SUBTÍTULOS AZULES */
-    .sub-laboratorio {{
-        color: #008fb3;
-        font-size: 32px; font-weight: bold; line-height: 1.1; margin-top: 15px;
-    }}
-    
-    .sub-mym {{
-        color: #444; font-size: 22px; font-weight: 500; margin-top: 10px;
+    .subtitulo-mym {{
+        color: #444; font-size: 22px; font-weight: 500; text-align: center; margin-top: 10px;
     }}
 </style>
 """, unsafe_allow_html=True)
 
-# --- 5. ENCABEZADO VISUAL FUSIONADO ---
+# --- 5. ENCABEZADO VISUAL ---
 st.markdown(f"""
 <div class="nav-bar-silver">
     <div style="font-family: monospace; font-weight: bold;">📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')}</div>
-    <div>
-        <a href="#" class="social-tag" style="background-color: #FF0000;">YouTube</a>
-        <a href="#" class="social-tag" style="background-color: #E1306C;">Instagram</a>
-        <a href="https://web.facebook.com/MyMsolucionesdetecnologia" target="_blank" class="social-tag" style="background-color: #4267B2;">Facebook</a>
-        <a href="https://wa.me/573114759768" target="_blank" class="social-tag" style="background-color: #25D366;">WhatsApp</a>
-        <a href="#" class="social-tag" style="background-color: #0088CC;">Telegram</a>
-    </div>
+    <div style="font-weight: bold; color: #333;">SOLUCIONES TECNOLÓGICAS M Y M</div>
 </div>
 """, unsafe_allow_html=True)
 
-col_logo, col_titulos = st.columns([1.2, 2.3])
+# Bloque Central: Logo y Títulos Escalonados
+st.markdown(f'<img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final">', unsafe_allow_html=True)
+st.markdown(f'<h1 class="titulo-lina-final">L.I.N.A.</h1>', unsafe_allow_html=True)
+st.markdown(f"""
+    <div class="subtitulo-azul">Laboratorio de Inteligencia<br>y Nuevos Algoritmos</div>
+    <div class="subtitulo-mym">Soluciones Tecnológicas MYM<br>Desde 2007</div>
+""", unsafe_allow_html=True)
 
-with col_logo:
-    if logo_robot_b64:
-        st.markdown(f'<div style="display:flex; justify-content:center; align-items:center; height:100%;"><img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final"></div>', unsafe_allow_html=True)
-
-with col_titulos:
-    st.markdown(f"""
-    <div class="contenedor-titulos">
-        <h1 class="titulo-lina-final">L.I.N.A.</h1>
-        <div class="sub-laboratorio">
-            Laboratorio de Inteligencia<br>y Nuevos Algoritmos
-        </div>
-        <div class="sub-mym">
-            Soluciones Tecnológicas MYM<br>Desde 2007
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
+st.divider()
 st.divider()
 
 # --- 6. NAVEGACIÓN ---
