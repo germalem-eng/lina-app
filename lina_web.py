@@ -193,6 +193,16 @@ if st.session_state.seccion == "LEGAL":
             """)
             st.caption("⚖️ Estrategia: Presión por Trámite de Vivienda y Superfinanciera.")    
     with tab3:
+        # --- POLÍTICA DE COBRO MYM ---
+           st.info("💡 **Información sobre nuestra Asesoría**")
+           st.write("El diagnóstico inicial es **GRATIS** con tus datos básicos.")
+    
+    with st.expander("🔍 Ver costos de gestión detallada"):
+        st.markdown("""
+        * **Si NO inicias proceso con nosotros:** El costo de la consulta técnica y legal es de **$40.000**.
+        * **Si INICIAS proceso de defensa:** ¡Consulta GRATIS! Solo cobramos el **10%** de lo que logremos ahorrarte al finalizar con éxito.
+        """)
+        st.markdown("---")
         st.markdown("### 📝 Datos para la Radicación")
         col_d1, col_d2 = st.columns(2)
         
@@ -229,30 +239,52 @@ if st.session_state.seccion == "LEGAL":
                 f"C.C. {u_ced}"
             )
                 # --- NUEVO: MONITOR DE SEGUIMIENTO LEGAL ---
-            st.markdown("---")
-            st.subheader("📅 Monitor de Respuesta (Silencio Administrativo)")
+
+         # --- BLOQUE DE HONORARIOS Y CONDICIONES ---
+    st.markdown("---")
+    st.warning("""
+⚠️ **Nota de Honorarios:** Nuestros honorarios se basan estrictamente en el éxito del ahorro conseguido. 
+Se estipula un cobro del **10% sobre el valor real ahorrado** por el cliente. 
+*Si no hay ahorro, ¡no pagas honorarios de éxito!* (Consulta técnica independiente: $40.000).
+""")
+    col_h1, col_h2 = st.columns(2)
+    
+    with col_h1:
+        st.write("📈 **VALOR DEL SERVICIO:**")
+        st.title("10%")
+        st.caption("Del valor total ahorrado")
+
+    with col_h2:
+        st.write("📑 **CONDICIÓN:**")
+        st.write("* Solo se cobra si el proceso es exitoso.")
+        st.write("* Si prefieres no iniciar proceso de defensa, el diagnóstico tiene un costo de **$40.000**.")
+
+        st.info("💡 *Al descargar o usar este documento, aceptas que MyM Soluciones gestione tu caso bajo estas condiciones.*")
+        st.markdown("---")       
+        st.markdown("---")
+        st.subheader("📅 Monitor de Respuesta (Silencio Administrativo)")
             
             # Calendario para marcar el día que se envió el correo o radicó
-            fecha_radicado = st.date_input("¿Qué día radicó esta petición?", value=ahora)
+        fecha_radicado = st.date_input("¿Qué día radicó esta petición?", value=ahora)
             
             # Calculamos 15 días hábiles (aprox. 21 días calendario)
-            fecha_vencimiento = fecha_radicado + datetime.timedelta(days=21) 
+        fecha_vencimiento = fecha_radicado + datetime.timedelta(days=21) 
             
             # Diferencia contra el día de hoy
-            dias_restantes = (fecha_vencimiento - ahora.date()).days
+        dias_restantes = (fecha_vencimiento - ahora.date()).days
 
-            if dias_restantes > 0:
+        if dias_restantes > 0:
                 st.warning(f"⏳ Faltan **{dias_restantes}** días para que se cumpla el término legal.")
                 st.info(f"📅 Fecha estimada de respuesta: **{fecha_vencimiento.strftime('%d/%m/%Y')}**")
-            else:
+        else:
                 st.error("🚨 **¡PLAZO VENCIDO!** Si no hay respuesta, puedes solicitar el Silencio Administrativo Positivo.")
                          
             
             
-            st.text_area("📄 Vista Previa del Documento:", value=doc, height=250)
+        st.text_area("📄 Vista Previa del Documento:", value=doc, height=250)
             
             # Botón de descarga con el nombre del cliente para tu archivo
-            st.download_button(
+        st.download_button(
                 label="📥 Descargar Petición Lista",
                 data=doc,
                 file_name=f"Reclamacion_{u_nom.replace(' ', '_')}.txt",
