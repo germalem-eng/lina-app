@@ -55,7 +55,7 @@ st.html(f"""
 <div class="nav-bar-silver">
     <div style="font-family: monospace; font-weight: bold;">📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')}</div>
     <div class="social-links">
-        <a href="https://www.facebook.com/share/18U3tNcSUK/" target="_blank">FACEBOOK</a>
+        <a href="https://web.facebook.com/MyMsolucionesdetecnologia/" target="_blank">FACEBOOK</a>
         <a href="https://wa.me/573114759768" target="_blank">WHATSAPP</a>
         <a href="#">X</a> <a href="#">INSTAGRAM</a> <a href="#">TIKTOK</a> <a href="#">YOUTUBE</a> <a href="#">TELEGRAM</a>
     </div>
