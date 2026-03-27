@@ -7,7 +7,7 @@ from datetime import timedelta
 from streamlit_autorefresh import st_autorefresh
 
 # --- 1. CONFIGURACIÓN DEL SISTEMA ---
-st.set_page_config(page_title="LINA V16.8 | Soluciones Tecnológicas M Y M", layout="wide", page_icon="🤖")
+st.set_page_config(page_title="LINA V16.9 | Soluciones Tecnológicas M Y M", layout="wide", page_icon="🤖")
 st_autorefresh(interval=1000, key="daterefresh")
 ahora = datetime.datetime.now() - datetime.timedelta(hours=5)
 
@@ -27,7 +27,7 @@ def get_base64(bin_file):
 logo_robot_b64 = get_base64("Logos/logo_robot_2007.jpg")
 fondo_b64 = get_base64("Logos/fondo.jpg")
 
-# --- 4. ESTILOS CSS (DISEÑO MONUMENTAL) ---
+# --- 4. ESTILOS CSS (CENTRADO ABSOLUTO) ---
 st.markdown(f"""
 <style>
     .stApp {{
@@ -45,14 +45,27 @@ st.markdown(f"""
         padding: 4px 12px; border-radius: 15px; text-decoration: none;
         color: white !important; font-weight: bold; font-size: 13px; margin-left: 8px;
     }}
+    
+    /* Contenedor de Títulos Centrados */
+    .contenedor-titulos {{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        height: 100%;
+        width: 100%;
+    }}
+
     .titulo-lina-final {{
         font-family: 'Comic Sans MS', cursive; 
-        font-size: clamp(70px, 12vw, 130px);
+        font-size: clamp(60px, 10vw, 130px);
         color: #000; text-shadow: 0 0 20px #7FFFD4, 0 0 40px #7FFFD4; 
-        margin: 0; line-height: 1; text-align: center;
+        margin: 0; line-height: 1;
     }}
+    
     .logo-redondo-final {{
-        width: 190px; height: 190px;
+        width: 200px; height: 200px;
         border-radius: 50%; border: 5px solid #7FFFD4; 
         box-shadow: 0 0 25px #7FFFD4; object-fit: cover;
     }}
@@ -74,16 +87,21 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 col_logo, col_titulos = st.columns([1, 2.5])
+
 with col_logo:
     if logo_robot_b64:
         st.markdown(f'<div style="display:flex; justify-content:center; align-items:center; height:100%;"><img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final"></div>', unsafe_allow_html=True)
 
 with col_titulos:
     st.markdown(f"""
-    <div style="display:flex; flex-direction:column; justify-content:center; text-align:center;">
+    <div class="contenedor-titulos">
         <h1 class="titulo-lina-final">L.I.N.A.</h1>
-        <div style="color:#008fb3; font-size:26px; font-weight:bold;">Laboratorio de Inteligencia y Nuevos Algoritmos</div>
-        <div style="color:#444; font-size:18px;">Soluciones Tecnológicas M Y M | Desde 2007</div>
+        <div style="color:#008fb3; font-size:26px; font-weight:bold; margin-top:10px;">
+            Laboratorio de Inteligencia y Nuevos Algoritmos
+        </div>
+        <div style="color:#444; font-size:18px; margin-top:5px; border-top: 1px solid #ccc; padding-top:5px; width: 80%;">
+            Soluciones Tecnológicas M Y M | Desde 2007
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -107,7 +125,7 @@ with c4:
 
 st.divider()
 
-# --- 7. LÓGICA DE SECCIONES (COTIZADOR ESTRATÉGICO) ---
+# --- 7. LÓGICA DE SECCIONES ---
 if st.session_state.seccion == "COTIZADOR":
     st.subheader("💰 Cotizador Inteligente de Servicios")
     col_precios, col_calc = st.columns([1, 2])
@@ -154,7 +172,7 @@ elif st.session_state.seccion == "FINANZAS":
     st.subheader("🏠 Control Personal MyM")
     st.metric("Meta Sistecrédito", "$898.771")
 
-# --- 8. PIE DE PÁGINA (EJECUTIVO MyM) ---
+# --- 8. PIE DE PÁGINA ---
 st.markdown(f"""
 <div style="background-color: #f1f1f1; padding: 15px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 20px;">
     <b>⚠️ Nota de Honorarios:</b> Nuestros honorarios se basan estrictamente en el éxito conseguido. 
