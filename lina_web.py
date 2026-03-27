@@ -88,11 +88,31 @@ st.markdown(f"""
 
 # --- 5. ENCABEZADO VISUAL EN COLUMNAS ---
 st.markdown(f"""
+<style>
+    .nav-bar-silver {{
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 10px 20px; background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
+        border-bottom: 3px solid #666; border-radius: 12px; margin-bottom: 25px;
+    }}
+    .social-tag {{
+        padding: 5px 12px; border-radius: 15px; text-decoration: none !important;
+        color: white !important; font-weight: bold; font-size: 13px; margin-left: 8px;
+    }}
+</style>
+
 <div class="nav-bar-silver">
-    <div style="font-family: monospace; font-weight: bold;">📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')}</div>
-    <div style="font-weight: bold; color: #333;">SOLUCIONES TECNOLÓGICAS M Y M</div>
+    <div style="font-family: monospace; font-weight: bold; color: #333;">
+        📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')} | SOLUCIONES TECNOLÓGICAS M Y M
+    </div>
+    <div>
+        <a href="https://www.youtube.com/@gerardomartinezlemus7969" target="_blank" class="social-tag" style="background-color: #FF0000;">YouTube</a>
+        <a href="https://www.instagram.com/solucionesmym_2007/" target="_blank" class="social-tag" style="background-color: #E1306C;">Instagram</a>
+        <a href="https://web.facebook.com/MyMsolucionesdetecnologia" target="_blank" class="social-tag" style="background-color: #4267B2;">Facebook</a>
+        <a href="https://wa.me/573114759768" target="_blank" class="social-tag" style="background-color: #25D366;">WhatsApp</a>
+        <a href="https://t.me/+573114759768" target="_blank" class="social-tag" style="background-color: #0088CC;">Telegram</a>
+    </div>
 </div>
-""", unsafe_allow_html=True)
+""", unsafe_allow_html=True
 
 # CREACIÓN DE LAS DOS COLUMNAS
 col_izq, col_der = st.columns([1.2, 2.3])
