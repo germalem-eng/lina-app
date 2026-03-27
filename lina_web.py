@@ -6,21 +6,17 @@ import pandas as pd
 from datetime import timedelta
 from streamlit_autorefresh import st_autorefresh
 
-# --- 1. CONFIGURACIÓN DEL SISTEMA ---
-st.set_page_config(page_title="LINA V15.6 | MyM Soluciones", layout="wide", page_icon="🤖")
-
-# Sincronización de Reloj (Colombia UTC-5)
+# --- 1. CONFIGURACIÓN ---
+st.set_page_config(page_title="LINA V15.8 | Cotizador & Gestión MyM", layout="wide", page_icon="🤖")
 st_autorefresh(interval=1000, key="daterefresh")
 ahora = datetime.datetime.now() - datetime.timedelta(hours=5)
 
-# --- 2. INICIALIZACIÓN DE VARIABLES (ESTO MATA EL ERROR ROJO PARA SIEMPRE) ---
-if 'seccion' not in st.session_state:
-    st.session_state.seccion = "DASHBOARD"
-if 'doc_final' not in st.session_state:
-    # Inicializamos la variable que causaba el error como texto vacío
-    st.session_state.doc_final = ""
+# --- 2. INICIALIZACIÓN DE ESTADO ---
+if 'seccion' not in st.session_state: st.session_state.seccion = "COTIZADOR"
+if 'doc_final' not in st.session_state: st.session_state.doc_final = ""
+archivo_casos = "database_casos_mym.csv"
 
-# --- 3. RECURSOS VISUALES (RESTAURADOS) ---
+# --- 3. RECURSOS VISUALES ---
 def get_base64(bin_file):
     if os.path.exists(bin_file):
         with open(bin_file, 'rb') as f:
@@ -28,11 +24,10 @@ def get_base64(bin_file):
         return base64.b64encode(data).decode()
     return ""
 
-# Restauramos las rutas originales de tus logos
-logo_robot_b64 = get_base64("Logos/logo_robot_2007.jpg")
+logo_robot = get_base64("Logos/logo_robot_2007.jpg")
 fondo_b64 = get_base64("Logos/fondo.jpg")
 
-# --- 4. ESTILOS CSS MyM (RESTAURADOS Y MEJORADOS) ---
+# --- 4. ESTILOS CSS ---
 st.markdown(f"""
 <style>
     .stApp {{
@@ -43,146 +38,116 @@ st.markdown(f"""
     .nav-bar-silver {{
         display: flex; justify-content: space-between; align-items: center;
         padding: 10px 20px; background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
-        border-bottom: 3px solid #666; border-radius: 8px; margin-bottom: 20px;
+        border-bottom: 3px solid #666; border-radius: 8px; margin-bottom: 10px;
     }}
     .titulo-neon {{
-        font-family: 'Comic Sans MS', cursive; font-size: clamp(30px, 5vw, 60px); 
-        color: #000; text-shadow: 0 0 10px #7FFFD4; margin: 0;
+        font-family: 'Comic Sans MS', cursive; color: #000; 
+        text-shadow: 0 0 10px #7FFFD4; margin: 0; line-height: 1.1;
     }}
-    .subtitulo-mym {{
-        color: #008fb3; font-size: 18px; font-weight: bold; font-family: 'Comic Sans MS', cursive;
-    }}
-    .social-bar {{
-        display: flex; gap: 15px; align-items: center;
-    }}
-    .social-bar a {{
-        text-decoration: none; font-size: 20px; transition: transform 0.2s;
-    }}
-    .social-bar a:hover {{
-        transform: scale(1.1);
-    }}
-    .footer-mym {{
-        background-color: #f1f1f1; padding: 20px; border-radius: 10px;
-        border-left: 5px solid #008fb3; margin-top: 30px; font-size: 14px;
+    .price-card {{
+        background-color: #f8f9fa; padding: 15px; border-radius: 10px;
+        border: 2px solid #00d4ff; text-align: center;
     }}
 </style>
 """, unsafe_allow_html=True)
 
-# --- 5. ENCABEZADO RESTAURADO (LOGO, RELOJ, TODAS LAS REDES) ---
-# Barra superior (Reloj y Redes)
-# Usamos emojis como placeholders de iconos para máxima compatibilidad móvil
+# --- 5. ENCABEZADO MyM ---
 st.markdown(f"""
 <div class="nav-bar-silver">
-    <div style="font-family: monospace; font-weight: bold;">
-        📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')}
-    </div>
-    <div class="social-bar">
-        <a href="https://youtube.com/@mymsoluciones" target="_blank" title="YouTube">🔴</a>
-        <a href="https://instagram.com/mymsoluciones" target="_blank" title="Instagram">🟣</a>
-        <a href="https://facebook.com/mymsolucionestech" target="_blank" title="Facebook">🔵</a>
-        <a href="https://wa.me/573114759768" target="_blank" title="WhatsApp">🟢</a>
+    <div style="font-family: monospace; font-weight: bold;">📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')}</div>
+    <div style="display: flex; gap: 15px;">
+        <a href="#" style="text-decoration:none">🔴</a> <a href="#" style="text-decoration:none">🟣</a> 
+        <a href="#" style="text-decoration:none">🔵</a> <a href="https://wa.me/573114759768" style="text-decoration:none">🟢</a>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-# Bloque del Logo y Título
-logo_img = f'<img src="data:image/jpeg;base64,{logo_robot_b64}" style="width: clamp(80px, 10vw, 120px); border-radius: 50%; border: 3px solid #00d4ff;">' if logo_robot_b64 else "🤖"
+c_l, c_t = st.columns([1, 4])
+with c_l:
+    if logo_robot: st.image(f"data:image/jpeg;base64,{logo_robot}", width=110)
+with c_t:
+    st.markdown('<h1 class="titulo-neon">L.I.N.A. V15.8</h1>', unsafe_allow_html=True)
+    st.markdown("**Laboratorio de Inteligencia y Nuevos Algoritmos** | *SOLUCIONES TECNOLÓGICAS MyM*")
 
-st.markdown(f"""
-<div style="display: flex; align-items: center; gap: 20px; padding: 0 20px; margin-bottom: 20px;">
-    {logo_img}
-    <div>
-        <h1 class="titulo-neon">L.I.N.A. V15.6</h1>
-        <div class="subtitulo-mym">GESTIÓN PROFESIONAL MyM | DESDE 2007</div>
-        <div style="font-size: 14px;">Laboratorio de Inteligencia y Nuevos Algoritmos</div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
-# --- 6. NAVEGACIÓN ( Multiplataforma) ---
-st.write("### 🚀 Panel Operativo:")
+# --- 6. NAVEGACIÓN ---
 c1, c2, c3, c4 = st.columns(4)
 with c1: 
-    if st.button("📊 DASHBOARD", use_container_width=True): st.session_state.seccion = "DASHBOARD"
+    if st.button("💰 COTIZADOR", use_container_width=True): st.session_state.seccion = "COTIZADOR"
 with c2: 
-    if st.button("⚖️ LEGAL", use_container_width=True): st.session_state.seccion = "LEGAL"
+    if st.button("⚖️ CASOS LEGALES", use_container_width=True): st.session_state.seccion = "GESTION"
 with c3: 
-    if st.button("🔧 TÉCNICO", use_container_width=True): st.session_state.seccion = "TECNICO"
+    if st.button("📝 RADICACIÓN", use_container_width=True): st.session_state.seccion = "RADICACION"
 with c4: 
-    if st.button("💰 EXTRAS", use_container_width=True): st.session_state.seccion = "EXTRAS"
+    if st.button("🏠 PRIVADO MyM", use_container_width=True): st.session_state.seccion = "FINANZAS"
 
 st.divider()
 
-# --- 7. CONTENIDO DINÁMICO ---
-if st.session_state.seccion == "DASHBOARD":
-    st.subheader("📊 Control de Metas y Vivienda")
+# --- 7. MÓDULO COTIZADOR ---
+if st.session_state.seccion == "COTIZADOR":
+    st.subheader("💰 Cotizador de Servicios MyM")
     
-    # Monitor de Respuesta (Silencio Administrativo)
-    st.info("📅 **Monitor de Respuesta (Silencio Administrativo)**")
-    fecha_radicacion = st.date_input("¿Qué día radicó esta petición?", value=ahora - timedelta(days=5))
-    # Cálculo exacto de 21 días
-    fecha_estimada = fecha_radicacion + timedelta(days=21)
-    faltan_dias = (fecha_estimada - ahora.date()).days
+    col_precios, col_calc = st.columns([1, 2])
     
-    col_m1, col_m2 = st.columns(2)
-    col_m1.metric("Faltan para término legal", f"{max(0, faltan_dias)} días")
-    col_m2.metric("Fecha estimada respuesta", fecha_estimada.strftime('%d/%m/%Y'))
-    
-    st.markdown("---")
-    st.write("### 🏠 Metas Vivienda")
-    st.metric("Sistecrédito (Saldo)", "$898.771")
+    with col_precios:
+        st.markdown("""
+        <div class="price-card">
+            <h4>📋 Lista de Precios</h4>
+            <p><b>Revisión Técnica:</b> $40.000<br>(GRATIS si acepta servicio)</p>
+            <p><b>Asesoría Legal:</b> $40.000<br>(GRATIS si inicia proceso)</p>
+            <p><b>Recargo Domicilio:</b> $20.000</p>
+        </div>
+        """, unsafe_allow_html=True)
 
-elif st.session_state.seccion == "LEGAL":
-    st.subheader("📝 Radicación y Generación de Peticiones")
-    
-    with st.expander("🔍 Ver costos de gestión detallada", expanded=False):
-        st.write("Si NO inicias proceso: **$40.000** (Consulta técnica/legal).")
-        st.write("Si INICIAS proceso de defensa: **GRATIS**. Solo cobramos el 10% del ahorro conseguido.")
-
-    col_l1, col_l2 = st.columns(2)
-    with col_l1:
-        u_nom = st.text_input("Nombre Completo:")
-        u_ced = st.text_input("Cédula:")
-        u_tel = st.text_input("Teléfono:")
-    with col_l2:
-        u_ent = st.text_input("Casa de Cobranza / Entidad:")
-        u_cor = st.text_input("Correo Electrónico:")
-        u_dir = st.text_input("Dirección de Residencia (Bogotá):")
-
-    st.file_uploader("📂 Adjuntar Foto de Cédula (Opcional)", type=['jpg', 'png', 'pdf', 'jpeg'])
-
-    if st.button("🔨 GENERAR DOCUMENTO DE DEFENSA"):
-        if u_nom and u_ced and u_ent:
-            # Construimos la carta
-            st.session_state.doc_final = f"""Bogotá D.C., {ahora.strftime('%d/%m/%Y')}
-Señores: {u_ent} | E. S. D.
-REF: RECLAMACIÓN HABEAS DATA - LEY 1266 Y LEY 2157
-
-Yo, {u_nom}, con C.C. {u_ced}, solicito la eliminación del reporte negativo.
-...
-Atentamente,
-{u_nom} | C.C. {u_ced}"""
-            st.success("Documento generado. Revisa la vista previa abajo.")
+    with col_calc:
+        tipo_servicio = st.selectbox("Tipo de Servicio:", ["Mantenimiento Preventivo", "Mantenimiento Correctivo", "Asesoría Legal / Habeas Data"])
+        modalidad = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
+        
+        # Lógica de Cobro
+        base = 40000
+        domicilio = 20000 if modalidad == "A Domicilio" else 0
+        
+        if tipo_servicio == "Asesoría Legal / Habeas Data":
+            total = base + domicilio
+            detalle = "Si inicias proceso legal, solo pagas el 10% del ahorro al finalizar. ¡Esta consulta es gratis si firmas!"
         else:
-            st.warning("⚠️ Completa los datos básicos (Nombre, Cédula, Entidad).")
+            # Estrategia 20% sobre el mínimo
+            total = (base * 1.20) + domicilio
+            detalle = "¡La revisión es GRATIS! El valor incluye repuestos básicos y mano de obra calificada."
 
-    # --- ESTA ES LA LÍNEA 284 QUE FALLABA ---
-    # Usamos st.session_state.doc_final que ya está inicializada arriba
-    st.text_area("📄 Vista Previa del Documento:", value=st.session_state.doc_final, height=250)
+        st.metric("Total a Pagar", f"${total:,.0f} COP", f"+{domicilio} domicilio" if domicilio > 0 else "")
+        st.caption(f"💡 {detalle}")
+
+        if st.button("📍 AGENDAR CITA AHORA"):
+            st.success(f"Cita solicitada para {tipo_servicio} ({modalidad}). Nos comunicaremos al WhatsApp.")
+
+elif st.session_state.seccion == "GESTION":
+    st.subheader("⚖️ Seguimiento de Casos y Cobros")
+    # Monitor de 21 días
+    f_rad = st.date_input("Fecha Radicación:", value=ahora.date())
+    f_est = f_rad + timedelta(days=21)
+    st.info(f"⏳ Vencimiento legal: {f_est.strftime('%d/%m/%Y')} (Faltan {(f_est - ahora.date()).days} días)")
     
-    if st.session_state.doc_final:
-        st.download_button("📥 Descargar Petición TXT", data=st.session_state.doc_final, file_name=f"HabeasData_{u_nom}.txt")
+    if os.path.exists(archivo_casos):
+        st.dataframe(pd.read_csv(archivo_casos), use_container_width=True)
 
-# --- 8. PIE DE PÁGINA FIJO (TUS CONDICIONES) ---
+elif st.session_state.seccion == "RADICACION":
+    st.subheader("📝 Nueva Radicación Legal")
+    u_nom = st.text_input("Nombre del Cliente:")
+    u_aho = st.number_input("Ahorro Proyectado ($):", min_value=0)
+    if st.button("Generar Registro"):
+        hon = u_aho * 0.10
+        st.success(f"Registrado. Honorarios por ganar: ${hon:,.0f}")
+
+elif st.session_state.seccion == "FINANZAS":
+    st.subheader("🏠 Control Personal MyM")
+    st.metric("Meta Sistecrédito", "$898.771")
+
+# --- 8. PIE DE PÁGINA ---
 st.markdown(f"""
-<div class="footer-mym">
-    <h3>⚠️ Nota: Sus honorarios se basan en el éxito del ahorro conseguido.</h3>
-    <p><b>📈 VALOR DEL SERVICIO:</b> 10% del valor total ahorrado.</p>
-    <p><b>📑 CONDICIÓN:</b> Solo se cobra si el proceso es exitoso.</p>
-    <hr>
-    <p>Si prefieres no iniciar proceso de defensa, el diagnóstico técnico/legal tiene un costo de <b>$40.000</b>.</p>
-    <p style="font-size: 11px; color: #666;">💡 Al descargar o usar este documento, aceptas que MyM Soluciones gestione tu caso bajo estas condiciones.</p>
+<div style="background-color: #f1f1f1; padding: 15px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 20px;">
+    <b>⚠️ Nota de Honorarios:</b> Nuestros honorarios se basan estrictamente en el éxito conseguido. 
+    Defensa Legal: 10% del ahorro. Mantenimiento: Revisión gratis si se realiza el proceso.
 </div>
 """, unsafe_allow_html=True)
 
-st.caption(f"L.I.N.A. V15.6 | © {ahora.year} Gerardo Martinez Lemus | Soluciones M Y M")
+st.caption(f"L.I.N.A. V15.8 | © {ahora.year} Gerardo Martinez Lemus | Soluciones M Y M")
