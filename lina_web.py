@@ -110,6 +110,7 @@ st.markdown(f"""
         <a href="https://web.facebook.com/MyMsolucionesdetecnologia" target="_blank" class="social-tag" style="background-color: #4267B2;">Facebook</a>
         <a href="https://wa.me/573114759768" target="_blank" class="social-tag" style="background-color: #25D366;">WhatsApp</a>
         <a href="https://t.me/+573114759768" target="_blank" class="social-tag" style="background-color: #0088CC;">Telegram</a>
+        <a href="https://x.com/" target="_blank" class="social-tag" style="background-color: #000000;">X</a>
     </div>
 </div>
 """, unsafe_allow_html=True)
