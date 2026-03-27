@@ -7,7 +7,7 @@ from datetime import timedelta
 from streamlit_autorefresh import st_autorefresh
 
 # --- 1. CONFIGURACIÓN DEL SISTEMA ---
-st.set_page_config(page_title="LINA V18.0 | Soluciones Tecnológicas M Y M", layout="wide", page_icon="🤖")
+st.set_page_config(page_title="LINA V18.0 | S T M Y M, layout="wide", page_icon="🤖")
 st_autorefresh(interval=1000, key="daterefresh")
 ahora = datetime.datetime.now() - datetime.timedelta(hours=5)
 
