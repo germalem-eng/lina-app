@@ -30,7 +30,7 @@ fondo_b64 = get_base64("Logos/fondo.jpg")
 # --- 4. ESTILOS CSS (DISEÑO MONUMENTAL AZUL V17.2) ---
 st.markdown(f"""
 <style>
-    /* 1. FONDO DE PÁGINA (CON TRANSPARENCIA) */
+    /* 1. FONDO DE PÁGINA (CON 50 % TRANSPARENCIA) */
     .stApp {{
         background-image: linear-gradient(rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.96)),
                           url("data:image/jpeg;base64,{fondo_b64}");
