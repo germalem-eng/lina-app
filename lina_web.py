@@ -6,17 +6,16 @@ import pandas as pd
 from datetime import timedelta
 from streamlit_autorefresh import st_autorefresh
 
-# --- 1. CONFIGURACIÓN ---
-st.set_page_config(page_title="LINA V15.8 | Cotizador & Gestión MyM", layout="wide", page_icon="🤖")
+# --- 1. CONFIGURACIÓN Y RELOJ ---
+st.set_page_config(page_title="L.I.N.A. | MyM Soluciones", layout="wide", page_icon="🤖")
 st_autorefresh(interval=1000, key="daterefresh")
 ahora = datetime.datetime.now() - datetime.timedelta(hours=5)
 
-# --- 2. INICIALIZACIÓN DE ESTADO ---
+# --- 2. INICIALIZACIÓN DE ESTADO (EVITA ERRORES) ---
 if 'seccion' not in st.session_state: st.session_state.seccion = "COTIZADOR"
 if 'doc_final' not in st.session_state: st.session_state.doc_final = ""
-archivo_casos = "database_casos_mym.csv"
 
-# --- 3. RECURSOS VISUALES ---
+# --- 3. RECURSOS VISUALES (LOGO Y FONDO) ---
 def get_base64(bin_file):
     if os.path.exists(bin_file):
         with open(bin_file, 'rb') as f:
@@ -24,52 +23,87 @@ def get_base64(bin_file):
         return base64.b64encode(data).decode()
     return ""
 
-logo_robot = get_base64("Logos/logo_robot_2007.jpg")
-fondo_b64 = get_base64("Logos/fondo.jpg")
+logo_robot_b64 = get_base64("Logos/logo_robot_2007.jpg")
+fondo_pagina_b64 = get_base64("Logos/fondo.jpg")
 
-# --- 4. ESTILOS CSS ---
+# --- 4. ESTILOS CSS (FONDO TRANSPARENTE, NEÓN Y CENTRADO) ---
 st.markdown(f"""
 <style>
+    /* Fondo transparente en toda la página */
     .stApp {{
-        background-image: linear-gradient(rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.96)),
-                          url("data:image/jpeg;base64,{fondo_b64}");
+        background-image: linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.92)),
+                          url("data:image/jpeg;base64,{fondo_pagina_b64}");
         background-size: cover !important;
+        background-attachment: fixed !important;
     }}
+
+    /* Barra de Navegación Superior */
     .nav-bar-silver {{
         display: flex; justify-content: space-between; align-items: center;
         padding: 10px 20px; background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
-        border-bottom: 3px solid #666; border-radius: 8px; margin-bottom: 10px;
+        border-bottom: 3px solid #666; border-radius: 8px; margin-bottom: 20px;
     }}
-    .titulo-neon {{
-        font-family: 'Comic Sans MS', cursive; color: #000; 
-        text-shadow: 0 0 10px #7FFFD4; margin: 0; line-height: 1.1;
+
+    /* Logo Redondo con Neón Agua Marina */
+    .logo-redondo {{
+        display: block; margin: 0 auto;
+        width: 140px; height: 140px;
+        border-radius: 50%; 
+        border: 4px solid #7FFFD4;
+        box-shadow: 0 0 15px #7FFFD4, 0 0 30px #7FFFD4;
+        object-fit: cover;
     }}
-    .price-card {{
-        background-color: #f8f9fa; padding: 15px; border-radius: 10px;
-        border: 2px solid #00d4ff; text-align: center;
+
+    /* Título L.I.N.A. con Neón Azul Fluorescente */
+    .titulo-lina-neon {{
+        font-family: 'Comic Sans MS', cursive;
+        font-size: 80px; color: #000;
+        text-align: center;
+        text-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF;
+        margin: 5px 0; line-height: 1;
+    }}
+
+    .centrado-texto {{ text-align: center; margin-bottom: 20px; font-family: sans-serif; }}
+
+    /* Etiquetas de Redes Sociales */
+    .social-tag {{
+        padding: 4px 12px; border-radius: 15px; text-decoration: none;
+        color: white !important; font-weight: bold; font-size: 13px; margin-left: 8px;
     }}
 </style>
 """, unsafe_allow_html=True)
 
-# --- 5. ENCABEZADO MyM ---
+# --- 5. ENCABEZADO (RELOJ, REDES, LOGO Y TÍTULOS) ---
+
+# Barra Superior
 st.markdown(f"""
 <div class="nav-bar-silver">
-    <div style="font-family: monospace; font-weight: bold;">📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')}</div>
-    <div style="display: flex; gap: 15px;">
-        <a href="#" style="text-decoration:none">🔴</a> <a href="#" style="text-decoration:none">🟣</a> 
-        <a href="#" style="text-decoration:none">🔵</a> <a href="https://wa.me/573114759768" style="text-decoration:none">🟢</a>
+    <div style="font-family: monospace; font-weight: bold;">
+        📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')} | SOLUCIONES MyM
+    </div>
+    <div>
+        <a href="#" class="social-tag" style="background-color: #FF0000;">YouTube</a>
+        <a href="#" class="social-tag" style="background-color: #E1306C;">Instagram</a>
+        <a href="#" class="social-tag" style="background-color: #4267B2;">Facebook</a>
+        <a href="https://wa.me/573114759768" class="social-tag" style="background-color: #25D366;">WhatsApp</a>
+        <a href="#" class="social-tag" style="background-color: #0088CC;">Telegram</a>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-c_l, c_t = st.columns([1, 4])
-with c_l:
-    if logo_robot: st.image(f"data:image/jpeg;base64,{logo_robot}", width=110)
-with c_t:
-    st.markdown('<h1 class="titulo-neon">L.I.N.A. V15.8</h1>', unsafe_allow_html=True)
-    st.markdown("**Laboratorio de Inteligencia y Nuevos Algoritmos** | *SOLUCIONES TECNOLÓGICAS MyM*")
+# Cuerpo Central Centrado
+st.markdown(f"""
+<div class="centrado-texto">
+    <img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo">
+    <h1 class="titulo-lina-neon">L.I.N.A.</h1>
+    <div style="color: #008fb3; font-size: 22px; font-weight: bold;">GESTIÓN PROFESIONAL MyM | DESDE 2007</div>
+    <div style="font-size: 16px; color: #444;">Laboratorio de Inteligencia y Nuevos Algoritmos</div>
+</div>
+""", unsafe_allow_html=True)
 
-# --- 6. NAVEGACIÓN ---
+st.divider()
+
+# --- 6. NAVEGACIÓN (AQUÍ CONTINÚA TU CÓDIGO DE BOTONES) ---
 c1, c2, c3, c4 = st.columns(4)
 with c1: 
     if st.button("💰 COTIZADOR", use_container_width=True): st.session_state.seccion = "COTIZADOR"
