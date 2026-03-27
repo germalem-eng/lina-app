@@ -112,7 +112,7 @@ st.markdown(f"""
         <a href="https://t.me/+573114759768" target="_blank" class="social-tag" style="background-color: #0088CC;">Telegram</a>
     </div>
 </div>
-""", unsafe_allow_html=True
+""", unsafe_allow_html=True)
 
 # CREACIÓN DE LAS DOS COLUMNAS
 col_izq, col_der = st.columns([1.2, 2.3])
