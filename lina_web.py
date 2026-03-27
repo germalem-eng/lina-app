@@ -27,7 +27,7 @@ def get_base64(bin_file):
 logo_robot_b64 = get_base64("Logos/logo_robot_2007.jpg")
 fondo_b64 = get_base64("Logos/fondo.jpg")
 
-# --- 4. ESTILOS CSS (DISEÑO MONUMENTAL AZUL Y FUSIONADO) ---
+# --- 4. ESTILOS CSS (DISEÑO MONUMENTAL AZUL V17.2) ---
 st.markdown(f"""
 <style>
     /* 1. FONDO DE PÁGINA (CON TRANSPARENCIA) */
@@ -52,16 +52,16 @@ st.markdown(f"""
     /* 3. BLOQUE DE TEXTO CENTRADO Y ESCALONADO */
     .contenedor-titulos {{
         display: flex; flex-direction: column; justify-content: center;
-        align-items: center; text-align: center; width: 100%;
+        align-items: center; text-align: center; width: 100%; height: 100%;
     }}
 
-    /* 4. LINA MONUMENTAL AZUL (30% MÁS GRANDE) */
+    /* 4. LINA MONUMENTAL AZUL (40% MÁS GRANDE - V17.2) */
     .titulo-lina-final {{
         font-family: 'Comic Sans MS', cursive; 
-        font-size: clamp(80px, 15vw, 170px); /* GIGANTE */
+        font-size: clamp(100px, 18vw, 220px); /* GIGANTE */
         color: #004d61; /* Azul Profundo MyM */
-        text-shadow: 0 0 25px #00FFFF, 0 0 50px #00FFFF; /* Destello Cyan Eléctrico */
-        margin: 0; line-height: 0.85;
+        text-shadow: 0 0 30px #00FFFF, 0 0 60px #00FFFF, 0 0 90px #00FFFF; /* Triple Destello Cyan */
+        margin: 0; line-height: 0.8;
     }}
     
     /* 5. LOGO IMPONENTE AZUL (20% MÁS GRANDE) */
@@ -118,7 +118,6 @@ with col_titulos:
         </div>
     </div>
     """, unsafe_allow_html=True)
-st.divider()
 
 # --- 6. NAVEGACIÓN ---
 st.write("### 🚀 Panel Operativo:")
