@@ -102,7 +102,7 @@ st.markdown(f"""
 
 <div class="nav-bar-silver">
     <div style="font-family: monospace; font-weight: bold; color: #333;">
-        📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')} | SOLUCIONES TECNOLÓGICAS M Y M
+        📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')} | S T M Y M
     </div>
     <div>
         <a href="https://www.youtube.com/@gerardomartinezlemus7969" target="_blank" class="social-tag" style="background-color: #FF0000;">YouTube</a>
