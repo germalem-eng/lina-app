@@ -7,7 +7,7 @@ from datetime import timedelta
 from streamlit_autorefresh import st_autorefresh
 
 # --- 1. CONFIGURACIÓN DEL SISTEMA ---
-st.set_page_config(page_title="LINA V17.0 | Soluciones Tecnológicas M Y M", layout="wide", page_icon="🤖")
+st.set_page_config(page_title="LINA V18.0 | Soluciones Tecnológicas M Y M", layout="wide", page_icon="🤖")
 st_autorefresh(interval=1000, key="daterefresh")
 ahora = datetime.datetime.now() - datetime.timedelta(hours=5)
 
@@ -25,15 +25,16 @@ def get_base64(bin_file):
     return ""
 
 logo_robot_b64 = get_base64("Logos/logo_robot_2007.jpg")
-fondo_b64 = get_base64("Logos/fondo.jpg")
+# Usamos el fondo de código binario de image_3.png
+fondo_binario_b64 = get_base64("Logos/fondo_binario.png")
 
-# --- 4. ESTILOS CSS (DISEÑO MONUMENTAL AZUL V17.2) ---
+# --- 4. ESTILOS CSS (FONDO 50% TRANSPARENTE Y DISEÑO AZUL) ---
 st.markdown(f"""
 <style>
-    /* 1. FONDO DE PÁGINA (CON 50 % TRANSPARENCIA) */
+    /* 1. FONDO DE CÓDIGO BINARIO CON 50% DE TRANSPARENCIA */
     .stApp {{
-        background-image: linear-gradient(rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.96)),
-                          url("data:image/jpeg;base64,{fondo_b64}");
+        background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
+                          url("data:image/png;base64,{fondo_binario_b64}");
         background-size: cover !important;
         background-attachment: fixed !important;
     }}
@@ -55,25 +56,25 @@ st.markdown(f"""
         align-items: center; text-align: center; width: 100%; height: 100%;
     }}
 
-    /* 4. LINA MONUMENTAL AZUL (40% MÁS GRANDE - V17.2) */
+    /* 4. LINA MONUMENTAL AZUL (TAMAÑO 220px) */
     .titulo-lina-final {{
         font-family: 'Comic Sans MS', cursive; 
-        font-size: clamp(100px, 18vw, 220px); /* GIGANTE */
+        font-size: clamp(100px, 18vw, 220px);
         color: #004d61; /* Azul Profundo MyM */
-        text-shadow: 0 0 30px #00FFFF, 0 0 60px #00FFFF, 0 0 90px #00FFFF; /* Triple Destello Cyan */
+        text-shadow: 0 0 30px #00FFFF, 0 0 60px #00FFFF, 0 0 90px #00FFFF;
         margin: 0; line-height: 0.8;
     }}
     
-    /* 5. LOGO IMPONENTE AZUL (20% MÁS GRANDE) */
+    /* 5. LOGO IMPONENTE AZUL (DIÁMETRO 270px) */
     .logo-redondo-final {{
-        width: 270px; height: 270px; /* Diámetro GIGANTE */
-        border-radius: 50%; border: 6px solid #00FFFF; /* Borde Cyan Eléctrico */
+        width: 270px; height: 270px;
+        border-radius: 50%; border: 6px solid #00FFFF;
         box-shadow: 0 0 35px #00FFFF; object-fit: cover;
     }}
 
     /* 6. SUBTÍTULOS AZULES */
     .sub-laboratorio {{
-        color: #008fb3; /* Azul Cyan Medio */
+        color: #008fb3;
         font-size: 32px; font-weight: bold; line-height: 1.1; margin-top: 15px;
     }}
     
@@ -97,16 +98,13 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-# Ajuste de Proporción de Columnas para el Logo Gigante
-col_logo, col_titulos = st.columns([1.2, 2.3]) 
+col_logo, col_titulos = st.columns([1.2, 2.3])
 
 with col_logo:
-    # Mostramos el logo maximizado y centrado con destello azul
     if logo_robot_b64:
         st.markdown(f'<div style="display:flex; justify-content:center; align-items:center; height:100%;"><img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final"></div>', unsafe_allow_html=True)
 
 with col_titulos:
-    # Mostramos LINA monumental y los títulos escalonados
     st.markdown(f"""
     <div class="contenedor-titulos">
         <h1 class="titulo-lina-final">L.I.N.A.</h1>
@@ -118,6 +116,8 @@ with col_titulos:
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+st.divider()
 
 # --- 6. NAVEGACIÓN ---
 st.write("### 🚀 Panel Operativo:")
@@ -137,21 +137,11 @@ with c4:
 
 st.divider()
 
-# --- 7. COTIZADOR (CON TU LÓGICA DE PRECIOS) ---
+# --- 7. LÓGICA DE SECCIONES (Mantenemos el Cotizador Funcional) ---
 if st.session_state.seccion == "COTIZADOR":
     st.subheader("💰 Cotizador Inteligente")
-    col_precios, col_calc = st.columns([1, 2])
-    with col_precios:
-        st.markdown("""
-        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 10px; border: 2px solid #00d4ff;">
-            <h4 style="text-align:center;">📋 Tarifas MyM</h4>
-            <ul style="font-size: 14px;">
-                <li><b>Revisión:</b> $40.000 (Gratis con servicio)</li>
-                <li><b>Legal:</b> 10% del ahorro</li>
-                <li><b>Domicilio:</b> $20.000</li>
-            </ul>
-        </div>
-        """, unsafe_allow_html=True)
+    col_calc, col_info = st.columns([2, 1])
+    
     with col_calc:
         ser = st.selectbox("Servicio:", ["Mantenimiento Preventivo", "Mantenimiento Correctivo", "Asesoría Legal"])
         mod = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
@@ -160,6 +150,18 @@ if st.session_state.seccion == "COTIZADOR":
         total = (base * 1.20) + dom if "Mantenimiento" in ser else base + dom
         st.metric("Inversión Total", f"${total:,.0f} COP")
         st.link_button("📅 AGENDAR CITA", f"https://wa.me/573114759768")
+        
+    with col_info:
+        st.markdown("""
+        <div style="background-color: rgba(248, 249, 250, 0.7); padding: 15px; border-radius: 10px; border: 2px solid #00d4ff;">
+            <h4 style="text-align:center;">📋 Tarifas MyM</h4>
+            <ul style="font-size: 14px;">
+                <li><b>Revisión:</b> $40.000 (Gratis con servicio)</li>
+                <li><b>Legal:</b> 10% del ahorro</li>
+                <li><b>Domicilio:</b> $20.000</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
 
 elif st.session_state.seccion == "FINANZAS":
     st.subheader("🏠 Control Personal")
@@ -167,7 +169,7 @@ elif st.session_state.seccion == "FINANZAS":
 
 # --- 8. PIE DE PÁGINA (EJECUTIVO) ---
 st.markdown(f"""
-<div style="background-color: #f1f1f1; padding: 15px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 20px;">
+<div style="background-color: rgba(241, 241, 241, 0.7); padding: 15px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 20px;">
     <b>⚠️ Nota de Honorarios:</b> Nuestros honorarios se basan estrictamente en el éxito conseguido. 
     Defensa Legal: 10% del ahorro. Mantenimiento: Revisión gratis si se realiza el proceso.
 </div>
