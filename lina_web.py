@@ -27,15 +27,18 @@ def get_base64(bin_file):
 logo_robot_b64 = get_base64("Logos/logo_robot_2007.jpg")
 fondo_b64 = get_base64("Logos/fondo.jpg")
 
-# --- 4. ESTILOS CSS (DISEÑO ESCALONADO Y CENTRADO) ---
+# --- 4. ESTILOS CSS (DISEÑO MONUMENTAL AZUL Y FUSIONADO) ---
 st.markdown(f"""
 <style>
+    /* 1. FONDO DE PÁGINA (CON TRANSPARENCIA) */
     .stApp {{
         background-image: linear-gradient(rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.96)),
                           url("data:image/jpeg;base64,{fondo_b64}");
         background-size: cover !important;
         background-attachment: fixed !important;
     }}
+    
+    /* 2. BARRA PLATEADA SUPERIOR */
     .nav-bar-silver {{
         display: flex; justify-content: space-between; align-items: center;
         padding: 10px 20px; background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
@@ -46,36 +49,41 @@ st.markdown(f"""
         color: white !important; font-weight: bold; font-size: 13px; margin-left: 8px;
     }}
     
-    /* Bloque de Texto Centrado y Escalonado */
+    /* 3. BLOQUE DE TEXTO CENTRADO Y ESCALONADO */
     .contenedor-titulos {{
         display: flex; flex-direction: column; justify-content: center;
         align-items: center; text-align: center; width: 100%;
     }}
 
+    /* 4. LINA MONUMENTAL AZUL (30% MÁS GRANDE) */
     .titulo-lina-final {{
         font-family: 'Comic Sans MS', cursive; 
-        font-size: clamp(60px, 10vw, 120px);
-        color: #000; text-shadow: 0 0 20px #7FFFD4, 0 0 40px #7FFFD4; 
-        margin: 0; line-height: 0.9;
+        font-size: clamp(80px, 15vw, 170px); /* GIGANTE */
+        color: #004d61; /* Azul Profundo MyM */
+        text-shadow: 0 0 25px #00FFFF, 0 0 50px #00FFFF; /* Destello Cyan Eléctrico */
+        margin: 0; line-height: 0.85;
     }}
     
+    /* 5. LOGO IMPONENTE AZUL (20% MÁS GRANDE) */
     .logo-redondo-final {{
-        width: 220px; height: 220px;
-        border-radius: 50%; border: 5px solid #7FFFD4; 
-        box-shadow: 0 0 25px #7FFFD4; object-fit: cover;
+        width: 270px; height: 270px; /* Diámetro GIGANTE */
+        border-radius: 50%; border: 6px solid #00FFFF; /* Borde Cyan Eléctrico */
+        box-shadow: 0 0 35px #00FFFF; object-fit: cover;
     }}
 
+    /* 6. SUBTÍTULOS AZULES */
     .sub-laboratorio {{
-        color: #008fb3; font-size: 28px; font-weight: bold; line-height: 1.2; margin-top: 10px;
+        color: #008fb3; /* Azul Cyan Medio */
+        font-size: 32px; font-weight: bold; line-height: 1.1; margin-top: 15px;
     }}
     
     .sub-mym {{
-        color: #444; font-size: 20px; font-weight: 500; margin-top: 5px;
+        color: #444; font-size: 22px; font-weight: 500; margin-top: 10px;
     }}
 </style>
 """, unsafe_allow_html=True)
 
-# --- 5. ENCABEZADO ---
+# --- 5. ENCABEZADO VISUAL FUSIONADO ---
 st.markdown(f"""
 <div class="nav-bar-silver">
     <div style="font-family: monospace; font-weight: bold;">📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')}</div>
@@ -89,13 +97,16 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-col_logo, col_titulos = st.columns([1, 2.5])
+# Ajuste de Proporción de Columnas para el Logo Gigante
+col_logo, col_titulos = st.columns([1.2, 2.3]) 
 
 with col_logo:
+    # Mostramos el logo maximizado y centrado con destello azul
     if logo_robot_b64:
         st.markdown(f'<div style="display:flex; justify-content:center; align-items:center; height:100%;"><img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final"></div>', unsafe_allow_html=True)
 
 with col_titulos:
+    # Mostramos LINA monumental y los títulos escalonados
     st.markdown(f"""
     <div class="contenedor-titulos">
         <h1 class="titulo-lina-final">L.I.N.A.</h1>
@@ -107,7 +118,6 @@ with col_titulos:
         </div>
     </div>
     """, unsafe_allow_html=True)
-
 st.divider()
 
 # --- 6. NAVEGACIÓN ---
