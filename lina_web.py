@@ -7,7 +7,7 @@ from datetime import timedelta
 from streamlit_autorefresh import st_autorefresh
 
 # --- 1. CONFIGURACIÓN DEL SISTEMA ---
-st.set_page_config(page_title="LINA V16.7 | Soluciones Tecnológicas M Y M", layout="wide", page_icon="🤖")
+st.set_page_config(page_title="LINA V16.8 | Soluciones Tecnológicas M Y M", layout="wide", page_icon="🤖")
 st_autorefresh(interval=1000, key="daterefresh")
 ahora = datetime.datetime.now() - datetime.timedelta(hours=5)
 
@@ -27,7 +27,7 @@ def get_base64(bin_file):
 logo_robot_b64 = get_base64("Logos/logo_robot_2007.jpg")
 fondo_b64 = get_base64("Logos/fondo.jpg")
 
-# --- 4. ESTILOS CSS (DISEÑO MONUMENTAL Y FONDO) ---
+# --- 4. ESTILOS CSS (DISEÑO MONUMENTAL) ---
 st.markdown(f"""
 <style>
     .stApp {{
@@ -89,7 +89,7 @@ with col_titulos:
 
 st.divider()
 
-# --- 6. NAVEGACIÓN (Sintaxis Corregida) ---
+# --- 6. NAVEGACIÓN ---
 st.write("### 🚀 Panel Operativo:")
 c1, c2, c3, c4 = st.columns(4)
 with c1:
@@ -107,10 +107,9 @@ with c4:
 
 st.divider()
 
-# --- 7. LÓGICA DE SECCIONES (COTIZADOR RESTAURADO) ---
+# --- 7. LÓGICA DE SECCIONES (COTIZADOR ESTRATÉGICO) ---
 if st.session_state.seccion == "COTIZADOR":
     st.subheader("💰 Cotizador Inteligente de Servicios")
-    
     col_precios, col_calc = st.columns([1, 2])
     
     with col_precios:
@@ -118,57 +117,49 @@ if st.session_state.seccion == "COTIZADOR":
         <div style="background-color: #f8f9fa; padding: 15px; border-radius: 10px; border: 2px solid #00d4ff;">
             <h4 style="text-align:center;">📋 Tarifas Oficiales</h4>
             <ul style="font-size: 14px;">
-                <li><b>Revisión Técnica:</b> $40.000<br><small>(Bonificada al 100% si acepta el servicio)</small></li>
+                <li><b>Revisión Técnica:</b> $40.000<br><small>(Gratis si realiza el proceso)</small></li>
                 <li><b>Trámite Legal:</b> 10% del ahorro conseguido.</li>
                 <li><b>Recargo Domicilio:</b> $20.000</li>
-                <li><b>Mantenimientos:</b> Incluyen peritaje técnico especializado.</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
 
     with col_calc:
-        tipo_ser = st.selectbox("Seleccione el Servicio:", 
-                                ["Mantenimiento Preventivo", "Mantenimiento Correctivo", "Asesoría Legal / Habeas Data"])
-        modalidad = st.radio("Modalidad de atención:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
+        tipo_ser = st.selectbox("Seleccione el Servicio:", ["Mantenimiento Preventivo", "Mantenimiento Correctivo", "Asesoría Legal / Habeas Data"])
+        modalidad = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
         
-        # LÓGICA DE COBRO GERARDO
         base_revision = 40000
         recargo_dom = 20000 if modalidad == "A Domicilio" else 0
         
         if "Mantenimiento" in tipo_ser:
-            # Estrategia: Decimos revisión gratis, pero sumamos 20% sobre el mínimo internamente
             total = (base_revision * 1.20) + recargo_dom
-            nota = "✅ **¡REVISIÓN GRATIS!** El valor mostrado incluye la mano de obra y el peritaje técnico."
-        elif "Legal" in tipo_ser:
+            st.info("✅ **¡REVISIÓN GRATIS!** El valor incluye mano de obra y peritaje especializado.")
+        else:
             total = base_revision + recargo_dom
-            nota = "⚖️ **ASESORÍA PROFESIONAL:** Si iniciamos el proceso, el costo de esta consulta se abona al éxito del caso (10%)."
-        
-        st.metric("Inversión Total Estimada", f"${total:,.0f} COP", f"+{recargo_dom} por domicilio" if recargo_dom > 0 else None)
-        st.info(nota)
-        
-        # Botón de Agendamiento Directo
-        msg = f"Hola Gerardo, deseo agendar un {tipo_ser} en modalidad {modalidad}."
-        st.link_button("📅 AGENDAR CITA EN WHATSAPP", f"https://wa.me/573114759768?text={msg.replace(' ', '%20')}")
+            st.info("⚖️ **DEFENSA LEGAL:** Se cobra el 10% del ahorro solo si el resultado es exitoso.")
+            
+        st.metric("Inversión Total", f"${total:,.0f} COP")
+        st.link_button("📅 AGENDAR CITA", f"https://wa.me/573114759768")
 
 elif st.session_state.seccion == "GESTION":
     st.subheader("⚖️ Seguimiento a Casos Generados")
     if os.path.exists(archivo_casos):
         st.dataframe(pd.read_csv(archivo_casos), use_container_width=True)
-    else:
-        st.info("No hay registros de casos pendientes.")
 
 elif st.session_state.seccion == "RADICACION":
-    st.subheader("📝 Generador de Peticiones Legales")
-    st.text_area("Vista Previa:", value=st.session_state.doc_final, height=300)
+    st.subheader("📝 Generador de Peticiones")
+    st.text_area("Vista Previa:", value=st.session_state.doc_final, height=250)
 
 elif st.session_state.seccion == "FINANZAS":
-    st.subheader("🏠 Control Personal - Metas Vivienda")
-    st.metric("Saldo Sistecrédito", "$898.771")
+    st.subheader("🏠 Control Personal MyM")
+    st.metric("Meta Sistecrédito", "$898.771")
 
-# --- 8. PIE DE PÁGINA ---
+# --- 8. PIE DE PÁGINA (EJECUTIVO MyM) ---
 st.markdown(f"""
 <div style="background-color: #f1f1f1; padding: 15px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 20px;">
-    <b>Soluciones Tecnológicas M Y M</b><br>
-    Expertos en Soporte Técnico y Soluciones Legales desde 2007.
+    <b>⚠️ Nota de Honorarios:</b> Nuestros honorarios se basan estrictamente en el éxito conseguido. 
+    Defensa Legal: 10% del ahorro. Mantenimiento: Revisión gratis si se realiza el proceso.
 </div>
 """, unsafe_allow_html=True)
+
+st.caption(f"LINA Core | © {ahora.year} Gerardo Martinez Lemus | Soluciones Tecnológicas M Y M")
