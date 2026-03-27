@@ -28,13 +28,12 @@ logo_robot_b64 = get_base64("Logos/logo_robot_2007.jpg")
 # Usamos el fondo de código binario de image_3.png
 fondo_binario_b64 = get_base64("Logos/fondo_binario.png")
 
-# --- 4. ESTILOS CSS (FONDO BINARIO Y DISEÑO DE COLUMNAS) ---
+# --- 4. ESTILOS CSS (FONDO CON RUTA DIRECTA Y TRANSPARENCIA) ---
+# Primero convertimos la imagen de la ruta a base64 para que el navegador la lea
 def get_image_base64(path):
     import base64
-    if os.path.exists(path):
-        with open(path, "rb") as img_file:
-            return base64.b64encode(img_file.read()).decode()
-    return ""
+    with open(path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode()
 
 # Cargamos el fondo desde la ruta Logos/fondo.jpg
 fondo_path = "Logos/fondo.jpg"
@@ -54,42 +53,33 @@ st.markdown(f"""
     .nav-bar-silver {{
         display: flex; justify-content: space-between; align-items: center;
         padding: 10px 20px; background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
-        border-bottom: 3px solid #666; border-radius: 8px; margin-bottom: 15px;
+        border-bottom: 3px solid #666; border-radius: 8px; margin-bottom: 20px;
     }}
     
-    /* 3. LOGO GIGANTE CON NEÓN AZUL */
+    /* 3. LOGO MONUMENTAL CON NEÓN AZUL */
     .logo-redondo-final {{
-        width: 300px; height: 300px; /* Tamaño monumental */
+        display: block; margin: 0 auto; width: 300px; height: 300px;
         border-radius: 50%; border: 6px solid #00FFFF;
         box-shadow: 0 0 30px #00FFFF, 0 0 60px #00FFFF;
         object-fit: cover;
     }}
     
-    /* 4. BLOQUE DE TÍTULOS ESCALONADOS (DERECHA) */
-    .contenedor-titulos {{
-        display: flex; flex-direction: column; justify-content: center;
-        align-items: center; text-align: center; width: 100%; height: 100%;
-    }}
-
+    /* 4. TÍTULOS CENTRADOS Y ESCALONADOS */
     .titulo-lina-final {{
         font-family: 'Comic Sans MS', cursive; 
-        font-size: clamp(100px, 18vw, 220px); /* LINA GIGANTE */
-        color: #004d61; /* Azul Profundo MyM */
-        text-shadow: 0 0 30px #00FFFF, 0 0 60px #00FFFF;
-        margin: 0; line-height: 0.8;
+        font-size: 110px; color: #004d61; text-align: center;
+        text-shadow: 0 0 20px #00FFFF; margin: 15px 0; line-height: 0.8;
     }}
-    
-    .sub-laboratorio {{
-        color: #008fb3; font-size: 32px; font-weight: bold; line-height: 1.1; margin-top: 15px;
+    .subtitulo-azul {{
+        color: #008fb3; font-size: 32px; font-weight: bold; text-align: center; line-height: 1.1;
     }}
-    
-    .sub-mym {{
-        color: #444; font-size: 22px; font-weight: 500; margin-top: 10px;
+    .subtitulo-mym {{
+        color: #444; font-size: 22px; font-weight: 500; text-align: center; margin-top: 10px;
     }}
 </style>
 """, unsafe_allow_html=True)
 
-# --- 5. ENCABEZADO EN DOS COLUMNAS ---
+# --- 5. ENCABEZADO VISUAL ---
 st.markdown(f"""
 <div class="nav-bar-silver">
     <div style="font-family: monospace; font-weight: bold;">📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')}</div>
@@ -97,22 +87,15 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-# Creamos las dos columnas para recuperar la estructura
-col_logo, col_titulos = st.columns([1.2, 2.3])
+# Bloque Central: Logo y Títulos Escalonados
+st.markdown(f'<img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final">', unsafe_allow_html=True)
+st.markdown(f'<h1 class="titulo-lina-final">L.I.N.A.</h1>', unsafe_allow_html=True)
+st.markdown(f"""
+    <div class="subtitulo-azul">Laboratorio de Inteligencia<br>y Nuevos Algoritmos</div>
+    <div class="subtitulo-mym">Soluciones Tecnológicas MYM<br>Desde 2007</div>
+""", unsafe_allow_html=True)
 
-with col_logo:
-    # Mostramos el logo gigante a la izquierda
-    if logo_robot_b64:
-        st.markdown(f'<div style="display:flex; justify-content:center; align-items:center; height:100%;"><img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final"></div>', unsafe_allow_html=True)
-
-with col_titulos:
-    # Mostramos LINA y subtítulos a la derecha de forma escalonada
-    st.markdown(f"""
-    <div class="contenedor-titulos">
-        <h1 class="titulo-lina-final">L.I.N.A.</h1>
-        <div class="sub-laboratorio">
-            Laboratorio
-
+st.divider()
 # --- 6. NAVEGACIÓN ---
 st.write("### 🚀 Panel Operativo:")
 c1, c2, c3, c4 = st.columns(4)
