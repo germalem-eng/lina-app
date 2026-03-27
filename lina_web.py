@@ -99,33 +99,86 @@ st.divider()
 # --- 5. DESPLIEGUE DE CONTENIDO ---
 
 if st.session_state.seccion == "LEGAL":
-    st.subheader("🛡️ Escudo Anti-Abuso y Habeas Data")
-    tab1, tab2, tab3 = st.tabs(["🔍 Evaluador", "📞 ¿Qué responder?", "📝 Petición"])
+    st.subheader("🛡️ Escudo Anti-Abuso y Liquidación MyM")
+    tab1, tab2, tab3 = st.tabs(["🔍 Evaluador y Honorarios", "📞 ¿Qué responder?", "📝 Petición"])
 
     with tab1:
-        st.info("📊 **Análisis de Viabilidad de la Deuda**")
+        st.markdown("### 📊 Diagnóstico y Liquidación de Comisión MyM")
         col_l1, col_l2 = st.columns(2)
+        
         with col_l1:
-            fecha_vence = st.number_input("Años desde la mora:", min_value=0, max_value=20, step=1)
-            tipo_d = st.selectbox("Tipo de Deuda:", ["Tarjeta/Banco", "Celular/Internet", "Revistas/Varios", "Sistecrédito/Ropa"])
+            v_deuda = st.number_input("Valor que exige el cobrador ($):", min_value=0, value=1789977)
+            v_capital = st.number_input("Capital original (Meta de pago) ($):", min_value=0, value=700000)
+            dias_mora = st.number_input("Días de mora reportados:", min_value=0, value=801)
+        
         with col_l2:
             ya_pago = st.checkbox("¿Ya pagó la deuda?")
             acoso = st.checkbox("¿Acoso telefónico? (Ley 2300)")
+            
+            # Lógica de Estado basada en la mora
+            if dias_mora <= 90:
+                st.warning("🟡 **ESTADO: COBRANZA ADMINISTRATIVA**")
+                st.write("Estrategia: Exija desglose y detenga el reporte con la Ley 1266.")
+            elif dias_mora <= 360:
+                st.error("🟠 **ESTADO: PRE-JURÍDICO**")
+                st.write("Estrategia: Ofrezca el 100% del capital para frenar demanda.")
+            else:
+                st.error("🔴 **ESTADO: CARTERA CASTIGADA**")
+                st.write("Estrategia (Caso Solventa): Negocie solo capital. El riesgo es mínimo.")
 
-        if fecha_vence >= 8:
-            st.success("✅ **CADUCIDAD:** El reporte debe ser borrado (Ley 2157).")
-        elif fecha_vence >= 3 and tipo_d != "Tarjeta/Banco":
-            st.warning("⚠️ **POSIBLE PRESCRIPCIÓN:** No reconozca la deuda sin asesoría.")
-        if acoso:
-            st.error("🚫 **ABUSO:** Están violando la Ley 'Dejen de Fregar'.")
+        st.divider()
+        # --- EL MOTOR DE TU NEGOCIO (EL 10%) ---
+        ahorro_real = v_deuda - v_capital
+        comision_mym = ahorro_real * 0.10 if ahorro_real > 0 else 0
 
+        c1, c2, c3 = st.columns(3)
+        c1.metric("Ahorro del Cliente", f"${ahorro_real:,.0f}")
+        c2.metric("Meta de Pago", f"${v_capital:,.0f}")
+        c3.metric("Honorarios MyM (10%)", f"${comision_mym:,.0f}", delta="Tu Ganancia")
+        
+        st.caption("⚠️ Nota: Sus honorarios se basan en el éxito del ahorro conseguido.")
     with tab2:
-        st.markdown("### 🗣️ Respuestas Legales Inmediatas")
-        with st.expander("1. Si exigen pago de deuda vieja (+4 años)"):
-            st.info("Diga: 'Solicite el soporte del títulovalor (pagaré) antes de negociar. Me acojo al derecho de inspección.'")
-        with st.expander("2. Si llaman en horarios prohibidos"):
-            st.info("Diga: 'Está incumpliendo la Ley 2300 de 2023. Procederé a denunciar ante la SIC si persiste.'")
+        st.markdown("### 🗣️ Respuestas Legales Basadas en Normatividad")
+        st.info("💡 *Use estas respuestas cuando el cobrador intente presionarlo. Cite las leyes para demostrar conocimiento técnico.*")
+        
+        # PREGUNTA 1: INTERESES ABUSIVOS
+        with st.expander("❓ ¿Por qué el cobro supera el doble del capital inicial?"):
+            st.write("""
+            **Respuesta Legal:** 'Bajo el **Art. 884 del Código de Comercio**, cualquier cobro que supere la Tasa de Usura es ilegal. Exijo un desglose certificado donde se demuestre que no hay anatocismo (cobro de intereses sobre intereses) y que se respete el tope legal de la Superfinanciera.'
+            """)
+            st.caption("⚖️ Norma: Código de Comercio Art. 884 / Ley 1266 de 2008.")
 
+        # PREGUNTA 2: NEGOCIACIÓN DE BUENA FE
+        with st.expander("❓ ¿Están obligados a aceptarme un acuerdo por el capital base?"):
+            st.write("""
+            **Respuesta Legal:** 'Según la **Ley 2157 de 2021 (Borrón y Cuenta Nueva)**, las entidades deben facilitar la extinción de deudas en cartera castigada. Dado que el reporte es negativo y afecta mi buen nombre, mi oferta de pago por el capital busca la democratización del crédito que promueve esta ley.'
+            """)
+            st.caption("⚖️ Norma: Ley 2157 de 2021.")
+
+        # PREGUNTA 3: VERACIDAD DEL DATO (HABEAS DATA)
+        with st.expander("❓ ¿Qué pasa si el valor que reportan no coincide con mis cuentas?"):
+            st.write("""
+            **Respuesta Legal:** 'La **Ley 1266 de 2008** exige que el dato reportado sea VERAZ y EXACTO. Si ustedes no pueden demostrar el origen de cada peso de esos $1.7M, están incurriendo en un reporte ilegal. Solicito la corrección inmediata en centrales de riesgo.'
+            """)
+            st.caption("⚖️ Norma: Ley 1266 de 2008.")
+
+        # PREGUNTA 4: HORARIOS DE ACOSO (LEY 2300)
+        with st.expander("❓ ¿Me pueden llamar un domingo o a las 8:00 PM?"):
+            st.write("""
+            **Respuesta Legal:** 'Usted está violando la **Ley 2300 de 2023 (Dejen de Fregar)**. Esta ley prohíbe el contacto fuera de horarios hábiles (L-V 7am-7pm, S 8am-3pm) y más de dos veces por semana. Esta llamada está siendo registrada para la queja ante la SIC.'
+            """)
+            st.caption("⚖️ Norma: Ley 2300 de 2023.")
+       
+        # CASO REAL: RESPUESTA A SOLVENTA / CARTERA CASTIGADA
+        with st.expander("❓ El cobrador (Solventa) dice que 'no es posible' el descuento por capital"):
+            st.error("🚨 **ALERTA DE PRESIÓN:** Intentan que pagues intereses inflados de 801 días.")
+            st.write("""
+            **Respuesta Técnica Sugerida:**
+            'Entiendo su posición, pero jurídicamente la obligación tiene **más de 800 días de mora**, lo que la sitúa en **Cartera Castigada**. Bajo la **Ley 2157 de 2021**, las entidades deben facilitar la extinción de deudas para trámites de vivienda. 
+            
+            Mi oferta de **$700.000** cubre el capital original. Si persisten en el cobro de intereses abusivos sobre una deuda castigada, elevaré una **Queja Formal ante la Superintendencia Financiera** por falta de voluntad de negociación.'
+            """)
+            st.caption("⚖️ Estrategia: Presión por Trámite de Vivienda y Superfinanciera.")    
     with tab3:
         st.markdown("### 📝 Datos para la Radicación")
         col_d1, col_d2 = st.columns(2)
@@ -162,6 +215,26 @@ if st.session_state.seccion == "LEGAL":
                 f"{u_nom}\n"
                 f"C.C. {u_ced}"
             )
+                # --- NUEVO: MONITOR DE SEGUIMIENTO LEGAL ---
+            st.markdown("---")
+            st.subheader("📅 Monitor de Respuesta (Silencio Administrativo)")
+            
+            # Calendario para marcar el día que se envió el correo o radicó
+            fecha_radicado = st.date_input("¿Qué día radicó esta petición?", value=ahora)
+            
+            # Calculamos 15 días hábiles (aprox. 21 días calendario)
+            fecha_vencimiento = fecha_radicado + datetime.timedelta(days=21) 
+            
+            # Diferencia contra el día de hoy
+            dias_restantes = (fecha_vencimiento - ahora.date()).days
+
+            if dias_restantes > 0:
+                st.warning(f"⏳ Faltan **{dias_restantes}** días para que se cumpla el término legal.")
+                st.info(f"📅 Fecha estimada de respuesta: **{fecha_vencimiento.strftime('%d/%m/%Y')}**")
+            else:
+                st.error("🚨 **¡PLAZO VENCIDO!** Si no hay respuesta, puedes solicitar el Silencio Administrativo Positivo.")
+                         
+            
             
             st.text_area("📄 Vista Previa del Documento:", value=doc, height=250)
             
