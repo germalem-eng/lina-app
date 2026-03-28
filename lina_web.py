@@ -169,14 +169,26 @@ elif st.session_state.seccion == "RADICACION":
         url_wa = f"https://wa.me/?text={base64.urlsafe_b64encode(mensaje_wa.encode()).decode()}" # Versión simple para probar
         st.markdown(f'<a href="https://api.whatsapp.com/send?text={mensaje_wa}" target="_blank" style="background-color:#25D366; color:white; padding:10px 20px; text-decoration:none; border-radius:5px; font-weight:bold; display:block; text-align:center;">📲 ENVIAR BORRADOR POR WHATSAPP</a>', unsafe_allow_html=True)
 
-    # --- 3. SECCIÓN BANCOLOMBIA ---
+    # --- 3. SECCIÓN REVERSIÓN BANCARIA UNIVERSAL ---
     st.markdown("---")
-    st.write("### 🏦 Reversión Bancolombia")
-    monto_banc = st.text_input("Monto a reclamar:", value="$502.837")
-    if st.button("🏦 GENERAR TEXTO BANCOLOMBIA", use_container_width=True):
-        texto_ban = f"SOLICITUD DE REVERSIÓN - CUENTA DE NÓMINA\nCliente: {u_nombre}\nEntidad: BANCOLOMBIA\nMonto: {monto_banc}\nCausal: Violación al Mínimo Vital y Oferta Incumplida.\nDerecho: Circular 007 Superfinanciera."
-        st.code(texto_ban)
-        st.markdown(f'<a href="https://api.whatsapp.com/send?text={texto_ban}" target="_blank" style="background-color:#25D366; color:white; padding:10px 20px; text-decoration:none; border-radius:5px; font-weight:bold; display:block; text-align:center;">📲 ENVIAR RECLAMO BANCO A LINA</a>', unsafe_allow_html=True)
+    st.write("### 🏦 Reversión de Pago (Cualquier Banco)")
+    
+    col_b1, col_b2 = st.columns(2)
+    with col_b1:
+        u_banco = st.text_input("Nombre del Banco:", placeholder="Ej: BANCOLOMBIA, DAVIVIENDA, BOGOTÁ...")
+    with col_b2:
+        monto_banc = st.text_input("Monto debitado:", value="$502.837")
+        
+    if st.button("🏦 GENERAR RECLAMO BANCARIO", use_container_width=True):
+        if u_banco:
+            texto_ban = f"SOLICITUD DE REVERSIÓN - CUENTA DE NÓMINA\nCliente: {u_nombre}\nEntidad: {u_banco.upper()}\nMonto: {monto_banc}\nCausal: Violación al Mínimo Vital e Incumplimiento de Oferta.\nDerecho: Circular 007 de la Superfinanciera y Sentencia T-012/17."
+            st.code(texto_ban)
+            # Enlace de WhatsApp
+            import urllib.parse
+            msg_encoded = urllib.parse.quote(texto_ban)
+            st.markdown(f'<a href="https://api.whatsapp.com/send?text={msg_encoded}" target="_blank" style="background-color:#25D366; color:white; padding:10px 20px; text-decoration:none; border-radius:5px; font-weight:bold; display:block; text-align:center;">📲 ENVIAR RECLAMO BANCARIO POR WHATSAPP</a>', unsafe_allow_html=True)
+        else:
+            st.error("⚠️ Por favor, ingresa el nombre del banco para generar el documento.")
 
 elif st.session_state.seccion == "GESTION":
     st.subheader("⚖️ Historial de Casos")
