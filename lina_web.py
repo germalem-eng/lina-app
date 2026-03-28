@@ -137,64 +137,45 @@ if st.session_state.seccion == "COTIZADOR":
         st.markdown('<div style="background-color:rgba(255,255,255,0.8);padding:15px;border-radius:10px;border:2px solid #00d4ff;"><h4>📋 Tarifas</h4><li>Revisión: $40.000</li><li>Legal: 10% ahorro</li><li>Domicilio: $20.000</li></div>', unsafe_allow_html=True)
 
 elif st.session_state.seccion == "RADICACION":
-    st.subheader("📝 Centro de Radicación Legal (Lina & MyM)")
+    st.subheader("📝 Centro de Defensa Ciudadana (Radicación Legal)")
     
+    # --- ENTRADA DE DATOS UNIVERSAL ---
+    with st.expander("👤 CONFIGURAR DATOS DEL AFECTADO (Dejar vacío para usar datos de Lina)"):
+        u_nombre = st.text_input("Nombre Completo:", placeholder="LINA PAOLA MOJICA").upper() or "LINA PAOLA MOJICA"
+        u_cedula = st.text_input("Cédula de Ciudadanía:", placeholder="1016026492") or "1016026492"
+        u_entidad = st.text_input("Entidad Acreedora / Casa Cobranza:", placeholder="RECOVERY OF CREDITS / RAPICREDIT") or "RECOVERY OF CREDITS / RAPICREDIT"
+
     # --- 1. SECCIÓN DATA CRÉDITO ---
     st.markdown("---")
     st.write("### ⚖️ Gestión DataCrédito")
-    u_nom_lina = "LINA PAOLA MOJICA"
-    u_ent_lina = "RAPICREDIT / ZINOBE"
-    
-    col_dc1, col_dc2 = st.columns([2, 1])
-    with col_dc1:
-        radicado_dc = st.text_input("Ingrese el número de radicado de DataCrédito:", placeholder="Ej: 2026-XXXXX")
+    radicado_dc = st.text_input("Ingrese el número de radicado de DataCrédito:", placeholder="Ej: 2026-XXXXX")
     
     if radicado_dc:
-        st.info(f"✅ Seguimiento activo para: {u_nom_lina} | Radicado: {radicado_dc}")
+        st.info(f"✅ Seguimiento activo para: {u_nombre} | Radicado: {radicado_dc}")
         fecha_res = (ahora + datetime.timedelta(days=15)).strftime('%d/%m/%Y')
-        st.write(f"📅 **Fecha estimada de respuesta:** {fecha_res}")
-    else:
-        st.warning("⚠️ Pendiente: Radicar en el portal y anotar el número aquí.")
+        st.write(f"📅 **Respuesta esperada:** {fecha_res}")
 
-    if st.button("💾 REGISTRAR RECLAMO DATACRÉDITO", use_container_width=True):
-        opcion_elegida = "No remitir comunicación previa / Incumplimiento Oferta"
-        st.success(f"✅ Reclamo registrado bajo la causal: {opcion_elegida}")
-        st.info("📅 Recordatorio: Revisar respuesta en 15 días hábiles.")
-
-    # --- 2. SECCIÓN RECOVERY CREDITS (PDF) ---
+    # --- 2. GENERADOR RECOVERY CREDITS ---
     st.markdown("---")
-    st.write("### 📄 Generador para Recovery Credits")
-    if st.button("🔍 GENERAR BORRADOR PARA RECOVERY", use_container_width=True):
-        u_ced = "1016026492"
-        u_ent_rec = "RECOVERY OF CREDITS / RAPICREDIT"
+    st.write("### 📄 Reclamo por Incumplimiento de Oferta")
+    if st.button("🔍 GENERAR BORRADOR TÉCNICO", use_container_width=True):
+        texto_legal = f"""RECLAMACIÓN FORMAL - INCUMPLIMIENTO DE OFERTA COMERCIAL\nFecha: {ahora.strftime('%d/%m/%Y')}\n\nSeñores {u_entidad}:\n\n1. OFERTA VINCULANTE: El SMS recibido establecía un plazo y monto específico. El débito realizado por un valor superior es una violación al término de la oferta.\n2. ABUSO DEL DERECHO: El uso del débito automático para vaciar cuentas sin respetar el mínimo vital es ilegal (Sentencia T-012/17).\n3. ACCIÓN LEGAL: Se informa que el radicado ante la Superfinanciera está en curso.\n\nAtentamente,\n{u_nombre} | C.C. {u_cedula}"""
         
-        texto_pdf = f"""RECLAMACIÓN FORMAL - INCUMPLIMIENTO DE OFERTA COMERCIAL
-Fecha: {ahora.strftime('%d/%m/%Y')}
-
-Señores RECOVERY OF CREDITS:
-
-1. OFERTA VINCULANTE: El SMS recibido el 27/03/2026 establecía un plazo hasta el 28/03/2026 para pagar $200.000. El débito realizado el 27/03/2026 por $503.000 es una violación al término de la oferta.
-2. ABUSO DEL DERECHO: El uso del débito automático para vaciar una cuenta de nómina sin respetar el mínimo vital es ilegal (Sentencia T-012/17).
-3. ACCIÓN LEGAL: Se informa que el radicado ante la Superfinanciera está en curso.
-
-Atentamente,
-{u_nom_lina} | C.C. {u_ced}"""
-
-        st.text_area("Copia este texto para tu PDF:", texto_pdf, height=250)
-        st.info("💡 **Tip de Gerardo:** Pega este texto en LibreOffice Draw y guárdalo como PDF para Alexandra.")
+        st.text_area("Texto para PDF:", texto_legal, height=220)
+        
+        # Botón de WhatsApp
+        mensaje_wa = f"Hola, comparto el borrador legal generado en L.I.N.A para el caso de {u_nombre}:\n\n{texto_legal}"
+        url_wa = f"https://wa.me/?text={base64.urlsafe_b64encode(mensaje_wa.encode()).decode()}" # Versión simple para probar
+        st.markdown(f'<a href="https://api.whatsapp.com/send?text={mensaje_wa}" target="_blank" style="background-color:#25D366; color:white; padding:10px 20px; text-decoration:none; border-radius:5px; font-weight:bold; display:block; text-align:center;">📲 ENVIAR BORRADOR POR WHATSAPP</a>', unsafe_allow_html=True)
 
     # --- 3. SECCIÓN BANCOLOMBIA ---
     st.markdown("---")
-    st.write("### 🏦 Reclamación Bancolombia")
-    if st.button("🏦 GENERAR RECLAMO BANCOLOMBIA", use_container_width=True):
-        banco_info = "BANCOLOMBIA - REVERSIÓN DE PAGO"
-        monto_debitado = "$502.837"
-        
-        st.success(f"Documento listo para {u_nom_lina} contra {banco_info}")
-        st.code(f"""SOLICITUD DE REVERSIÓN - CUENTA DE NÓMINA
-Monto: {monto_debitado}
-Causal: Violación al Mínimo Vital y Oferta Incumplida.
-Derecho: Circular 007 Superfinanciera.""", language="text")
+    st.write("### 🏦 Reversión Bancolombia")
+    monto_banc = st.text_input("Monto a reclamar:", value="$502.837")
+    if st.button("🏦 GENERAR TEXTO BANCOLOMBIA", use_container_width=True):
+        texto_ban = f"SOLICITUD DE REVERSIÓN - CUENTA DE NÓMINA\nCliente: {u_nombre}\nEntidad: BANCOLOMBIA\nMonto: {monto_banc}\nCausal: Violación al Mínimo Vital y Oferta Incumplida.\nDerecho: Circular 007 Superfinanciera."
+        st.code(texto_ban)
+        st.markdown(f'<a href="https://api.whatsapp.com/send?text={texto_ban}" target="_blank" style="background-color:#25D366; color:white; padding:10px 20px; text-decoration:none; border-radius:5px; font-weight:bold; display:block; text-align:center;">📲 ENVIAR RECLAMO BANCO A LINA</a>', unsafe_allow_html=True)
 elif st.session_state.seccion == "GESTION":
     st.subheader("⚖️ Historial de Casos")
     st.info("No hay casos registrados aún.")
