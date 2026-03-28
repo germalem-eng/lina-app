@@ -149,8 +149,9 @@ with col_der:
     """, unsafe_allow_html=True)
 
 st.divider()
-            /* Efecto NEÓN POTENTE E IMPONENTE para L.I.N.A. */
-            .neon-imponente {{
+          }}
+             /* Efecto NEÓN POTENTE E IMPONENTE para L.I.N.A. */
+                .neon-imponente {{
                 font-family: 'Comic Sans MS', cursive; 
                 font-weight: bold;
                 color: #fff; 
