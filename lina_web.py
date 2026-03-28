@@ -8,15 +8,15 @@ from streamlit_autorefresh import st_autorefresh
 # --- 1. CONFIGURACIÓN DEL SISTEMA ---
 st.set_page_config(page_title="LINA V20.0 | Soluciones Tecnológicas M Y M", layout="wide", page_icon="🤖")
 st_autorefresh(interval=1000, key="daterefresh")
-
 # Ajuste de hora Colombia (UTC-5)
 ahora = datetime.datetime.now() - datetime.timedelta(hours=5)
 
 # --- 2. INICIALIZACIÓN DE ESTADO ---
-if 'seccion' not in st.session_state: 
-    st.session_state.seccion = "COTIZADOR"
+if 'seccion' not in st.session_state: st.session_state.seccion = "COTIZADOR"
+if 'doc_final' not in st.session_state: st.session_state.doc_final = ""
+archivo_casos = "database_casos_mym.csv"
 
-# --- 3. RECURSOS VISUALES ---
+# --- 3. RECURSOS VISUALES (RUTAS) ---
 def get_image_base64(path):
     if os.path.exists(path):
         with open(path, "rb") as img_file:
@@ -26,7 +26,7 @@ def get_image_base64(path):
 fondo_b64 = get_image_base64("Logos/fondo.jpg")
 logo_robot_b64 = get_image_base64("Logos/logo_robot_2007.jpg")
 
-# --- 4. ESTILOS CSS ---
+# --- 4. ESTILOS CSS GENERALES ---
 st.markdown(f"""
 <style>
     .stApp {{
@@ -41,7 +41,7 @@ st.markdown(f"""
         border-bottom: 3px solid #666; border-radius: 12px; margin-bottom: 25px;
     }}
     .logo-redondo-final {{
-        width: 250px; height: 250px;
+        width: 280px; height: 280px;
         border-radius: 50%; border: 6px solid #00FFFF;
         box-shadow: 0 0 35px #00FFFF; object-fit: cover;
     }}
@@ -56,57 +56,102 @@ st.markdown(f"""
         line-height: 0.85; margin: 0; text-align: center;
     }}
     .social-tag {{
-        padding: 5px 10px; border-radius: 10px; text-decoration: none !important;
-        color: white !important; font-weight: bold; font-size: 11px; margin-left: 5px;
+        padding: 5px 12px; border-radius: 15px; text-decoration: none !important;
+        color: white !important; font-weight: bold; font-size: 12px; margin-left: 5px;
     }}
 </style>
 """, unsafe_allow_html=True)
 
-# --- 5. ENCABEZADO ---
+# --- 5. ENCABEZADO (BARRA PLATEADA) ---
 st.markdown(f"""
 <div class="nav-bar-silver">
     <div style="font-family: monospace; font-weight: bold; color: #333;">
         📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')} | S T M Y M
     </div>
-    <div style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
+    <div>
+        <a href="https://www.youtube.com/@gerardomartinezlemus7969" target="_blank" class="social-tag" style="background-color: #FF0000;">YouTube</a>
         <a href="https://wa.me/573114759768" target="_blank" class="social-tag" style="background-color: #25D366;">WhatsApp</a>
         <a href="https://web.facebook.com/MyMsolucionesdetecnologia" target="_blank" class="social-tag" style="background-color: #4267B2;">Facebook</a>
-        <a href="https://www.youtube.com/@gerardomartinezlemus7969" target="_blank" class="social-tag" style="background-color: #FF0000;">YouTube</a>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-col_izq, col_der = st.columns([1, 2])
+# --- SECCIÓN DE LOGO Y TÍTULOS ---
+col_izq, col_der = st.columns([1.2, 2.3])
+
 with col_izq:
     st.markdown(f'<div style="display:flex; justify-content:center;"><img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final"></div>', unsafe_allow_html=True)
 
 with col_der:
     st.markdown(f"""
-    <div style="text-align: center; margin-top: -10px;">
-        <h1 class="neon-imponente" style="font-size: 90px;">L.I.N.A.</h1>
-        <div class="resaltado-blanco"><span style="color: #008fb3; font-size: 22px; font-weight: bold;">Laboratorio de Inteligencia y Nuevos Algoritmos</span></div><br>
-        <div class="resaltado-blanco"><span style="color: #444; font-size: 16px; font-weight: bold;">Soluciones Tecnológicas M Y M - Desde 2007</span></div>
+    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; margin-top: -20px;">
+        <h1 class="neon-imponente" style="font-size: 110px;">L.I.N.A.</h1>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%;">
+            <div class="resaltado-blanco">
+                <span style="color: #008fb3; font-size: 26px; font-weight: bold;">Laboratorio de Inteligencia</span>
+            </div>
+            <div class="resaltado-blanco">
+                <span style="color: #008fb3; font-size: 26px; font-weight: bold;">y Nuevos Algoritmos</span>
+            </div>
+            <div class="resaltado-blanco" style="margin-top: 8px;">
+                <span style="color: #444; font-size: 18px; font-weight: bold;">Soluciones Tecnológicas M Y M</span>
+            </div>
+            <div class="resaltado-blanco">
+                <span style="color: #444; font-size: 16px; font-weight: bold;">Desde 2007</span>
+            </div>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
 st.divider()
 
-# --- 6. PANEL OPERATIVO (BOTONES FUNCIONALES) ---
+# --- 6. PANEL OPERATIVO ---
 st.write("### 🚀 Panel Operativo:")
-c1, c2, c3, c4, c5 = st.columns(5)
-
+c1, c2, c3, c4 = st.columns(4)
 with c1:
-    if st.button("💰 COTIZADOR", use_container_width=True):
-        st.session_state.seccion = "COTIZADOR"
-        st.rerun()
+    if st.button("💰 COTIZADOR", use_container_width=True): st.session_state.seccion = "COTIZADOR"
 with c2:
-    if st.button("⚖️ GESTIÓN", use_container_width=True):
-        st.session_state.seccion = "GESTION"
-        st.rerun()
+    if st.button("⚖️ GESTIÓN DE CASOS", use_container_width=True): st.session_state.seccion = "GESTION"
 with c3:
-    if st.button("📝 RADICACIÓN", use_container_width=True):
-        st.session_state.seccion = "RADICACION"
-        st.rerun()
+    if st.button("📝 RADICACIÓN", use_container_width=True): st.session_state.seccion = "RADICACION"
 with c4:
-    if st.button("🏠 PRIVADO MyM", use_container_width=True):
-        st.session_
+    if st.button("🏠 PRIVADO MyM", use_container_width=True): st.session_state.seccion = "FINANZAS"
+
+st.divider()
+
+# --- 7. LÓGICA DE SECCIONES ---
+if st.session_state.seccion == "COTIZADOR":
+    st.subheader("💰 Cotizador Inteligente")
+    col_calc, col_info = st.columns([2, 1])
+    with col_calc:
+        ser = st.selectbox("Servicio:", ["Mantenimiento Preventivo", "Mantenimiento Correctivo", "Asesoría Legal"])
+        mod = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
+        base = 40000
+        extra = 20000 if mod == "A Domicilio" else 0
+        total = base + extra
+        st.metric("Inversión Total", f"$ {total:,.0f}".replace(",", "."))
+    with col_info:
+        st.markdown('<div style="background-color:rgba(255,255,255,0.8);padding:15px;border-radius:10px;border:2px solid #00d4ff;"><h4>📋 Tarifas</h4><li>Revisión: $40.000</li><li>Legal: 10% ahorro</li><li>Domicilio: $20.000</li></div>', unsafe_allow_html=True)
+
+elif st.session_state.seccion == "RADICACION":
+    st.subheader("📝 Generador de Peticiones Legales")
+    u_nom = st.text_input("Nombre del Titular:", value="LINA PAOLA MOJICA").upper()
+    u_ced = st.text_input("Cédula:")
+    if st.button("Generar Borrador"):
+        st.text_area("📄 Documento:", f"Bogotá D.C., {ahora.strftime('%d/%m/%Y')}\n\nYo, {u_nom}, con C.C. {u_ced}...", height=200)
+
+elif st.session_state.seccion == "GESTION":
+    st.subheader("⚖️ Historial de Casos")
+    st.info("No hay casos registrados aún.")
+
+elif st.session_state.seccion == "FINANZAS":
+    st.subheader("🏠 Control Privado")
+    st.metric("Meta Sistecrédito", "$898.771")
+
+# --- 8. PIE DE PÁGINA ---
+st.markdown(f"""
+<div style="background-color: rgba(255, 255, 255, 0.7); padding: 15px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 20px;">
+    <b>⚠️ Nota:</b> Honorarios por éxito (10% ahorro) o tarifas base de <b>$40.000</b>.
+</div>
+<p style="text-align:center; color:#666;">LINA Core V20.0 | © {ahora.year} Gerardo Martinez Lemus</p>
+""", unsafe_allow_html=True)
