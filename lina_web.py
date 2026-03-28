@@ -109,20 +109,56 @@ with col_izq:
     st.markdown(f'<div style="display:flex; justify-content:center; align-items:center; height:100%;"><img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final"></div>', unsafe_allow_html=True)
 
 with col_der:
-    # Títulos escalonados directamente sobre el fondo binario
-    st.markdown(f"""
-    <div class="contenedor-titulos-derecha">
-        <h1 class="titulo-lina-final">L.I.N.A.</h1>
-        <div class="sub-laboratorio">
-            Laboratorio de Inteligencia<br>y Nuevos Algoritmos
-        </div>
-        <div class="sub-mym">
-            Soluciones Tecnológicas MYM<br>Desde 2007
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+   # --- DENTRO DE COL_DER (TÍTULOS RESALTADOS CON NEÓN POTENTE Y RECUADROS POR RENGLÓN) ---
+        # 1. Definimos los estilos CSS específicos para esta sección
+        st.markdown(f"""
+        <style>
+            /* Estilo para los recuadros claros por renglón (como en image_9.png) */
+            .resaltado-renglon {{
+                background-color: rgba(173, 216, 230, 0.6); /* Azul claro traslúcido */
+                border-radius: 5px; 
+                padding: 2px 10px; 
+                margin: 3px 0;
+                display: inline-block; /* Ajusta el recuadro al ancho del texto */
+                box-sizing: border-box;
+            }}
 
-st.divider()
+            /* Efecto NEÓN POTENTE E IMPONENTE para L.I.N.A. */
+            .neon-imponente {{
+                font-family: 'Comic Sans MS', cursive; 
+                font-weight: bold;
+                color: #fff; 
+                text-transform: uppercase;
+                text-shadow: 0 0 10px #7FFFD4, 0 0 20px #7FFFD4, 0 0 30px #7FFFD4, 0 0 40px #7FFFD4, 0 0 70px #7FFFD4, 0 0 80px #7FFFD4, 0 0 100px #7FFFD4, 0 0 150px #7FFFD4;
+                letter-spacing: 5px; 
+                margin-bottom: 20px;
+                line-height: 1;
+                display: inline-block;
+            }}
+            
+            /* Ajuste de contenedor para centrado */
+            .contenedor-titulos-derecha-v2 {{
+                text-align: center;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }}
+        </style>
+        """, unsafe_allow_html=True)
+
+        # 2. Generamos el contenido escalonado con recuadros claros
+        st.markdown(f"""
+        <div class="contenedor-titulos-derecha-v2">
+            <h1 class="neon-imponente" style="font-size: 130px;">L.I.N.A.</h1>
+            
+            <div class="resaltado-renglon" style="color: #000; font-size: 30px; font-weight: bold;">Laboratorio de Inteligencia</div>
+            <div class="resaltado-renglon" style="color: #000; font-size: 30px; font-weight: bold;">y Nuevos Algoritmos</div>
+            
+            <div class="resaltado-renglon" style="color: #444; font-size: 18px; margin-top: 15px;">Soluciones Tecnológicas M Y M</div>
+            <div class="resaltado-renglon" style="color: #444; font-size: 16px;">Desde 2007</div>
+        </div>
+        """, unsafe_allow_html=True)
 # --- 6. PANEL OPERATIVO ---
 st.write("### 🚀 Panel Operativo:")
 c1, c2, c3, c4 = st.columns(4)
