@@ -136,84 +136,54 @@ if st.session_state.seccion == "COTIZADOR":
     with col_info:
         st.markdown('<div style="background-color:rgba(255,255,255,0.8);padding:15px;border-radius:10px;border:2px solid #00d4ff;"><h4>📋 Tarifas</h4><li>Revisión: $40.000</li><li>Legal: 10% ahorro</li><li>Domicilio: $20.000</li></div>', unsafe_allow_html=True)
 
+# --- DENTRO DE LA SECCIÓN DE RADICACIÓN ---
 elif st.session_state.seccion == "RADICACION":
-    st.subheader("📝 Centro de Defensa Ciudadana (Radicación Legal)")
-
-    # --- INICIALIZACIÓN DE MEMORIA PARA DOCUMENTOS ---
-    if 'doc_generado' not in st.session_state:
-        st.session_state.doc_generado = ""
-
-    # --- ENTRADA DE DATOS UNIVERSAL ---
-    with st.expander("👤 CONFIGURAR DATOS DEL AFECTADO (Dejar vacío para usar datos de Lina)"):
-        u_nombre = st.text_input("Nombre Completo:", placeholder="LINA PAOLA MOJICA").upper() or "LINA PAOLA MOJICA"
-        u_cedula = st.text_input("Cédula de Ciudadanía:", placeholder="1016026492") or "1016026492"
-        u_entidad = st.text_input("Entidad Acreedora / Casa Cobranza:", placeholder="RECOVERY OF CREDITS / RAPICREDIT").upper() or "RECOVERY OF CREDITS / RAPICREDIT"
-
-    # --- 1. SECCIÓN DATA CRÉDITO ---
-    st.markdown("---")
-    st.write("### ⚖️ Gestión DataCrédito")
-    radicado_dc = st.text_input("Ingrese el número de radicado de DataCrédito:", placeholder="Ej: 2026-XXXXX")
+    st.subheader("📝 Centro de Defensa Ciudadana")
     
-    if radicado_dc:
-        st.info(f"✅ Seguimiento activo para: {u_nombre} | Radicado: {radicado_dc}")
-        fecha_res = (ahora + datetime.timedelta(days=15)).strftime('%d/%m/%Y')
-        st.write(f"📅 **Respuesta esperada:** {fecha_res}")
+    # Aseguramos que la variable exista
+    if 'texto_fijo' not in st.session_state:
+        st.session_state.texto_fijo = ""
 
-    # --- 2. GENERADOR DE DOCUMENTOS (RECOVERY / BANCOS) ---
-    st.markdown("---")
-    st.write("### 📄 Generador de Reclamaciones")
-    
-    col_acc1, col_acc2 = st.columns(2)
-    with col_acc1:
-        u_banco_gen = st.text_input("Nombre del Banco (Si es para banco):", placeholder="BANCOLOMBIA")
-    with col_acc2:
-        u_monto_gen = st.text_input("Monto en disputa:", value="$502.837")
+    with st.expander("👤 CONFIGURAR DATOS DEL AFECTADO"):
+        u_nombre = st.text_input("Nombre:", value="LINA PAOLA MOJICA").upper()
+        u_cedula = st.text_input("Cédula:", value="1016026492")
+
+    col_b1, col_b2 = st.columns(2)
+    with col_b1:
+        u_banco = st.text_input("Banco:", placeholder="Ej: BANCOLOMBIA")
+    with col_b2:
+        u_monto = st.text_input("Monto:", value="$502.837")
 
     c_btn1, c_btn2 = st.columns(2)
-    
     with c_btn1:
-        if st.button("🔍 GENERAR RECLAMO CASA COBRANZA", use_container_width=True):
-            st.session_state.doc_generado = f"""RECLAMACIÓN FORMAL - INCUMPLIMIENTO DE OFERTA COMERCIAL
-Fecha: {ahora.strftime('%d/%m/%Y')}
-
-Señores {u_entidad}:
-
-1. OFERTA VINCULANTE: El SMS recibido establecía un plazo y monto específico. El débito realizado por un valor superior es una violación al término de la oferta.
-2. ABUSO DEL DERECHO: El uso del débito automático para vaciar cuentas de nómina sin respetar el mínimo vital es ilegal (Sentencia T-012/17).
-3. ACCIÓN LEGAL: Se informa que el radicado ante la Superfinanciera está en curso.
-
-Atentamente,
-{u_nombre} | C.C. {u_cedula}"""
-
-    with c_btn2:
-        if st.button("🏦 GENERAR RECLAMO BANCARIO", use_container_width=True):
-            if u_banco_gen:
-                st.session_state.doc_generado = f"SOLICITUD DE REVERSIÓN - CUENTA DE NÓMINA\nFecha: {ahora.strftime('%d/%m/%Y')}\n\nCliente: {u_nombre}\nEntidad: {u_banco_gen.upper()}\nMonto: {u_monto_gen}\nCausal: Violación al Mínimo Vital e Incumplimiento de Oferta.\nDerecho: Circular 007 de la Superfinanciera y Sentencia T-012/17."
-            else:
-                st.error("Escribe el nombre del banco primero.")
-
-    # --- VISUALIZACIÓN PERMANENTE Y WHATSAPP ---
-    if st.session_state.doc_generado:
-        st.markdown("#### 📄 Documento Generado:")
-        st.code(st.session_state.doc_generado, language="text")
-        
-        import urllib.parse
-        msg_wa = urllib.parse.quote(st.session_state.doc_generado)
-        st.markdown(f'<a href="https://api.whatsapp.com/send?text={msg_wa}" target="_blank" style="background-color:#25D366; color:white; padding:12px; text-decoration:none; border-radius:8px; font-weight:bold; display:block; text-align:center;">📲 ENVIAR ESTE DOCUMENTO POR WHATSAPP</a>', unsafe_allow_html=True)
-
-    # --- BOTÓN DE LIMPIAR ---
-    st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("♻️ LIMPIAR FORMULARIO Y BORRAR TODO", use_container_width=True):
-        st.session_state.doc_generado = ""
-        st.rerun()
+        # AGREGAMOS 'key' PARA EVITAR EL ERROR DE DUPLICADO
+        if st.button("🔍 RECLAMO COBRANZA", key="btn_cob_unico"):
+            st.session_state.texto_fijo = f"RECLAMO PARA LINA\nCédula: {u_cedula}\nMonto: {u_monto}"
     
-    elif st.session_state.seccion == "GESTION":
+    with c_btn2:
+        if st.button("🏦 RECLAMO BANCARIO", key="btn_ban_unico"):
+            st.session_state.texto_fijo = f"SOLICITUD BANCO: {u_banco}\nCliente: {u_nombre}\nMonto: {u_monto}"
+
+    if st.session_state.texto_fijo:
+        st.code(st.session_state.texto_fijo)
+
+    # BOTÓN DE LIMPIAR CORREGIDO (Imagen 6)
+    st.markdown("<br>", unsafe_allow_html=True)
+    if st.button("♻️ LIMPIAR TODO", key="btn_limpiar_rad"):
+        st.session_state.texto_fijo = ""
+        st.rerun()
+
+# --- SECCIÓN GESTIÓN (CORREGIDA LA SANGRÍA) ---
+elif st.session_state.seccion == "GESTION":
     st.subheader("⚖️ Historial de Casos")
     st.info("No hay casos registrados aún.")
 
 elif st.session_state.seccion == "FINANZAS":
     st.subheader("🏠 Control Privado")
-    st.metric("Meta Sistecrédito", "$898.771")
+    st.metric("Meta Sistecrédito", "$898.771")    
+    elif st.session_state.seccion == "GESTION":
+    st.subheader("⚖️ Historial de Casos")
+    st.info("No hay casos registrados aún.")
 
 # --- 8. PIE DE PÁGINA ---
 st.markdown(f"""
