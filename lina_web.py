@@ -138,86 +138,70 @@ if st.session_state.seccion == "COTIZADOR":
         st.markdown('<div style="background-color:rgba(255,255,255,0.8);padding:15px;border-radius:10px;border:2px solid #00d4ff;"><h4>📋 Tarifas</h4><li>Revisión: $40.000</li><li>Legal: 10% ahorro</li><li>Domicilio: $20.000</li></div>', unsafe_allow_html=True)
 
 elif st.session_state.seccion == "RADICACION":
-    st.subheader("📝 Centro de Defensa Ciudadana (Radicación Legal)")
+    st.subheader("📝 Centro de Defensa Ciudadana (Radicación)")
 
-    # --- INICIALIZACIÓN DE MEMORIA PARA DOCUMENTOS ---
-    if 'doc_generado' not in st.session_state:
-        st.session_state.doc_generado = ""
+    # 1. Memoria de sesión para que el texto NO desaparezca
+    if 'texto_fijo' not in st.session_state:
+        st.session_state.texto_fijo = ""
 
-    # --- ENTRADA DE DATOS UNIVERSAL ---
-    with st.expander("👤 CONFIGURAR DATOS DEL AFECTADO (Dejar vacío para usar datos de Lina)"):
+    # 2. Configuración del Afectado
+    with st.expander("👤 CONFIGURAR DATOS DEL AFECTADO"):
         u_nombre = st.text_input("Nombre Completo:", placeholder="LINA PAOLA MOJICA").upper() or "LINA PAOLA MOJICA"
-        u_cedula = st.text_input("Cédula de Ciudadanía:", placeholder="1016026492") or "1016026492"
-        u_entidad = st.text_input("Entidad Acreedora / Casa Cobranza:", placeholder="RECOVERY OF CREDITS / RAPICREDIT").upper() or "RECOVERY OF CREDITS / RAPICREDIT"
+        u_cedula = st.text_input("Cédula:", placeholder="1016026492") or "1016026492"
+        u_casa = st.text_input("Casa de Cobranza:", placeholder="RECOVERY OF CREDITS / RAPICREDIT").upper() or "RECOVERY OF CREDITS / RAPICREDIT"
 
-    # --- 1. SECCIÓN DATA CRÉDITO ---
     st.markdown("---")
-    st.write("### ⚖️ Gestión DataCrédito")
-    radicado_dc = st.text_input("Ingrese el número de radicado de DataCrédito:", placeholder="Ej: 2026-XXXXX")
     
-    if radicado_dc:
-        st.info(f"✅ Seguimiento activo para: {u_nombre} | Radicado: {radicado_dc}")
-        fecha_res = (ahora + datetime.timedelta(days=15)).strftime('%d/%m/%Y')
-        st.write(f"📅 **Respuesta esperada:** {fecha_res}")
+    # 3. Datos del Banco y Monto
+    col_b1, col_b2 = st.columns(2)
+    with col_b1:
+        u_banco_any = st.text_input("Nombre del Banco:", placeholder="Ej: BANCOLOMBIA, DAVIVIENDA...")
+    with col_b2:
+        u_monto_any = st.text_input("Monto en disputa:", value="$502.837")
 
-    # --- 2. GENERADOR DE DOCUMENTOS (RECOVERY / BANCOS) ---
-    st.markdown("---")
-    st.write("### 📄 Generador de Reclamaciones")
-    
-    col_acc1, col_acc2 = st.columns(2)
-    with col_acc1:
-        u_banco_gen = st.text_input("Nombre del Banco (Si es para banco):", placeholder="BANCOLOMBIA")
-    with col_acc2:
-        u_monto_gen = st.text_input("Monto en disputa:", value="$502.837")
-
+    # 4. Botones de Acción
     c_btn1, c_btn2 = st.columns(2)
     
     with c_btn1:
-        if st.button("🔍 GENERAR RECLAMO CASA COBRANZA", use_container_width=True):
-            st.session_state.doc_generado = f"""RECLAMACIÓN FORMAL - INCUMPLIMIENTO DE OFERTA COMERCIAL
+        if st.button("🔍 GENERAR RECLAMO COBRANZA", key="btn_cobranza"):
+            st.session_state.texto_fijo = f"""RECLAMACIÓN FORMAL - INCUMPLIMIENTO DE OFERTA
 Fecha: {ahora.strftime('%d/%m/%Y')}
 
-Señores {u_entidad}:
+Señores {u_casa}:
 
-1. OFERTA VINCULANTE: El SMS recibido establecía un plazo y monto específico. El débito realizado por un valor superior es una violación al término de la oferta.
-2. ABUSO DEL DERECHO: El uso del débito automático para vaciar cuentas de nómina sin respetar el mínimo vital es ilegal (Sentencia T-012/17).
-3. ACCIÓN LEGAL: Se informa que el radicado ante la Superfinanciera está en curso.
+1. OFERTA VINCULANTE: Se violó el plazo y monto de la oferta enviada.
+2. ABUSO DEL DERECHO: Débito automático ilegal sobre mínimo vital (Sentencia T-012/17).
+3. ACCIÓN LEGAL: Radicado ante Superfinanciera en curso.
 
 Atentamente,
 {u_nombre} | C.C. {u_cedula}"""
 
     with c_btn2:
-        if st.button("🏦 GENERAR RECLAMO BANCARIO", use_container_width=True):
-            if u_banco_gen:
-                st.session_state.doc_generado = f"SOLICITUD DE REVERSIÓN - CUENTA DE NÓMINA\nFecha: {ahora.strftime('%d/%m/%Y')}\n\nCliente: {u_nombre}\nEntidad: {u_banco_gen.upper()}\nMonto: {u_monto_gen}\nCausal: Violación al Mínimo Vital e Incumplimiento de Oferta.\nDerecho: Circular 007 de la Superfinanciera y Sentencia T-012/17."
+        if st.button("🏦 GENERAR RECLAMO BANCARIO", key="btn_banco"):
+            if u_banco_any:
+                st.session_state.texto_fijo = f"SOLICITUD DE REVERSIÓN - CUENTA DE NÓMINA\nFecha: {ahora.strftime('%d/%m/%Y')}\n\nCliente: {u_nombre}\nEntidad: {u_banco_any.upper()}\nMonto: {u_monto_any}\nCausal: Violación al Mínimo Vital (Sentencia T-012/17)."
             else:
-                st.error("Escribe el nombre del banco primero.")
+                st.error("⚠️ Escribe el nombre del banco.")
 
-    # --- VISUALIZACIÓN PERMANENTE Y WHATSAPP ---
-    if st.session_state.doc_generado:
-        st.markdown("#### 📄 Documento Generado:")
-        st.code(st.session_state.doc_generado, language="text")
+    # 5. Visualización y WhatsApp (Aquí es donde se queda fijo)
+    if st.session_state.texto_fijo:
+        st.markdown("#### 📄 Documento para Copiar:")
+        st.code(st.session_state.texto_fijo, language="text")
         
         import urllib.parse
-        msg_wa = urllib.parse.quote(st.session_state.doc_generado)
-        st.markdown(f'<a href="https://api.whatsapp.com/send?text={msg_wa}" target="_blank" style="background-color:#25D366; color:white; padding:12px; text-decoration:none; border-radius:8px; font-weight:bold; display:block; text-align:center;">📲 ENVIAR ESTE DOCUMENTO POR WHATSAPP</a>', unsafe_allow_html=True)
+        msg_wa = urllib.parse.quote(st.session_state.texto_fijo)
+        st.markdown(f'''
+            <a href="https://api.whatsapp.com/send?text={msg_wa}" target="_blank" 
+               style="background-color:#25D366; color:white; padding:12px; text-decoration:none; border-radius:8px; font-weight:bold; display:block; text-align:center; margin-top:10px;">
+               📲 ENVIAR ESTE RECLAMO POR WHATSAPP
+            </a>
+            ''', unsafe_allow_html=True)
 
-    # --- BOTÓN DE LIMPIAR ---
-    st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("♻️ LIMPIAR FORMULARIO Y BORRAR TODO", use_container_width=True):
-        st.session_state.doc_generado = ""
-        st.rerun()        
-    if st.button("🏦 GENERAR RECLAMO BANCARIO", use_container_width=True):
-        if u_banco:
-            texto_ban = f"SOLICITUD DE REVERSIÓN - CUENTA DE NÓMINA\nCliente: {u_nombre}\nEntidad: {u_banco.upper()}\nMonto: {monto_banc}\nCausal: Violación al Mínimo Vital e Incumplimiento de Oferta.\nDerecho: Circular 007 de la Superfinanciera y Sentencia T-012/17."
-            st.code(texto_ban)
-            # Enlace de WhatsApp
-            import urllib.parse
-            msg_encoded = urllib.parse.quote(texto_ban)
-            st.markdown(f'<a href="https://api.whatsapp.com/send?text={msg_encoded}" target="_blank" style="background-color:#25D366; color:white; padding:10px 20px; text-decoration:none; border-radius:5px; font-weight:bold; display:block; text-align:center;">📲 ENVIAR RECLAMO BANCARIO POR WHATSAPP</a>', unsafe_allow_html=True)
-        else:
-            st.error("⚠️ Por favor, ingresa el nombre del banco para generar el documento.")
-
+    # 6. Botón de Limpiar Total
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    if st.button("♻️ LIMPIAR TODO Y NUEVO CASO", use_container_width=True, key="btn_clean_all"):
+        st.session_state.texto_fijo = ""
+        st.rerun()
 elif st.session_state.seccion == "GESTION":
     st.subheader("⚖️ Historial de Casos")
     st.info("No hay casos registrados aún.")
