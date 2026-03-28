@@ -109,7 +109,6 @@ with col_izq:
     st.markdown(f'<div style="display:flex; justify-content:center; align-items:center; height:100%;"><img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final"></div>', unsafe_allow_html=True)
 
 with col_der:
-    # --- ESTILOS CSS PARA RECUADROS Y NEÓN ---
     st.markdown(f"""
 <style>
     .resaltado-renglon {{
@@ -131,7 +130,6 @@ with col_der:
 </style>
     """, unsafe_allow_html=True)
 
-    # --- CONTENIDO RENDERIZADO ---
     st.markdown(f"""
     <div style="text-align: center;">
         <h1 class="neon-imponente" style="font-size: 110px;">L.I.N.A.</h1>
