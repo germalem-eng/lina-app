@@ -47,37 +47,29 @@ def get_image_base64(path):
 fondo_b64 = get_image_base64("Logos/fondo.jpg")
 logo_robot_b64 = get_image_base64("Logos/logo_robot_2007.jpg")
 
-# --- 5. ESTILOS CSS ---
+# --- 5. ESTILOS CSS ACTUALIZADOS ---
 st.markdown(f"""
 <style>
+    /* Fondo global */
     .stApp {{
         background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url("data:image/jpeg;base64,{fondo_b64}");
         background-size: cover; background-attachment: fixed;
+    }}
+    /* Fondo del Menú Lateral (Transparente para ver el fondo) */
+    [data-testid="stSidebar"] {{
+        background-color: rgba(255, 255, 255, 0.1); /* Muy ligero para que se vea el fondo */
+        backdrop-filter: blur(10px); /* Efecto cristalino */
     }}
     .nav-bar-silver {{
         display: flex; justify-content: space-between; align-items: center;
         padding: 10px 20px; background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
         border-bottom: 3px solid #666; border-radius: 12px; margin-bottom: 25px;
     }}
-    .logo-redondo-final {{
-        width: 250px; height: 250px; border-radius: 50%; border: 6px solid #00FFFF; box-shadow: 0 0 35px #00FFFF; object-fit: cover;
-    }}
-    .neon-imponente {{
-        font-family: 'Comic Sans MS', cursive; color: #FFFFFF; text-shadow: 0 0 15px #00FFFF, 0 0 30px #00FFFF;
-        line-height: 0.85; margin: 0; text-align: center;
-    }}
-    .resaltado-blanco {{
-        background-color: rgba(255, 255, 255, 0.85); border-radius: 8px; padding: 5px 15px; margin: 3px 0; display: inline-block;
-    }}
-    .social-tag {{
-        padding: 5px 12px; border-radius: 15px; text-decoration: none !important; color: white !important; font-weight: bold; font-size: 12px; margin-left: 5px;
-    }}
     .sidebar-logo {{
-        display: block; margin: auto; width: 150px; height: 150px; border-radius: 50%; border: 3px solid #00FFFF; box-shadow: 0 0 15px #00FFFF; object-fit: cover;
+        display: block; margin: auto; width: 180px; height: 180px; border-radius: 50%; border: 3px solid #00FFFF; box-shadow: 0 0 15px #00FFFF; object-fit: cover;
     }}
 </style>
 """, unsafe_allow_html=True)
-
 # --- 6. BARRA SUPERIOR (REDES COMPLETAS) ---
 st.markdown(f"""
 <div class="nav-bar-silver">
