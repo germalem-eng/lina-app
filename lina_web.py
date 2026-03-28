@@ -4,6 +4,7 @@ import base64
 import datetime
 import urllib.parse
 import pandas as pd
+from streamlit_autorefresh import st_autorefresh
 from fpdf import FPDF
 
 # --- 1. CONFIGURACIÓN DEL SISTEMA ---
