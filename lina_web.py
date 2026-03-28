@@ -1,35 +1,32 @@
 import streamlit as st
-import os
+from datetime import datetime
 import base64
-import datetime
-import pandas as pd
-from datetime import timedelta
-from streamlit_autorefresh import st_autorefresh
 
-# --- 1. CONFIGURACIÓN DEL SISTEMA ---
-st.set_page_config(page_title="LINA V19.0 | Soluciones Tecnológicas M Y M", layout="wide", page_icon="🤖")
-st_autorefresh(interval=1000, key="daterefresh")
-ahora = datetime.datetime.now() - datetime.timedelta(hours=5)
+# --- 1. CONFIGURACIÓN DE PÁGINA ---
+st.set_page_config(page_title="L.I.N.A. - Soluciones Tecnológicas MYM", layout="wide")
 
-# --- 2. INICIALIZACIÓN DE ESTADO ---
-if 'seccion' not in st.session_state: st.session_state.seccion = "COTIZADOR"
-if 'doc_final' not in st.session_state: st.session_state.doc_final = ""
-archivo_casos = "database_casos_mym.csv"
+# --- 2. LÓGICA DE ESTADO (SESIÓN) ---
+if "seccion" not in st.session_state:
+    st.session_state.seccion = "INICIO"
 
-# --- 3. RECURSOS VISUALES (RUTAS DIRECTAS) ---
-def get_image_base64(path):
-    if os.path.exists(path):
-        with open(path, "rb") as img_file:
-            return base64.b64encode(img_file.read()).decode()
-    return ""
+ahora = datetime.now()
 
-fondo_b64 = get_image_base64("Logos/fondo.jpg")
-logo_robot_b64 = get_image_base64("Logos/logo_robot_2007.jpg")
+# --- 3. CARGA DE IMÁGENES (Simulación de Base64 para fondo y logo) ---
+# Nota: Aquí asumo que ya tienes tus funciones para cargar 'Logos/fondo.jpg' y 'Logos/robot.jpg'
+# Si usas archivos locales, asegúrate de que existan en tu repo de GitHub.
+def get_base64(file_path):
+    try:
+        with open(file_path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+    except:
+        return ""
 
-# --- 4. ESTILOS CSS (REVERTIDO: SIN RECUADRO) ---
+fondo_b64 = get_base64("Logos/fondo.jpg")
+logo_robot_b64 = get_base64("Logos/robot.jpg")
+
+# --- 4. ESTILOS CSS GENERALES ---
 st.markdown(f"""
 <style>
-    /* FONDO CON TRANSPARENCIA DEL 50% */
     .stApp {{
         background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
                           url("data:image/jpeg;base64,{fondo_b64}");
@@ -49,43 +46,27 @@ st.markdown(f"""
         box-shadow: 0 0 35px #00FFFF; object-fit: cover;
     }}
 
-    .contenedor-titulos-derecha {{
-        display: flex; flex-direction: column; justify-content: center;
-        align-items: center; text-align: center; height: 100%;
+    .resaltado-renglon {{
+        background-color: rgba(173, 216, 230, 0.7);
+        border-radius: 8px; padding: 5px 15px; margin: 5px 0;
+        display: inline-block; box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
     }}
 
-    .titulo-lina-final {{
-        font-family: 'Comic Sans MS', cursive; 
-        font-size: 140px; color: #004d61; 
-        text-shadow: 0 0 30px #00FFFF; margin: 0; line-height: 0.8;
+    .neon-imponente {{
+        font-family: 'Comic Sans MS', cursive; color: #fff;
+        text-shadow: 0 0 15px #7FFFD4, 0 0 30px #7FFFD4, 0 0 45px #7FFFD4;
+        line-height: 1.1; margin-bottom: 10px; text-align: center;
     }}
 
-    .sub-laboratorio {{
-        color: #008fb3; font-size: 30px; font-weight: bold; line-height: 1.1; margin-top: 10px;
-    }}
-
-    .sub-mym {{
-        color: #444; font-size: 20px; font-weight: 500; margin-top: 8px;
-    }}
-</style>
-""", unsafe_allow_html=True)
-
-# --- 5. ENCABEZADO VISUAL COMPLETO (BARRA, LOGO Y TÍTULOS) ---
-
-# 1. Barra Plateada Superior con Redes Sociales
-st.markdown(f"""
-<style>
-    .nav-bar-silver {{
-        display: flex; justify-content: space-between; align-items: center;
-        padding: 10px 20px; background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
-        border-bottom: 3px solid #666; border-radius: 12px; margin-bottom: 25px;
-    }}
     .social-tag {{
         padding: 5px 12px; border-radius: 15px; text-decoration: none !important;
         color: white !important; font-weight: bold; font-size: 13px; margin-left: 8px;
     }}
 </style>
+""", unsafe_allow_html=True)
 
+# --- 5. ENCABEZADO (BARRA PLATEADA) ---
+st.markdown(f"""
 <div class="nav-bar-silver">
     <div style="font-family: monospace; font-weight: bold; color: #333;">
         📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')} | S T M Y M
@@ -101,35 +82,13 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-# 2. Distribución en Dos Columnas (Logo e Información)
+# --- SECCIÓN DE LOGO Y TÍTULOS ---
 col_izq, col_der = st.columns([1.2, 2.3])
 
 with col_izq:
-    # Logo gigante a la izquierda con neón azul
     st.markdown(f'<div style="display:flex; justify-content:center; align-items:center; height:100%;"><img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final"></div>', unsafe_allow_html=True)
 
 with col_der:
-    st.markdown(f"""
-<style>
-    .resaltado-renglon {{
-        background-color: rgba(173, 216, 230, 0.7);
-        border-radius: 8px;
-        padding: 5px 15px;
-        margin: 5px 0;
-        display: inline-block;
-        box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
-    }}
-    .neon-imponente {{
-        font-family: 'Comic Sans MS', cursive;
-        color: #fff;
-        text-shadow: 0 0 10px #7FFFD4, 0 0 20px #7FFFD4, 0 0 40px #7FFFD4, 0 0 80px #7FFFD4;
-        line-height: 1.2;
-        margin-bottom: 10px;
-        text-align: center;
-    }}
-</style>
-    """, unsafe_allow_html=True)
-
     st.markdown(f"""
     <div style="text-align: center;">
         <h1 class="neon-imponente" style="font-size: 110px;">L.I.N.A.</h1>
@@ -148,45 +107,12 @@ with col_der:
     </div>
     """, unsafe_allow_html=True)
 
-st.divider()             /* Efecto NEÓN POTENTE E IMPONENTE para L.I.N.A. */
-                .neon-imponente {{
-                font-family: 'Comic Sans MS', cursive; 
-                font-weight: bold;
-                color: #fff; 
-                text-transform: uppercase;
-                text-shadow: 0 0 10px #7FFFD4, 0 0 20px #7FFFD4, 0 0 30px #7FFFD4, 0 0 40px #7FFFD4, 0 0 70px #7FFFD4, 0 0 80px #7FFFD4, 0 0 100px #7FFFD4, 0 0 150px #7FFFD4;
-                letter-spacing: 5px; 
-                margin-bottom: 20px;
-                line-height: 1;
-                display: inline-block;
-            }}
-            
-            /* Ajuste de contenedor para centrado */
-            .contenedor-titulos-derecha-v2 {{
-                text-align: center;
-                width: 100%;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }}
-        </style>
-        """, unsafe_allow_html=True)
+st.divider()
 
-        # 2. Generamos el contenido escalonado con recuadros claros
-        st.markdown(f"""
-        <div class="contenedor-titulos-derecha-v2">
-            <h1 class="neon-imponente" style="font-size: 130px;">L.I.N.A.</h1>
-            
-            <div class="resaltado-renglon" style="color: #000; font-size: 30px; font-weight: bold;">Laboratorio de Inteligencia</div>
-            <div class="resaltado-renglon" style="color: #000; font-size: 30px; font-weight: bold;">y Nuevos Algoritmos</div>
-            
-            <div class="resaltado-renglon" style="color: #444; font-size: 18px; margin-top: 15px;">Soluciones Tecnológicas M Y M</div>
-            <div class="resaltado-renglon" style="color: #444; font-size: 16px;">Desde 2007</div>
-        </div>
-        """, unsafe_allow_html=True)
-# --- 6. PANEL OPERATIVO ---
+# --- 6. PANEL OPERATIVO (NAVEGACIÓN) ---
 st.write("### 🚀 Panel Operativo:")
 c1, c2, c3, c4 = st.columns(4)
+
 with c1:
     if st.button("💰 COTIZADOR", use_container_width=True): st.session_state.seccion = "COTIZADOR"
 with c2:
@@ -198,42 +124,40 @@ with c4:
 
 st.divider()
 
-# --- 7. LÓGICA DE SECCIONES (ACTUALIZADO CON FORMATO COLOMBIANO) ---
+# --- 7. LÓGICA DE SECCIONES (SISTEMA INTEGRADO) ---
 
 if st.session_state.seccion == "COTIZADOR":
-    st.subheader("💰 Cotizador Inteligente")
-    col_calc, col_info = st.columns([2, 1])
-    with col_calc:
-        ser = st.selectbox("Servicio:", ["Mantenimiento Preventivo", "Mantenimiento Correctivo", "Asesoría Legal"])
-        mod = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
-        base = 40000
-        dom = 20000 if mod == "A Domicilio" else 0
-        total = (base * 1.20) + dom if "Mantenimiento" in ser else base + dom
-        # Formato de moneda colombiana con separador de miles
-        st.metric("Inversión Total", f"$ {total:,.0f}".replace(",", "."))
-        
-    with col_info:
-        # Aquí eliminamos la 'k' y pusimos el formato correcto
-        st.markdown("""
-        <div style="background-color:rgba(248,249,250,0.7);padding:15px;border-radius:10px;border:2px solid #00d4ff;">
-            <h4 style="text-align:center;">📋 Tarifas Oficiales</h4>
-            <ul style="list-style-type: none; padding-left: 0;">
-                <li>📍 <b>Revisión:</b> $40.000</li>
-                <li>⚖️ <b>Legal:</b> 10% del ahorro</li>
-                <li>🏠 <b>Domicilio:</b> $20.000</li>
-            </ul>
-            <small>* La revisión es gratis si se realiza el servicio.</small>
-        </div>
-        """, unsafe_allow_html=True)
+    st.subheader("💰 Cotizador Técnico")
+    base = 40000
+    ser = st.selectbox("Servicio:", ["Mantenimiento Preventivo", "Mantenimiento Correctivo", "Consultoría"])
+    mod = st.radio("Modalidad:", ["Virtual", "Domicilio"], horizontal=True)
+    extra = 20000 if mod == "Domicilio" else 0
+    total = base + extra
+    st.metric("Inversión Estimada", f"$ {total:,.0f}".replace(",", "."))
+    st.info("📍 Tarifa de Revisión: $40.000 | 🏠 Domicilio: $20.000")
 
-# --- (Las secciones de RADICACION, GESTION y FINANZAS se mantienen igual) ---
+elif st.session_state.seccion == "RADICACION":
+    st.subheader("📝 Radicación Legal (Ley 2485 de 2025)")
+    with st.form("form_legal"):
+        cliente = st.text_input("Nombre del Cliente:")
+        operador = st.selectbox("Operador:", ["WOM", "Claro", "Movistar", "Tigo"])
+        motivo = "Cobro ilegal de reconexión"
+        if st.form_submit_button("Generar Documento"):
+            st.success(f"Documento generado para {cliente} contra {operador}.")
+            st.download_button("Descargar PDF (Simulado)", "Contenido del PDF", file_name="reclamacion.pdf")
 
-# --- 8. PIE DE PÁGINA (EJECUTIVO) ---
+elif st.session_state.seccion == "GESTION":
+    st.subheader("⚖️ Gestión de Casos Activos")
+    st.write("No hay casos pendientes por procesar.")
+
+elif st.session_state.seccion == "FINANZAS":
+    st.subheader("🔒 Acceso Privado MyM")
+    st.text_input("Contraseña de Administrador:", type="password")
+
+# --- 8. PIE DE PÁGINA ---
 st.markdown(f"""
 <div style="background-color: rgba(241, 241, 241, 0.7); padding: 15px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 20px;">
-    <b>⚠️ Nota de Honorarios:</b> Nuestros honorarios se basan en el éxito conseguido (10% del ahorro legal) 
-    o tarifas base de <b>$40.000</b> por revisión técnica.
+    <b>⚠️ Nota Profesional:</b> Honorarios legales basados en el 10% del ahorro conseguido. 
+    Revisiones técnicas base: <b>$40.000</b>.
 </div>
 """, unsafe_allow_html=True)
-
-st.caption(f"LINA Core | © {ahora.year} Gerardo Martinez Lemus | Soluciones Tecnológicas M Y M")
