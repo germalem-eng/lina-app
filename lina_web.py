@@ -111,7 +111,7 @@ st.divider()
 
 # --- 6. PANEL OPERATIVO ---
 st.write("### 🚀 Panel Operativo:")
-c1, c2, c3, c4 = st.columns(4)
+c1, c2, c3, c4, c5 = st.columns(5) # Cambia 4 por 5
 with c1:
     if st.button("💰 COTIZADOR", use_container_width=True): st.session_state.seccion = "COTIZADOR"
 with c2:
@@ -120,38 +120,8 @@ with c3:
     if st.button("📝 RADICACIÓN", use_container_width=True): st.session_state.seccion = "RADICACION"
 with c4:
     if st.button("🏠 PRIVADO MyM", use_container_width=True): st.session_state.seccion = "FINANZAS"
-
-st.divider()
-
-# --- 7. LÓGICA DE SECCIONES ---
-if st.session_state.seccion == "COTIZADOR":
-    st.subheader("💰 Cotizador Inteligente")
-    col_calc, col_info = st.columns([2, 1])
-    with col_calc:
-        ser = st.selectbox("Servicio:", ["Mantenimiento Preventivo", "Mantenimiento Correctivo", "Asesoría Legal"])
-        mod = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
-        base = 40000
-        extra = 20000 if mod == "A Domicilio" else 0
-        total = base + extra
-        st.metric("Inversión Total", f"$ {total:,.0f}".replace(",", "."))
-    with col_info:
-        st.markdown('<div style="background-color:rgba(255,255,255,0.8);padding:15px;border-radius:10px;border:2px solid #00d4ff;"><h4>📋 Tarifas</h4><li>Revisión: $40.000</li><li>Legal: 10% ahorro</li><li>Domicilio: $20.000</li></div>', unsafe_allow_html=True)
-
-elif st.session_state.seccion == "RADICACION":
-    st.subheader("📝 Generador de Peticiones Legales")
-    u_nom = st.text_input("Nombre del Titular:", value="LINA PAOLA MOJICA").upper()
-    u_ced = st.text_input("Cédula:")
-    if st.button("Generar Borrador"):
-        st.text_area("📄 Documento:", f"Bogotá D.C., {ahora.strftime('%d/%m/%Y')}\n\nYo, {u_nom}, con C.C. {u_ced}...", height=200)
-
-elif st.session_state.seccion == "GESTION":
-    st.subheader("⚖️ Historial de Casos")
-    st.info("No hay casos registrados aún.")
-
-elif st.session_state.seccion == "FINANZAS":
-    st.subheader("🏠 Control Privado")
-    st.metric("Meta Sistecrédito", "$898.771")
-
+with c5:
+    if st.button("🛡️ CASO LEGAL", use_container_width=True): st.session_state.seccion = "LEGAL" # Nuevo botón
 # --- 8. PIE DE PÁGINA ---
 st.markdown(f"""
 <div style="background-color: rgba(255, 255, 255, 0.7); padding: 15px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 20px;">
