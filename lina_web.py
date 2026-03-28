@@ -109,22 +109,25 @@ with col_der:
     </div>
     """, unsafe_allow_html=True)
 
-st.divider()
-
-# --- 6. PANEL OPERATIVO ---
-st.write("### 🚀 Panel Operativo:")
-c1, c2, c3, c4 = st.columns(4)
-with c1:
-    if st.button("💰 COTIZADOR", use_container_width=True): st.session_state.seccion = "COTIZADOR"
-with c2:
-    if st.button("⚖️ GESTIÓN DE CASOS", use_container_width=True): st.session_state.seccion = "GESTION"
-with c3:
-    if st.button("📝 RADICACIÓN", use_container_width=True): st.session_state.seccion = "RADICACION"
-with c4:
-    if st.button("🏠 PRIVADO MyM", use_container_width=True): st.session_state.seccion = "FINANZAS"
-
-st.divider()
-
+with col_der:
+    st.markdown(f"""
+    <div style="text-align: center; margin-top: -20px;">
+        <h1 class="neon-imponente" style="font-size: 115px; margin-bottom: 0px; padding-bottom: 0px;">L.I.N.A.</h1>
+        <div class="resaltado-blanco" style="margin: 2px 0;">
+            <span style="color: #008fb3; font-size: 30px; font-weight: bold;">Laboratorio de Inteligencia</span>
+        </div><br>
+        <div class="resaltado-blanco" style="margin: 2px 0;">
+            <span style="color: #008fb3; font-size: 30px; font-weight: bold;">y Nuevos Algoritmos</span>
+        </div><br>
+        <div class="resaltado-blanco" style="margin: 2px 0; margin-top: 5px;">
+            <span style="color: #444; font-size: 20px; font-weight: bold;">Soluciones Tecnológicas M Y M</span>
+        </div><br>
+        <div class="resaltado-blanco" style="margin: 2px 0;">
+            <span style="color: #444; font-size: 18px; font-weight: bold;">Desde 2007</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
 # --- 7. LÓGICA DE SECCIONES (ACTUALIZADO) ---
 
 if st.session_state.seccion == "COTIZADOR":
