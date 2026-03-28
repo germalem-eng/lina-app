@@ -121,10 +121,10 @@ if st.session_state.seccion == "COTIZADOR":
     with col_calc:
         ser = st.selectbox("Servicio:", ["Mantenimiento Preventivo", "Mantenimiento Correctivo", "Asesoría Legal"])
         mod = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
-        base = $40000
-        dom = $20000 if mod == "A Domicilio" else 0
+        base = 40000
+        dom = 20000 if mod == "A Domicilio" else 0
         total = (base * 1.20) + dom if "Mantenimiento" in ser else base + dom
-        st.metric("Inversión Total", f"${total:,.0f} COP")
+        st.metric("Inversión Total", f"${total:,.0f} ")
     with col_info:
         st.markdown('<div style="background-color:rgba(248,249,250,0.7);padding:15px;border-radius:10px;border:2px solid #00d4ff;"><h4>📋 Tarifas</h4><li>Revisión: $40k</li><li>Legal: 10% ahorro</li><li>Domicilio: $20k</li></div>', unsafe_allow_html=True)
 
