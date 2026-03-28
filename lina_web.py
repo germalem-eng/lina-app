@@ -26,7 +26,7 @@ def get_image_base64(path):
 fondo_b64 = get_image_base64("Logos/fondo.jpg")
 logo_robot_b64 = get_image_base64("Logos/logo_robot_2007.jpg")
 
-# --- 4. ESTILOS CSS (FONDO 50% Y DISEÑO AZUL) ---
+# --- 4. ESTILOS CSS ACTUALIZADOS (CON RECUADRO CLARO) ---
 st.markdown(f"""
 <style>
     .stApp {{
@@ -35,68 +35,59 @@ st.markdown(f"""
         background-size: cover !important;
         background-attachment: fixed !important;
     }}
-    .nav-bar-silver {{
-        display: flex; justify-content: space-between; align-items: center;
-        padding: 10px 20px; background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
-        border-bottom: 3px solid #666; border-radius: 12px; margin-bottom: 25px;
+    
+    /* RECUADRO CLARO PARA TÍTULOS (EFECTO CRISTAL) */
+    .recuadro-titulos {{
+        background: rgba(255, 255, 255, 0.6); /* Fondo blanco traslúcido */
+        backdrop-filter: blur(10px); /* Desenfoque sutil del fondo */
+        padding: 30px;
+        border-radius: 25px;
+        border: 2px solid rgba(0, 255, 255, 0.3); /* Borde cyan suave */
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
     }}
-    .social-tag {{
-        padding: 5px 12px; border-radius: 15px; text-decoration: none !important;
-        color: white !important; font-weight: bold; font-size: 13px; margin-left: 8px;
-    }}
-    .logo-redondo-final {{
-        width: 280px; height: 280px;
-        border-radius: 50%; border: 6px solid #00FFFF;
-        box-shadow: 0 0 35px #00FFFF; object-fit: cover;
-    }}
-    .contenedor-titulos-derecha {{
-        display: flex; flex-direction: column; justify-content: center;
-        align-items: center; text-align: center; height: 100%;
-    }}
+
     .titulo-lina-final {{
         font-family: 'Comic Sans MS', cursive; 
         font-size: 140px; color: #004d61; 
         text-shadow: 0 0 30px #00FFFF; margin: 0; line-height: 0.8;
     }}
+
     .sub-laboratorio {{
-        color: #008fb3; font-size: 30px; font-weight: bold; line-height: 1.1; margin-top: 10px;
+        color: #008fb3; font-size: 30px; font-weight: bold; line-height: 1.1; margin-top: 15px;
     }}
+
     .sub-mym {{
-        color: #444; font-size: 20px; font-weight: 500; margin-top: 8px;
+        color: #444; font-size: 20px; font-weight: 500; margin-top: 10px;
     }}
 </style>
 """, unsafe_allow_html=True)
 
-# --- 5. ENCABEZADO (BARRA Y LOGOS) ---
-st.markdown(f"""
-<div class="nav-bar-silver">
-    <div style="font-family: monospace; font-weight: bold; color: #333;">
-        📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')} | S T M Y M
-    </div>
-    <div>
-        <a href="https://www.youtube.com/@gerardomartinezlemus7969" target="_blank" class="social-tag" style="background-color: #FF0000;">YouTube</a>
-        <a href="https://www.instagram.com/solucionesmym_2007/" target="_blank" class="social-tag" style="background-color: #E1306C;">Instagram</a>
-        <a href="https://web.facebook.com/MyMsolucionesdetecnologia" target="_blank" class="social-tag" style="background-color: #4267B2;">Facebook</a>
-        <a href="https://wa.me/573114759768" target="_blank" class="social-tag" style="background-color: #25D366;">WhatsApp</a>
-        <a href="https://t.me/+573114759768" target="_blank" class="social-tag" style="background-color: #0088CC;">Telegram</a>
-        <a href="https://x.com/" target="_blank" class="social-tag" style="background-color: #000000;">X</a>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+# --- 5. ENCABEZADO (DENTRO DE LAS COLUMNAS) ---
+# ... (Mantén tu barra plateada igual) ...
 
 col_izq, col_der = st.columns([1.2, 2.3])
+
 with col_izq:
     st.markdown(f'<div style="display:flex; justify-content:center; align-items:center; height:100%;"><img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final"></div>', unsafe_allow_html=True)
 
 with col_der:
+    # AQUÍ APLICAMOS EL NUEVO RECUADRO CLARO
     st.markdown(f"""
-    <div class="contenedor-titulos-derecha">
+    <div class="recuadro-titulos">
         <h1 class="titulo-lina-final">L.I.N.A.</h1>
-        <div class="sub-laboratorio">Laboratorio de Inteligencia<br>y Nuevos Algoritmos</div>
-        <div class="sub-mym">Soluciones Tecnológicas MYM<br>Desde 2007</div>
+        <div class="sub-laboratorio">
+            Laboratorio de Inteligencia<br>y Nuevos Algoritmos
+        </div>
+        <div class="sub-mym">
+            Soluciones Tecnológicas MYM<br>Desde 2007
+        </div>
     </div>
     """, unsafe_allow_html=True)
-
 st.divider()
 
 # --- 6. PANEL OPERATIVO ---
