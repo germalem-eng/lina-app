@@ -75,22 +75,15 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-# --- 6. LOGO Y TEXTO PRINCIPAL DE L.I.N.A (RESTAURADO) ---
-st.markdown(f"""
-<div style="text-align: center;">
-    <img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final">
-    <h1 class="neon-imponente" style="font-size: 80px; margin-bottom: 0px;">L.I.N.A.</h1>
-    <h3 style="color: #00d4ff; font-family: 'Courier New', monospace; margin-top: -10px;">
-        Lógica, Inteligencia y Nuevos Algoritmos
-    </h3>
-    <h4 style="color: #FFFFFF; font-weight: 300; letter-spacing: 2px;">
-        Soluciones Tecnológicas M Y M
-    </h4>
-    <p style="color: #e0e0e0; font-style: italic;">Desde 2007</p>
-</div>
-""", unsafe_allow_html=True)
-
-st.divider()
+# --- 6. MENÚ LATERAL ---
+with st.sidebar:
+    if logo_robot_b64:
+        st.markdown(f'<img src="data:image/jpeg;base64,{logo_robot_b64}" class="sidebar-logo">', unsafe_allow_html=True)
+    st.markdown("<br><h3 style='text-align:center;'>🛠️ PANEL OPERATIVO</h3>", unsafe_allow_html=True)
+    if st.button("💰 COTIZADOR", use_container_width=True, key="s_cot"): st.session_state.seccion = "COTIZADOR"
+    st.markdown("---")
+    if st.button("📝 RADICACIÓN LEGAL", use_container_width=True, key="s_rad"): st.session_state.seccion = "RADICACION"
+    if st.button("🖥️ INVENTARIO PC", use_container_width=True, key="s_inv"): st.session_state.seccion = "INVENTARIO"
 
 # --- 7. LÓGICA DE SECCIONES ---
 
