@@ -18,7 +18,6 @@ if 'inventario' not in st.session_state:
     st.session_state.inventario = [
         {"Fecha": "2026-03-15", "Equipo": "HP Compaq dc5800 SFF", "Trabajo": "Cambio de pasta térmica y reemplazo de disco duro HDD por SSD.", "Estado": "Entregado"}
     ]
-
 # --- 3. RECURSOS VISUALES ---
 def get_image_base64(path):
     if os.path.exists(path):
