@@ -137,12 +137,64 @@ if st.session_state.seccion == "COTIZADOR":
         st.markdown('<div style="background-color:rgba(255,255,255,0.8);padding:15px;border-radius:10px;border:2px solid #00d4ff;"><h4>📋 Tarifas</h4><li>Revisión: $40.000</li><li>Legal: 10% ahorro</li><li>Domicilio: $20.000</li></div>', unsafe_allow_html=True)
 
 elif st.session_state.seccion == "RADICACION":
-    st.subheader("📝 Generador de Peticiones Legales")
-    u_nom = st.text_input("Nombre del Titular:", value="LINA PAOLA MOJICA").upper()
-    u_ced = st.text_input("Cédula:")
-    if st.button("Generar Borrador"):
-        st.text_area("📄 Documento:", f"Bogotá D.C., {ahora.strftime('%d/%m/%Y')}\n\nYo, {u_nom}, con C.C. {u_ced}...", height=200)
+    st.subheader("📝 Centro de Radicación Legal (Lina & MyM)")
+    
+    # --- 1. SECCIÓN DATA CRÉDITO ---
+    st.markdown("---")
+    st.write("### ⚖️ Gestión DataCrédito")
+    u_nom_lina = "LINA PAOLA MOJICA"
+    u_ent_lina = "RAPICREDIT / ZINOBE"
+    
+    col_dc1, col_dc2 = st.columns([2, 1])
+    with col_dc1:
+        radicado_dc = st.text_input("Ingrese el número de radicado de DataCrédito:", placeholder="Ej: 2026-XXXXX")
+    
+    if radicado_dc:
+        st.info(f"✅ Seguimiento activo para: {u_nom_lina} | Radicado: {radicado_dc}")
+        fecha_res = (ahora + datetime.timedelta(days=15)).strftime('%d/%m/%Y')
+        st.write(f"📅 **Fecha estimada de respuesta:** {fecha_res}")
+    else:
+        st.warning("⚠️ Pendiente: Radicar en el portal y anotar el número aquí.")
 
+    if st.button("💾 REGISTRAR RECLAMO DATACRÉDITO", use_container_width=True):
+        opcion_elegida = "No remitir comunicación previa / Incumplimiento Oferta"
+        st.success(f"✅ Reclamo registrado bajo la causal: {opcion_elegida}")
+        st.info("📅 Recordatorio: Revisar respuesta en 15 días hábiles.")
+
+    # --- 2. SECCIÓN RECOVERY CREDITS (PDF) ---
+    st.markdown("---")
+    st.write("### 📄 Generador para Recovery Credits")
+    if st.button("🔍 GENERAR BORRADOR PARA RECOVERY", use_container_width=True):
+        u_ced = "1016026492"
+        u_ent_rec = "RECOVERY OF CREDITS / RAPICREDIT"
+        
+        texto_pdf = f"""RECLAMACIÓN FORMAL - INCUMPLIMIENTO DE OFERTA COMERCIAL
+Fecha: {ahora.strftime('%d/%m/%Y')}
+
+Señores RECOVERY OF CREDITS:
+
+1. OFERTA VINCULANTE: El SMS recibido el 27/03/2026 establecía un plazo hasta el 28/03/2026 para pagar $200.000. El débito realizado el 27/03/2026 por $503.000 es una violación al término de la oferta.
+2. ABUSO DEL DERECHO: El uso del débito automático para vaciar una cuenta de nómina sin respetar el mínimo vital es ilegal (Sentencia T-012/17).
+3. ACCIÓN LEGAL: Se informa que el radicado ante la Superfinanciera está en curso.
+
+Atentamente,
+{u_nom_lina} | C.C. {u_ced}"""
+
+        st.text_area("Copia este texto para tu PDF:", texto_pdf, height=250)
+        st.info("💡 **Tip de Gerardo:** Pega este texto en LibreOffice Draw y guárdalo como PDF para Alexandra.")
+
+    # --- 3. SECCIÓN BANCOLOMBIA ---
+    st.markdown("---")
+    st.write("### 🏦 Reclamación Bancolombia")
+    if st.button("🏦 GENERAR RECLAMO BANCOLOMBIA", use_container_width=True):
+        banco_info = "BANCOLOMBIA - REVERSIÓN DE PAGO"
+        monto_debitado = "$502.837"
+        
+        st.success(f"Documento listo para {u_nom_lina} contra {banco_info}")
+        st.code(f"""SOLICITUD DE REVERSIÓN - CUENTA DE NÓMINA
+Monto: {monto_debitado}
+Causal: Violación al Mínimo Vital y Oferta Incumplida.
+Derecho: Circular 007 Superfinanciera.""", language="text")
 elif st.session_state.seccion == "GESTION":
     st.subheader("⚖️ Historial de Casos")
     st.info("No hay casos registrados aún.")
