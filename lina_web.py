@@ -2,113 +2,133 @@ import streamlit as st
 import os
 import base64
 import datetime
-import urllib.parse
-import pandas as pd  # Para el inventario
+from datetime import timedelta
+from streamlit_autorefresh import st_autorefresh
+import pandas as pd
 
-# --- 1. CONFIGURACIÓN ---
-st.set_page_config(page_title="LINA V20.0 | Proyecto L.I.N.A.", layout="wide", page_icon="🤖")
+# --- 1. CONFIGURACIÓN Y RELOJ (Sincronización Colombia UTC-5) ---
+st.set_page_config(page_title="LINA V20.0 | Gestión MyM", layout="wide", page_icon="🤖")
+st_autorefresh(interval=1000, key="daterefresh")
 ahora = datetime.datetime.now() - datetime.timedelta(hours=5)
 
-# --- 2. MEMORIA DE SESIÓN ---
+# Memoria de Sesión
 if 'seccion' not in st.session_state: st.session_state.seccion = "COTIZADOR"
-if 'texto_fijo' not in st.session_state: st.session_state.texto_fijo = ""
-# Memoria para el inventario (se guarda mientras la app esté abierta)
 if 'inventario' not in st.session_state:
     st.session_state.inventario = [
-        {"Fecha": "2026-03-15", "Equipo": "HP Compaq dc5800 SFF", "Trabajo": "Cambio de pasta térmica y reemplazo de disco duro HDD por SSD.", "Estado": "Entregado"}
+        {"Fecha": "2026-03-15", "Equipo": "HP Compaq dc5800 SFF", "Trabajo": "Mantenimiento preventivo, pasta térmica y SSD", "Estado": "Entregado"}
     ]
 
-# --- 3. ESTILOS CSS (TU DISEÑO NEÓN) ---
-def get_image_base64(path):
-    if os.path.exists(path):
-        with open(path, "rb") as img_file: return base64.b64encode(img_file.read()).decode()
-    return ""
+# --- 2. RECURSOS VISUALES ---
+def get_base64(bin_file):
+    if os.path.exists(bin_file):
+        with open(bin_file, 'rb') as f: return base64.b64encode(f.read()).decode()
+    return None
 
-fondo_b64 = get_image_base64("Logos/fondo.jpg")
-logo_robot_b64 = get_image_base64("Logos/logo_robot_2007.jpg")
+logo_b64 = get_base64("Logos/logo_robot_2007.jpg")
+fondo_b64 = get_base64("Logos/fondo.jpg")
 
+# --- 3. ESTILOS CSS (Fusión V15.5 + V20.0) ---
 st.markdown(f"""
 <style>
     .stApp {{
-        background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url("data:image/jpeg;base64,{fondo_b64}");
-        background-size: cover; background-attachment: fixed;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)),
+                          url("data:image/jpeg;base64,{fondo_b64 if fondo_b64 else ''}") !important;
+        background-size: cover !important;
     }}
     .nav-bar-silver {{
-        padding: 10px; background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
-        border-bottom: 3px solid #666; border-radius: 12px; margin-bottom: 20px; text-align: center;
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 10px 40px; background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%) !important;
+        border-bottom: 3px solid #666; margin-bottom: 20px; border-radius: 8px;
     }}
-    .logo-redondo-final {{
-        width: 220px; height: 220px; border-radius: 50%; border: 5px solid #00FFFF; box-shadow: 0 0 25px #00FFFF;
+    .titulo-neon-v15 {{
+        font-family: 'Comic Sans MS', cursive !important;
+        font-size: 70px !important; color: #000 !important;
+        text-shadow: 0 0 10px #7FFFD4, 0 0 20px #7FFFD4 !important;
+        margin: 0; line-height: 1;
     }}
-    .neon-imponente {{
-        font-family: 'Comic Sans MS', cursive; color: #FFFFFF; text-shadow: 0 0 15px #00FFFF, 0 0 30px #00FFFF;
-    }}
-    .resaltado-blanco {{
-        background-color: rgba(255, 255, 255, 0.85); border-radius: 8px; padding: 5px 15px; display: inline-block;
+    .logo-v15 {{
+        width: 130px; border-radius: 50%; border: 4px solid #00d4ff;
+        box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
     }}
 </style>
 """, unsafe_allow_html=True)
 
-# --- 4. MENÚ LATERAL (AJUSTADO PARA NO CONFUNDIR) ---
+# --- 4. BARRA SUPERIOR (Reloj y Fecha) ---
+st.html(f"""
+<div class="nav-bar-silver">
+    <div style="font-family: monospace; font-weight: bold; font-size: 16px; color: #333;">
+        📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')}
+    </div>
+    <div style="font-size: 12px; font-weight: bold; color: #555;">SOLUCIONES TECNOLÓGICAS M&M</div>
+</div>
+""")
+
+# --- 5. MENÚ LATERAL PROFESIONAL ---
 with st.sidebar:
-    st.markdown("### 🛠️ MENÚ L.I.N.A.")
-    st.image(f"data:image/jpeg;base64,{logo_robot_b64}", width=150)
+    st.markdown("### 🛠️ PANEL DE CONTROL")
+    if logo_b64: st.image(f"data:image/jpeg;base64,{logo_b64}", width=180)
     
     st.markdown("---")
-    st.write("**📱 ÁREA CLIENTE**")
-    if st.button("💰 Cotizador de Servicios", use_container_width=True): st.session_state.seccion = "COTIZADOR"
+    st.write("**📱 PÚBLICO**")
+    if st.button("💰 Cotizador", use_container_width=True): st.session_state.seccion = "COTIZADOR"
     
     st.markdown("---")
-    st.write("**🔒 ÁREA ADMINISTRADOR**")
+    st.write("**🔒 ADMINISTRATIVO**")
     if st.button("📝 Radicación Legal", use_container_width=True): st.session_state.seccion = "RADICACION"
-    if st.button("🖥️ Inventario de Mantenimiento", use_container_width=True): st.session_state.seccion = "INVENTARIO"
+    if st.button("🖥️ Inventario PC", use_container_width=True): st.session_state.seccion = "INVENTARIO"
     
     st.markdown("---")
-    st.info(f"Sesión: {ahora.strftime('%H:%M:%S')}")
+    st.caption(f"L.I.N.A. Core V20.0 | © {ahora.year}")
 
-# --- 5. ENCABEZADO PRINCIPAL ---
-st.markdown(f'<div class="nav-bar-silver"><b>PROYECTO L.I.N.A. | Soluciones MyM 2007</b></div>', unsafe_allow_html=True)
-
-col1, col2 = st.columns([1, 2])
-with col1:
-    st.markdown(f'<div style="text-align:center;"><img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final"></div>', unsafe_allow_html=True)
-with col2:
-    st.markdown('<h1 class="neon-imponente" style="font-size: 80px; margin-bottom:0;">L.I.N.A.</h1>', unsafe_allow_html=True)
-    st.markdown('<div class="resaltado-blanco"><b style="color:#008fb3;">Inventario & Gestión Digital</b></div>', unsafe_allow_html=True)
+# --- 6. ENCABEZADO PRINCIPAL (Estilo V15.5) ---
+logo_html = f'<img src="data:image/jpeg;base64,{logo_b64}" class="logo-v15">' if logo_b64 else "🤖"
+st.html(f"""
+<div style="display: flex; align-items: center; gap: 30px; padding: 10px 20px;">
+    {logo_html}
+    <div>
+        <h1 class="titulo-neon-v15">L.I.N.A.</h1>
+        <div style="color: #008fb3; font-weight: bold; border-top: 2px solid #00d4ff;">
+            GESTIÓN PROFESIONAL MyM | DESDE 2007
+        </div>
+    </div>
+</div>
+""")
 
 st.divider()
 
-# --- 6. LÓGICA DE SECCIONES ---
+# --- 7. LÓGICA DE SECCIONES ---
 
-# --- SECCIÓN: COTIZADOR ---
-if st.session_state.seccion == "COTIZADOR":
-    st.subheader("💰 Cotizador para Clientes")
-    st.info("Esta es la sección que verían tus clientes para pedir presupuestos.")
-    # Aquí puedes poner el código del cotizador de antes...
-
-# --- SECCIÓN: RADICACIÓN ---
-elif st.session_state.seccion == "RADICACION":
-    st.subheader("⚖️ Radicación de Reclamos Legales")
-    # (Aquí va el código de Radicación que ya arreglamos antes)
-    st.warning("Usa esta sección para generar documentos de cobranza o bancos.")
-
-# --- SECCIÓN: INVENTARIO (NUEVO) ---
-elif st.session_state.seccion == "INVENTARIO":
-    st.subheader("🖥️ Inventario de Mantenimientos Realizados")
+if st.session_state.seccion == "INVENTARIO":
+    st.subheader("🖥️ Inventario de Mantenimientos")
     
-    with st.expander("➕ REGISTRAR NUEVO TRABAJO"):
-        with st.form("nuevo_mantenimiento"):
-            f_equipo = st.text_input("Marca y Modelo del Equipo:", placeholder="Ej: Dell Optiplex 790")
-            f_fecha = st.date_input("Fecha del servicio:", datetime.date.today())
-            f_detalle = st.text_area("Descripción del trabajo:", placeholder="Limpieza, software, hardware...")
-            f_estado = st.selectbox("Estado:", ["En proceso", "Listo para entrega", "Entregado"])
+    # Formulario para registrar equipos
+    with st.expander("➕ REGISTRAR NUEVO MANTENIMIENTO"):
+        with st.form("form_inv"):
+            col_f1, col_f2 = st.columns(2)
+            with col_f1:
+                f_equipo = st.text_input("Equipo:", placeholder="Ej: HP Compaq dc5800")
+            with col_f2:
+                f_estado = st.selectbox("Estado:", ["Recibido", "En Reparación", "Entregado"])
             
-            if st.form_submit_button("Guardar en Bitácora"):
-                nuevo_item = {"Fecha": str(f_fecha), "Equipo": f_equipo, "Trabajo": f_detalle, "Estado": f_estado}
-                st.session_state.inventario.append(nuevo_item)
-                st.success("¡Registro guardado!")
+            f_detalle = st.text_area("Detalles técnicos (Pasta térmica, componentes, etc.):")
+            
+            if st.form_submit_button("Guardar Registro"):
+                st.session_state.inventario.append({
+                    "Fecha": ahora.strftime('%Y-%m-%d'),
+                    "Equipo": f_equipo,
+                    "Trabajo": f_detalle,
+                    "Estado": f_estado
+                })
+                st.success("¡Equipo registrado!")
                 st.rerun()
 
-    st.markdown("### 📋 Historial de Equipos")
-    df = pd.DataFrame(st.session_state.inventario)
-    st.table(df) # Muestra una tabla limpia con los trabajos realizados
+    # Mostrar la tabla de historial
+    st.table(pd.DataFrame(st.session_state.inventario))
+
+elif st.session_state.seccion == "RADICACION":
+    st.subheader("📝 Centro de Radicación")
+    st.info("Sección configurada para generación de documentos legales.")
+
+else: # COTIZADOR
+    st.subheader("💰 Cotizador de Servicios")
+    st.write("Bienvenido al área de cotización para clientes.")
