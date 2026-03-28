@@ -74,15 +74,6 @@ st.markdown(f"""
     </div>
 </div>
 """, unsafe_allow_html=True)
-# --- 6. MENÚ LATERAL ---
-with st.sidebar:
-    if logo_robot_b64:
-        st.markdown(f'<img src="data:image/jpeg;base64,{logo_robot_b64}" class="sidebar-logo">', unsafe_allow_html=True)
-    st.markdown("<br><h3 style='text-align:center;'>🛠️ PANEL OPERATIVO</h3>", unsafe_allow_html=True)
-    if st.button("💰 COTIZADOR", use_container_width=True, key="s_cot"): st.session_state.seccion = "COTIZADOR"
-    st.markdown("---")
-    if st.button("📝 RADICACIÓN LEGAL", use_container_width=True, key="s_rad"): st.session_state.seccion = "RADICACION"
-    if st.button("🖥️ INVENTARIO PC", use_container_width=True, key="s_inv"): st.session_state.seccion = "INVENTARIO"
 
 # --- 7. LÓGICA DE SECCIONES ---
 
