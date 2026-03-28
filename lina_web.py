@@ -4,7 +4,6 @@ import base64
 import datetime
 import urllib.parse
 import pandas as pd
-from streamlit_autorefresh import st_autorefresh
 from fpdf import FPDF
 
 # --- 1. CONFIGURACIÓN DEL SISTEMA ---
@@ -18,13 +17,14 @@ if 'inventario' not in st.session_state:
     st.session_state.inventario = [
         {"Fecha": "2026-03-15", "Equipo": "HP Compaq dc5800 SFF", "Trabajo": "Cambio de pasta térmica y reemplazo de disco duro HDD por SSD.", "Estado": "Entregado"}
     ]
+
 # --- 3. RECURSOS VISUALES ---
 def get_image_base64(path):
     if os.path.exists(path):
         with open(path, "rb") as img_file: return base64.b64encode(img_file.read()).decode()
     return ""
 
-
+fondo_b64 = get_image_base64("Logos/fondo.jpg")
 logo_robot_b64 = get_image_base64("Logos/logo_robot_2007.jpg")
 
 # --- 4. ESTILOS CSS (FONDO TRANSPARENTE EN SIDEBAR) ---
