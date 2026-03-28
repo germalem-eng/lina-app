@@ -113,15 +113,25 @@ st.divider()
 st.write("### 🚀 Panel Operativo:")
 c1, c2, c3, c4, c5 = st.columns(5) # Cambia 4 por 5
 with c1:
-    if st.button("💰 COTIZADOR", use_container_width=True): st.session_state.seccion = "COTIZADOR"
-with c2:
-    if st.button("⚖️ GESTIÓN DE CASOS", use_container_width=True): st.session_state.seccion = "GESTION"
-with c3:
-    if st.button("📝 RADICACIÓN", use_container_width=True): st.session_state.seccion = "RADICACION"
-with c4:
-    if st.button("🏠 PRIVADO MyM", use_container_width=True): st.session_state.seccion = "FINANZAS"
-with c5:
-    if st.button("🛡️ CASO LEGAL", use_container_width=True): st.session_state.seccion = "LEGAL" # Nuevo botón
+    if st.session_state.seccion == "COTIZADOR":
+    st.subheader("💰 Cotizador Inteligente")
+    # ... tu código del cotizador ...
+
+elif st.session_state.seccion == "RADICACION":
+    st.subheader("📝 Generador de Peticiones Legales")
+    # ... tu código de radicación ...
+
+elif st.session_state.seccion == "GESTION":
+    st.subheader("⚖️ Historial de Casos")
+    # ... tu código de gestión ...
+
+elif st.session_state.seccion == "FINANZAS":
+    st.subheader("🏠 Control Privado")
+    # ... tu código de finanzas ...
+
+elif st.session_state.seccion == "LEGAL":
+    # --- ESTE ES EL NUEVO BLOQUE DEL CASO ---
+    st.subheader("🛡️ Caso Nómina: Lina vs RapiCredit")
 # --- 8. PIE DE PÁGINA ---
 st.markdown(f"""
 <div style="background-color: rgba(255, 255, 255, 0.7); padding: 15px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 20px;">
