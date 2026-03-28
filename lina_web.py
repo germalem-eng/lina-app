@@ -1,28 +1,30 @@
 import streamlit as st
-from datetime import datetime
+import os
 import base64
+import datetime
+import pandas as pd
+from streamlit_autorefresh import st_autorefresh
 
-# --- 1. CONFIGURACIÓN DE PÁGINA ---
-st.set_page_config(page_title="L.I.N.A. - Soluciones Tecnológicas MYM", layout="wide")
+# --- 1. CONFIGURACIÓN DEL SISTEMA ---
+st.set_page_config(page_title="LINA V20.0 | Soluciones Tecnológicas M Y M", layout="wide", page_icon="🤖")
+st_autorefresh(interval=1000, key="daterefresh")
+# Ajuste de hora (Colombia UTC-5)
+ahora = datetime.datetime.now() - datetime.timedelta(hours=5)
 
-# --- 2. LÓGICA DE ESTADO (SESIÓN) ---
-if "seccion" not in st.session_state:
-    st.session_state.seccion = "INICIO"
+# --- 2. INICIALIZACIÓN DE ESTADO ---
+if 'seccion' not in st.session_state: st.session_state.seccion = "COTIZADOR"
+if 'doc_final' not in st.session_state: st.session_state.doc_final = ""
+archivo_casos = "database_casos_mym.csv"
 
-ahora = datetime.now()
+# --- 3. RECURSOS VISUALES ---
+def get_image_base64(path):
+    if os.path.exists(path):
+        with open(path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    return ""
 
-# --- 3. CARGA DE IMÁGENES (Simulación de Base64 para fondo y logo) ---
-# Nota: Aquí asumo que ya tienes tus funciones para cargar 'Logos/fondo.jpg' y 'Logos/robot.jpg'
-# Si usas archivos locales, asegúrate de que existan en tu repo de GitHub.
-def get_base64(file_path):
-    try:
-        with open(file_path, "rb") as f:
-            return base64.b64encode(f.read()).decode()
-    except:
-        return ""
-
-fondo_b64 = get_base64("Logos/fondo.jpg")
-logo_robot_b64 = get_base64("Logos/robot.jpg")
+fondo_b64 = get_image_base64("Logos/fondo.jpg")
+logo_robot_b64 = get_image_base64("Logos/logo_robot_2007.jpg")
 
 # --- 4. ESTILOS CSS GENERALES ---
 st.markdown(f"""
@@ -46,16 +48,17 @@ st.markdown(f"""
         box-shadow: 0 0 35px #00FFFF; object-fit: cover;
     }}
 
-    .resaltado-renglon {{
-        background-color: rgba(173, 216, 230, 0.7);
+    /* RECUADROS BLANCOS SOLICITADOS */
+    .resaltado-blanco {{
+        background-color: rgba(255, 255, 255, 0.8); /* Blanco puro con ligera transparencia */
         border-radius: 8px; padding: 5px 15px; margin: 5px 0;
         display: inline-block; box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
     }}
 
     .neon-imponente {{
         font-family: 'Comic Sans MS', cursive; color: #fff;
-        text-shadow: 0 0 15px #7FFFD4, 0 0 30px #7FFFD4, 0 0 45px #7FFFD4;
-        line-height: 1.1; margin-bottom: 10px; text-align: center;
+        text-shadow: 0 0 15px #00FFFF, 0 0 30px #00FFFF, 0 0 45px #00FFFF;
+        line-height: 1.1; margin-bottom: 15px; text-align: center;
     }}
 
     .social-tag {{
@@ -65,7 +68,7 @@ st.markdown(f"""
 </style>
 """, unsafe_allow_html=True)
 
-# --- 5. ENCABEZADO (BARRA PLATEADA) ---
+# --- 5. ENCABEZADO (BARRA PLATEADA Y LOGOS) ---
 st.markdown(f"""
 <div class="nav-bar-silver">
     <div style="font-family: monospace; font-weight: bold; color: #333;">
@@ -82,7 +85,6 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-# --- SECCIÓN DE LOGO Y TÍTULOS ---
 col_izq, col_der = st.columns([1.2, 2.3])
 
 with col_izq:
@@ -91,28 +93,27 @@ with col_izq:
 with col_der:
     st.markdown(f"""
     <div style="text-align: center;">
-        <h1 class="neon-imponente" style="font-size: 110px;">L.I.N.A.</h1>
-        <div class="resaltado-renglon">
-            <span style="color: #000; font-size: 28px; font-weight: bold;">Laboratorio de Inteligencia</span>
+        <h1 class="neon-imponente" style="font-size: 115px;">L.I.N.A.</h1>
+        <div class="resaltado-blanco">
+            <span style="color: #008fb3; font-size: 30px; font-weight: bold;">Laboratorio de Inteligencia</span>
         </div><br>
-        <div class="resaltado-renglon">
-            <span style="color: #000; font-size: 28px; font-weight: bold;">y Nuevos Algoritmos</span>
+        <div class="resaltado-blanco">
+            <span style="color: #008fb3; font-size: 30px; font-weight: bold;">y Nuevos Algoritmos</span>
         </div><br>
-        <div class="resaltado-renglon" style="margin-top: 15px;">
-            <span style="color: #444; font-size: 18px; font-weight: bold;">Soluciones Tecnológicas MYM</span>
+        <div class="resaltado-blanco" style="margin-top: 15px;">
+            <span style="color: #444; font-size: 20px; font-weight: bold;">Soluciones Tecnológicas M Y M</span>
         </div><br>
-        <div class="resaltado-renglon">
-            <span style="color: #444; font-size: 16px; font-weight: bold;">Desde 2007</span>
+        <div class="resaltado-blanco">
+            <span style="color: #444; font-size: 18px; font-weight: bold;">Desde 2007</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
 st.divider()
 
-# --- 6. PANEL OPERATIVO (NAVEGACIÓN) ---
+# --- 6. PANEL OPERATIVO ---
 st.write("### 🚀 Panel Operativo:")
 c1, c2, c3, c4 = st.columns(4)
-
 with c1:
     if st.button("💰 COTIZADOR", use_container_width=True): st.session_state.seccion = "COTIZADOR"
 with c2:
@@ -124,40 +125,57 @@ with c4:
 
 st.divider()
 
-# --- 7. LÓGICA DE SECCIONES (SISTEMA INTEGRADO) ---
+# --- 7. LÓGICA DE SECCIONES (ACTUALIZADO) ---
 
 if st.session_state.seccion == "COTIZADOR":
-    st.subheader("💰 Cotizador Técnico")
-    base = 40000
-    ser = st.selectbox("Servicio:", ["Mantenimiento Preventivo", "Mantenimiento Correctivo", "Consultoría"])
-    mod = st.radio("Modalidad:", ["Virtual", "Domicilio"], horizontal=True)
-    extra = 20000 if mod == "Domicilio" else 0
-    total = base + extra
-    st.metric("Inversión Estimada", f"$ {total:,.0f}".replace(",", "."))
-    st.info("📍 Tarifa de Revisión: $40.000 | 🏠 Domicilio: $20.000")
+    st.subheader("💰 Cotizador Inteligente")
+    col_calc, col_info = st.columns([2, 1])
+    with col_calc:
+        ser = st.selectbox("Servicio:", ["Mantenimiento Preventivo", "Mantenimiento Correctivo", "Asesoría Legal"])
+        mod = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
+        base = 40000
+        dom = 20000 if mod == "A Domicilio" else 0
+        total = (base * 1.20) + dom if "Mantenimiento" in ser else base + dom
+        st.metric("Inversión Total", f"$ {total:,.0f}".replace(",", "."))
+    with col_info:
+        st.markdown("""
+        <div style="background-color:rgba(255,255,255,0.8);padding:15px;border-radius:10px;border:2px solid #00d4ff;">
+            <h4 style="text-align:center;">📋 Tarifas Oficiales</h4>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li>📍 <b>Revisión:</b> $40.000</li>
+                <li>⚖️ <b>Legal:</b> 10% del ahorro</li>
+                <li>🏠 <b>Domicilio:</b> $20.000</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
 
 elif st.session_state.seccion == "RADICACION":
-    st.subheader("📝 Radicación Legal (Ley 2485 de 2025)")
-    with st.form("form_legal"):
-        cliente = st.text_input("Nombre del Cliente:")
-        operador = st.selectbox("Operador:", ["WOM", "Claro", "Movistar", "Tigo"])
-        motivo = "Cobro ilegal de reconexión"
-        if st.form_submit_button("Generar Documento"):
-            st.success(f"Documento generado para {cliente} contra {operador}.")
-            st.download_button("Descargar PDF (Simulado)", "Contenido del PDF", file_name="reclamacion.pdf")
+    st.subheader("📝 Generador de Peticiones Legales")
+    col_input, col_view = st.columns([1, 1])
+    with col_input:
+        u_nom = st.text_input("Nombre del Titular:", value="LINA PAOLA MOJICA").upper()
+        u_ced = st.text_input("Cédula:")
+        u_ent = st.text_input("Entidad:", value="RAPICREDIT").upper()
+        doc_legal = f"""Bogotá D.C., {ahora.strftime('%d/%m/%Y')}\nSeñores: {u_ent}\nREF: LEY 2157 DE 2021\n\nYo, {u_nom}, con C.C. {u_ced}..."""
+    with col_view:
+        st.text_area("📄 Vista Previa:", value=doc_legal, height=250)
+        if st.button("💾 Guardar"): st.success("Documento listo.")
 
 elif st.session_state.seccion == "GESTION":
-    st.subheader("⚖️ Gestión de Casos Activos")
-    st.write("No hay casos pendientes por procesar.")
+    st.subheader("⚖️ Historial de Casos")
+    if os.path.exists(archivo_casos):
+        st.dataframe(pd.read_csv(archivo_casos), use_container_width=True)
+    else: st.info("No hay casos registrados aún.")
 
 elif st.session_state.seccion == "FINANZAS":
-    st.subheader("🔒 Acceso Privado MyM")
-    st.text_input("Contraseña de Administrador:", type="password")
+    st.subheader("🏠 Control Privado")
+    st.metric("Meta Sistecrédito", "$898.771")
 
 # --- 8. PIE DE PÁGINA ---
 st.markdown(f"""
-<div style="background-color: rgba(241, 241, 241, 0.7); padding: 15px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 20px;">
-    <b>⚠️ Nota Profesional:</b> Honorarios legales basados en el 10% del ahorro conseguido. 
-    Revisiones técnicas base: <b>$40.000</b>.
+<div style="background-color: rgba(255, 255, 255, 0.7); padding: 15px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 20px;">
+    <b>⚠️ Nota Profesional:</b> Honorarios por éxito (10% ahorro) o tarifa base revisión: <b>$40.000</b>.
 </div>
 """, unsafe_allow_html=True)
+
+st.caption(f"LINA Core V20.0 | © {ahora.year} Gerardo Martinez Lemus | Soluciones Tecnológicas M Y M")
