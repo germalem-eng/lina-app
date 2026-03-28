@@ -70,15 +70,46 @@ st.markdown(f"""
 </style>
 """, unsafe_allow_html=True)
 
-# --- 5. ENCABEZADO VISUAL (DISTRIBUCIÓN ORIGINAL) ---
-# ... (Aquí va tu barra plateada con las redes sociales que ya tienes) ...
+# --- 5. ENCABEZADO VISUAL COMPLETO (BARRA, LOGO Y TÍTULOS) ---
 
+# 1. Barra Plateada Superior con Redes Sociales
+st.markdown(f"""
+<style>
+    .nav-bar-silver {{
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 10px 20px; background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
+        border-bottom: 3px solid #666; border-radius: 12px; margin-bottom: 25px;
+    }}
+    .social-tag {{
+        padding: 5px 12px; border-radius: 15px; text-decoration: none !important;
+        color: white !important; font-weight: bold; font-size: 13px; margin-left: 8px;
+    }}
+</style>
+
+<div class="nav-bar-silver">
+    <div style="font-family: monospace; font-weight: bold; color: #333;">
+        📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')} | S T M Y M
+    </div>
+    <div>
+        <a href="https://www.youtube.com/@gerardomartinezlemus7969" target="_blank" class="social-tag" style="background-color: #FF0000;">YouTube</a>
+        <a href="https://www.instagram.com/solucionesmym_2007/" target="_blank" class="social-tag" style="background-color: #E1306C;">Instagram</a>
+        <a href="https://web.facebook.com/MyMsolucionesdetecnologia" target="_blank" class="social-tag" style="background-color: #4267B2;">Facebook</a>
+        <a href="https://wa.me/573114759768" target="_blank" class="social-tag" style="background-color: #25D366;">WhatsApp</a>
+        <a href="https://t.me/+573114759768" target="_blank" class="social-tag" style="background-color: #0088CC;">Telegram</a>
+        <a href="https://x.com/" target="_blank" class="social-tag" style="background-color: #000000;">X</a>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# 2. Distribución en Dos Columnas (Logo e Información)
 col_izq, col_der = st.columns([1.2, 2.3])
 
 with col_izq:
+    # Logo gigante a la izquierda con neón azul
     st.markdown(f'<div style="display:flex; justify-content:center; align-items:center; height:100%;"><img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final"></div>', unsafe_allow_html=True)
 
 with col_der:
+    # Títulos escalonados directamente sobre el fondo binario
     st.markdown(f"""
     <div class="contenedor-titulos-derecha">
         <h1 class="titulo-lina-final">L.I.N.A.</h1>
@@ -90,8 +121,8 @@ with col_der:
         </div>
     </div>
     """, unsafe_allow_html=True)
-st.divider()
 
+st.divider()
 # --- 6. PANEL OPERATIVO ---
 st.write("### 🚀 Panel Operativo:")
 c1, c2, c3, c4 = st.columns(4)
