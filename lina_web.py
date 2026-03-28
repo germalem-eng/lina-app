@@ -174,6 +174,7 @@ elif st.session_state.seccion == "RADICACION":
         st.rerun()
 
 # --- SECCIÓN GESTIÓN (CORREGIDA LA SANGRÍA) ---
+
 elif st.session_state.seccion == "GESTION":
     st.subheader("⚖️ Historial de Casos")
     st.info("No hay casos registrados aún.")
