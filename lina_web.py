@@ -205,7 +205,9 @@ Atentamente,
     st.markdown("<br>", unsafe_allow_html=True)
     if st.button("♻️ LIMPIAR FORMULARIO Y BORRAR TODO", use_container_width=True):
         st.session_state.doc_generado = ""
-        st.rerun()elif st.session_state.seccion == "GESTION":
+        st.rerun()
+    
+    elif st.session_state.seccion == "GESTION":
     st.subheader("⚖️ Historial de Casos")
     st.info("No hay casos registrados aún.")
 
