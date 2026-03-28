@@ -26,9 +26,10 @@ def get_image_base64(path):
 fondo_b64 = get_image_base64("Logos/fondo.jpg")
 logo_robot_b64 = get_image_base64("Logos/logo_robot_2007.jpg")
 
-# --- 4. ESTILOS CSS ACTUALIZADOS (CON RECUADRO CLARO) ---
+# --- 4. ESTILOS CSS (REVERTIDO: SIN RECUADRO) ---
 st.markdown(f"""
 <style>
+    /* FONDO CON TRANSPARENCIA DEL 50% */
     .stApp {{
         background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
                           url("data:image/jpeg;base64,{fondo_b64}");
@@ -36,19 +37,21 @@ st.markdown(f"""
         background-attachment: fixed !important;
     }}
     
-    /* RECUADRO CLARO PARA TÍTULOS (EFECTO CRISTAL) */
-    .recuadro-titulos {{
-        background: rgba(255, 255, 255, 0.6); /* Fondo blanco traslúcido */
-        backdrop-filter: blur(10px); /* Desenfoque sutil del fondo */
-        padding: 30px;
-        border-radius: 25px;
-        border: 2px solid rgba(0, 255, 255, 0.3); /* Borde cyan suave */
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
+    .nav-bar-silver {{
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 10px 20px; background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
+        border-bottom: 3px solid #666; border-radius: 12px; margin-bottom: 25px;
+    }}
+
+    .logo-redondo-final {{
+        width: 280px; height: 280px;
+        border-radius: 50%; border: 6px solid #00FFFF;
+        box-shadow: 0 0 35px #00FFFF; object-fit: cover;
+    }}
+
+    .contenedor-titulos-derecha {{
+        display: flex; flex-direction: column; justify-content: center;
+        align-items: center; text-align: center; height: 100%;
     }}
 
     .titulo-lina-final {{
@@ -58,17 +61,17 @@ st.markdown(f"""
     }}
 
     .sub-laboratorio {{
-        color: #008fb3; font-size: 30px; font-weight: bold; line-height: 1.1; margin-top: 15px;
+        color: #008fb3; font-size: 30px; font-weight: bold; line-height: 1.1; margin-top: 10px;
     }}
 
     .sub-mym {{
-        color: #444; font-size: 20px; font-weight: 500; margin-top: 10px;
+        color: #444; font-size: 20px; font-weight: 500; margin-top: 8px;
     }}
 </style>
 """, unsafe_allow_html=True)
 
-# --- 5. ENCABEZADO (DENTRO DE LAS COLUMNAS) ---
-# ... (Mantén tu barra plateada igual) ...
+# --- 5. ENCABEZADO VISUAL (DISTRIBUCIÓN ORIGINAL) ---
+# ... (Aquí va tu barra plateada con las redes sociales que ya tienes) ...
 
 col_izq, col_der = st.columns([1.2, 2.3])
 
@@ -76,9 +79,8 @@ with col_izq:
     st.markdown(f'<div style="display:flex; justify-content:center; align-items:center; height:100%;"><img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final"></div>', unsafe_allow_html=True)
 
 with col_der:
-    # AQUÍ APLICAMOS EL NUEVO RECUADRO CLARO
     st.markdown(f"""
-    <div class="recuadro-titulos">
+    <div class="contenedor-titulos-derecha">
         <h1 class="titulo-lina-final">L.I.N.A.</h1>
         <div class="sub-laboratorio">
             Laboratorio de Inteligencia<br>y Nuevos Algoritmos
