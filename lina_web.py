@@ -89,28 +89,28 @@ col_izq, col_der = st.columns([1.2, 2.3])
 
 with col_izq:
     st.markdown(f'<div style="display:flex; justify-content:center; align-items:center; height:100%;"><img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final"></div>', unsafe_allow_html=True)
-
-if st.markdown(f"""
-    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 100%; margin-top: -30px;">
-        <h1 class="neon-imponente" style="font-size: 110px; margin: 0; padding: 0; line-height: 0.85;">L.I.N.A.</h1>
-        
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 5px; width: 100%;">
-            <div class="resaltado-blanco">
-                <span style="color: #008fb3; font-size: 26px; font-weight: bold;">Laboratorio de Inteligencia</span>
-            </div>
-            <div class="resaltado-blanco">
-                <span style="color: #008fb3; font-size: 26px; font-weight: bold;">y Nuevos Algoritmos</span>
-            </div>
+with col_der:
+        st.markdown(f"""
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 100%; margin-top: -30px;">
+            <h1 class="neon-imponente" style="font-size: 110px; margin: 0; padding: 0; line-height: 0.85;">L.I.N.A.</h1>
             
-            <div class="resaltado-blanco" style="margin-top: 10px;">
-                <span style="color: #444; font-size: 18px; font-weight: bold;">Soluciones Tecnológicas M Y M</span>
-            </div>
-            <div class="resaltado-blanco">
-                <span style="color: #444; font-size: 16px; font-weight: bold;">Desde 2007</span>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px; width: 100%;">
+                <div class="resaltado-blanco">
+                    <span style="color: #008fb3; font-size: 26px; font-weight: bold;">Laboratorio de Inteligencia</span>
+                </div>
+                <div class="resaltado-blanco">
+                    <span style="color: #008fb3; font-size: 26px; font-weight: bold;">y Nuevos Algoritmos</span>
+                </div>
+                
+                <div class="resaltado-blanco" style="margin-top: 10px;">
+                    <span style="color: #444; font-size: 18px; font-weight: bold;">Soluciones Tecnológicas M Y M</span>
+                </div>
+                <div class="resaltado-blanco">
+                    <span style="color: #444; font-size: 16px; font-weight: bold;">Desde 2007</span>
+                </div>
             </div>
         </div>
-    </div>
-    """, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
     
 # --- 7. LÓGICA DE SECCIONES (ACTUALIZADO) ---
 
