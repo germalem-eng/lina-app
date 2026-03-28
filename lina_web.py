@@ -104,16 +104,30 @@ with col_titulo:
 
 st.divider()
 
-# --- 8. MENÚ LATERAL ---
+# --- 8. MENÚ LATERAL (CORREGIDO) ---
 with st.sidebar:
-    st.markdown("### 🛠️ PANEL OPERATIVO")
+    # Primero el Logo
     if logo_robot_b64:
         st.markdown(f'<img src="data:image/jpeg;base64,{logo_robot_b64}" class="sidebar-logo">', unsafe_allow_html=True)
+    
     st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("💰 COTIZADOR", use_container_width=True): st.session_state.seccion = "COTIZADOR"
+    st.markdown("### 🛠️ PANEL OPERATIVO") # El título ahora queda debajo del logo
+    
+    # Botones con llaves únicas para evitar el error de la imagen
+    if st.button("💰 COTIZADOR", use_container_width=True, key="side_btn_cot"): 
+        st.session_state.seccion = "COTIZADOR"
+    
     st.markdown("---")
-    if st.button("📝 RADICACIÓN LEGAL", use_container_width=True): st.session_state.seccion = "RADICACION"
-    if st.button("🖥️ INVENTARIO PC", use_container_width=True): st.session_state.seccion = "INVENTARIO"
+    st.write("**🔒 ADMINISTRATIVO**")
+    
+    if st.button("📝 RADICACIÓN LEGAL", use_container_width=True, key="side_btn_rad"): 
+        st.session_state.seccion = "RADICACION"
+    
+    if st.button("🖥️ INVENTARIO PC", use_container_width=True, key="side_btn_inv"): 
+        st.session_state.seccion = "INVENTARIO"
+    
+    st.markdown("---")
+    st.caption(f"L.I.N.A. Core V20.2 | © {ahora.year}")
 
 # --- 9. LÓGICA DE SECCIONES ---
 
