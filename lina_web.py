@@ -25,7 +25,7 @@ def get_image_base64(path):
         with open(path, "rb") as img_file: return base64.b64encode(img_file.read()).decode()
     return ""
 
-fondo_b64 = get_image_base64("Logos/fondo.jpg")
+
 logo_robot_b64 = get_image_base64("Logos/logo_robot_2007.jpg")
 
 # --- 4. ESTILOS CSS (FONDO TRANSPARENTE EN SIDEBAR) ---
