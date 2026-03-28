@@ -109,28 +109,29 @@ with col_izq:
     st.markdown(f'<div style="display:flex; justify-content:center; align-items:center; height:100%;"><img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final"></div>', unsafe_allow_html=True)
 
 with col_der:
-    # --- 1. ESTILOS CSS PARA RECUADROS Y NEÓN ---
+    # --- ESTILOS CSS PARA RECUADROS Y NEÓN ---
     st.markdown(f"""
-    <style>
-        .resaltado-renglon {{
-            background-color: rgba(173, 216, 230, 0.7);
-            border-radius: 8px;
-            padding: 5px 15px;
-            margin: 5px 0;
-            display: inline-block;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
-        }}
-        .neon-imponente {{
-            font-family: 'Comic Sans MS', cursive;
-            color: #fff;
-            text-shadow: 0 0 10px #7FFFD4, 0 0 20px #7FFFD4, 0 0 40px #7FFFD4, 0 0 80px #7FFFD4;
-            line-height: 1.2;
-            margin-bottom: 10px;
-        }}
-    </style>
+<style>
+    .resaltado-renglon {{
+        background-color: rgba(173, 216, 230, 0.7);
+        border-radius: 8px;
+        padding: 5px 15px;
+        margin: 5px 0;
+        display: inline-block;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+    }}
+    .neon-imponente {{
+        font-family: 'Comic Sans MS', cursive;
+        color: #fff;
+        text-shadow: 0 0 10px #7FFFD4, 0 0 20px #7FFFD4, 0 0 40px #7FFFD4, 0 0 80px #7FFFD4;
+        line-height: 1.2;
+        margin-bottom: 10px;
+        text-align: center;
+    }}
+</style>
     """, unsafe_allow_html=True)
 
-    # --- 2. CONTENIDO RENDERIZADO ---
+    # --- CONTENIDO RENDERIZADO ---
     st.markdown(f"""
     <div style="text-align: center;">
         <h1 class="neon-imponente" style="font-size: 110px;">L.I.N.A.</h1>
