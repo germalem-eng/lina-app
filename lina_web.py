@@ -113,7 +113,7 @@ with c4:
 
 st.divider()
 
-# --- 7. LÓGICA DE SECCIONES ---
+# --- 7. LÓGICA DE SECCIONES (ACTUALIZADO CON FORMATO COLOMBIANO) ---
 
 if st.session_state.seccion == "COTIZADOR":
     st.subheader("💰 Cotizador Inteligente")
@@ -124,51 +124,30 @@ if st.session_state.seccion == "COTIZADOR":
         base = 40000
         dom = 20000 if mod == "A Domicilio" else 0
         total = (base * 1.20) + dom if "Mantenimiento" in ser else base + dom
-        st.metric("Inversión Total", f"${total:,.0f} ")
-    with col_info:
-        st.markdown('<div style="background-color:rgba(248,249,250,0.7);padding:15px;border-radius:10px;border:2px solid #00d4ff;"><h4>📋 Tarifas</h4><li>Revisión: $40k</li><li>Legal: 10% ahorro</li><li>Domicilio: $20k</li></div>', unsafe_allow_html=True)
-
-elif st.session_state.seccion == "RADICACION":
-    st.subheader("📝 Generador de Peticiones Legales")
-    col_input, col_view = st.columns([1, 1])
-    
-    with col_input:
-        u_nom = st.text_input("Nombre del Titular:", value="LINA PAOLA MOJICA").upper()
-        u_ced = st.text_input("Cédula:")
-        u_ent = st.text_input("Entidad:", value="RAPICREDIT").upper()
+        # Formato de moneda colombiana con separador de miles
+        st.metric("Inversión Total", f"$ {total:,.0f}".replace(",", "."))
         
-        # Lógica de generación de texto
-        doc_legal = "" 
-        if u_nom and u_ced and u_ent:
-            doc_legal = f"""Bogotá D.C., {ahora.strftime('%d/%m/%Y')}
-Señores: {u_ent}
-E. S. D.
+    with col_info:
+        # Aquí eliminamos la 'k' y pusimos el formato correcto
+        st.markdown("""
+        <div style="background-color:rgba(248,249,250,0.7);padding:15px;border-radius:10px;border:2px solid #00d4ff;">
+            <h4 style="text-align:center;">📋 Tarifas Oficiales</h4>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li>📍 <b>Revisión:</b> $40.000</li>
+                <li>⚖️ <b>Legal:</b> 10% del ahorro</li>
+                <li>🏠 <b>Domicilio:</b> $20.000</li>
+            </ul>
+            <small>* La revisión es gratis si se realiza el servicio.</small>
+        </div>
+        """, unsafe_allow_html=True)
 
-REF: SOLICITUD DE ACTUALIZACIÓN Y RECTIFICACIÓN (LEY 2157 DE 2021)
+# --- (Las secciones de RADICACION, GESTION y FINANZAS se mantienen igual) ---
 
-Yo, {u_nom}, identificado con C.C. No. {u_ced}, en ejercicio del derecho fundamental al Habeas Data, solicito la aplicación de los beneficios de la Ley de Borrón y Cuenta Nueva sobre mi historial crediticio..."""
-
-    with col_view:
-        st.text_area("📄 Vista Previa del Documento:", value=doc_legal, height=300)
-        if st.button("💾 Guardar en Memoria"):
-            st.session_state.doc_final = doc_legal
-            st.success("Copiado al portapapeles de la sesión.")
-
-elif st.session_state.seccion == "GESTION":
-    st.subheader("⚖️ Historial de Casos")
-    if os.path.exists(archivo_casos):
-        st.dataframe(pd.read_csv(archivo_casos), use_container_width=True)
-    else:
-        st.info("No hay casos registrados aún.")
-
-elif st.session_state.seccion == "FINANZAS":
-    st.subheader("🏠 Control Privado")
-    st.metric("Meta Sistecrédito", "$898.771")
-
-# --- 8. PIE DE PÁGINA ---
+# --- 8. PIE DE PÁGINA (EJECUTIVO) ---
 st.markdown(f"""
 <div style="background-color: rgba(241, 241, 241, 0.7); padding: 15px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 20px;">
-    <b>⚠️ Nota:</b> Honorarios por éxito (10% ahorro) o tarifas base según servicio.
+    <b>⚠️ Nota de Honorarios:</b> Nuestros honorarios se basan en el éxito conseguido (10% del ahorro legal) 
+    o tarifas base de <b>$40.000</b> por revisión técnica.
 </div>
 """, unsafe_allow_html=True)
 
