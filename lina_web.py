@@ -62,20 +62,23 @@ st.markdown(f"""
 </style>
 """, unsafe_allow_html=True)
 
-# --- 5. ENCABEZADO (BARRA PLATEADA) ---
+# --- 5. ENCABEZADO (BARRA PLATEADA COMPLETA) ---
 st.markdown(f"""
 <div class="nav-bar-silver">
     <div style="font-family: monospace; font-weight: bold; color: #333;">
         📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')} | S T M Y M
     </div>
-    <div>
+    <div style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
         <a href="https://www.youtube.com/@gerardomartinezlemus7969" target="_blank" class="social-tag" style="background-color: #FF0000;">YouTube</a>
+        <a href="https://www.tiktok.com/@solucionesmym" target="_blank" class="social-tag" style="background-color: #000000;">TikTok</a>
+        <a href="https://www.instagram.com/solucionesmym_2007/" target="_blank" class="social-tag" style="background-color: #E1306C;">Instagram</a>
         <a href="https://wa.me/573114759768" target="_blank" class="social-tag" style="background-color: #25D366;">WhatsApp</a>
+        <a href="https://t.me/+573114759768" target="_blank" class="social-tag" style="background-color: #0088CC;">Telegram</a>
+        <a href="https://x.com/" target="_blank" class="social-tag" style="background-color: #000000;">X</a>
         <a href="https://web.facebook.com/MyMsolucionesdetecnologia" target="_blank" class="social-tag" style="background-color: #4267B2;">Facebook</a>
     </div>
 </div>
 """, unsafe_allow_html=True)
-
 # --- SECCIÓN DE LOGO Y TÍTULOS ---
 col_izq, col_der = st.columns([1.2, 2.3])
 
