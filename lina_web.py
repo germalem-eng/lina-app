@@ -74,7 +74,6 @@ st.markdown(f"""
     </div>
 </div>
 """, unsafe_allow_html=True)
-
 # --- 6. MENÚ LATERAL ---
 with st.sidebar:
     if logo_robot_b64:
