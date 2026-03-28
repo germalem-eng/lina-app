@@ -92,21 +92,19 @@ with col_izq:
 
 with col_der:
     st.markdown(f"""
-    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: -30px; gap: 5px;">
-        <h1 class="neon-imponente" style="font-size: 115px; margin: 0; padding: 0; line-height: 0.9;">L.I.N.A.</h1>
-        
-        <div class="resaltado-blanco">
-            <span style="color: #008fb3; font-size: 28px; font-weight: bold;">Laboratorio de Inteligencia</span>
-        </div>
-        <div class="resaltado-blanco">
-            <span style="color: #008fb3; font-size: 28px; font-weight: bold;">y Nuevos Algoritmos</span>
-        </div>
-        
-        <div style="margin-top: 10px;" class="resaltado-blanco">
-            <span style="color: #444; font-size: 18px; font-weight: bold;">Soluciones Tecnológicas M Y M</span>
-        </div>
-        <div class="resaltado-blanco">
-            <span style="color: #444; font-size: 16px; font-weight: bold;">Desde 2007</span>
+    <div style="text-align: center; margin-top: -20px;">
+        <h1 class="neon-imponente" style="font-size: 115px; margin-bottom: 0px; padding-bottom: 0px;">L.I.N.A.</h1>
+        <div class="resaltado-blanco" style="margin: 2px 0;">
+            <span style="color: #008fb3; font-size: 30px; font-weight: bold;">Laboratorio de Inteligencia</span>
+        </div><br>
+        <div class="resaltado-blanco" style="margin: 2px 0;">
+            <span style="color: #008fb3; font-size: 30px; font-weight: bold;">y Nuevos Algoritmos</span>
+        </div><br>
+        <div class="resaltado-blanco" style="margin: 2px 0; margin-top: 5px;">
+            <span style="color: #444; font-size: 20px; font-weight: bold;">Soluciones Tecnológicas M Y M</span>
+        </div><br>
+        <div class="resaltado-blanco" style="margin: 2px 0;">
+            <span style="color: #444; font-size: 18px; font-weight: bold;">Desde 2007</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
