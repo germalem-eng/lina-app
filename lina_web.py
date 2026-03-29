@@ -83,7 +83,7 @@ with col_izq:
 with col_der:
     st.markdown(f"""
     <div style="text-align: center; margin-top: -10px;">
-        <h1 class="neon-imponente" style="font-size: 90px;">LINA****</h1>
+        <h1 class="neon-imponente" style="font-size: 90px;">L.I.N.A</h1>
         <div class="resaltado-blanco"><span style="color: #008fb3; font-size: 22px; font-weight: bold;">Laboratorio de Inteligencia y Nuevos Algoritmos</span></div><br>
         <div class="resaltado-blanco"><span style="color: #444; font-size: 16px; font-weight: bold;">Soluciones Tecnológicas M Y M - Desde 2007</span></div>
     </div>
