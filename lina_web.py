@@ -158,21 +158,36 @@ if st.session_state.seccion == "PREVENTIVO":
         if st.button("💾 Guardar Informe Técnico"):
             st.success(f"Informe de {tipo_e} {marca} guardado.")
 
-# --- 8. BARRA PLATEADA DE REDES Y PIE DE PÁGINA ---
+# --- 8. BARRA PLATEADA CON FECHA/HORA BOGOTÁ Y REDES ---
 
-# Estilos CSS avanzados para la interactividad de las redes
+# 1. Lógica de Autorefresh (Sincronización cada segundo)
+st_autorefresh(interval=1000, key="global_refresh")
+
+# 2. Ajuste de Zona Horaria Bogotá (UTC-5)
+# Obtenemos la hora del servidor y restamos 5 horas para Colombia
+ahora_bogota = datetime.datetime.now() - datetime.timedelta(hours=5)
+
+# 3. Estilos de la Barra y Botones
 st.markdown("""
 <style>
     .silver-bar {
-        display: flex; 
-        justify-content: space-between; 
-        align-items: center; 
-        padding: 15px 25px; 
         background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
-        border: 2px solid #666; 
-        border-radius: 12px; 
-        margin-top: 40px; 
+        border: 2px solid #666;
+        border-radius: 12px;
+        padding: 15px 25px;
+        margin-top: 40px;
         box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .time-display {
+        font-family: 'Courier New', Courier, monospace;
+        font-weight: bold;
+        color: #222;
+        font-size: 16px;
+        border-bottom: 1px solid #999;
+        margin-bottom: 12px;
+        padding-bottom: 5px;
+        display: flex;
+        justify-content: space-between;
     }
     .social-icon {
         text-decoration: none !important;
@@ -181,7 +196,7 @@ st.markdown("""
         padding: 8px 15px;
         border-radius: 10px;
         font-weight: bold;
-        font-size: 14px;
+        font-size: 13px;
         transition: all 0.3s ease;
         border: 1px solid #ccc;
         display: inline-block;
@@ -190,29 +205,33 @@ st.markdown("""
         transform: translateY(-3px);
         box-shadow: 0 5px 15px rgba(0,255,255,0.4);
         border-color: #00FFFF;
-        color: #000 !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# Renderizado de la Barra Plateada
+# 4. Renderizado de la Barra Completa
 st.markdown(f"""
 <div class="silver-bar">
-    <div style="font-family: monospace; font-weight: bold; color: #222; font-size: 14px;">
-        🌐 CONECTA CON SOLUCIONES MYM:
+    <div class="time-display">
+        <span>📍 BOGOTÁ, COLOMBIA</span>
+        <span>📅 {ahora_bogota.strftime('%d/%m/%Y')} | 🕒 {ahora_bogota.strftime('%H:%M:%S')}</span>
     </div>
-    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-        <a href="https://wa.me/573114759768" target="_blank" class="social-icon">🟢 WhatsApp</a>
-        <a href="https://web.facebook.com/MyMsolucionesdetecnologia/" target="_blank" class="social-icon">🔵 Facebook</a>
-        <a href="https://instagram.com" target="_blank" class="social-icon">🟣 Instagram</a>
-        <a href="https://linkedin.com" target="_blank" class="social-icon">💠 LinkedIn</a>
-        <a href="https://youtube.com" target="_blank" class="social-icon">🔴 YouTube</a>
-        <a href="https://x.com" target="_blank" class="social-icon">⚫ X</a>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="font-weight: bold; color: #222; font-size: 14px;">🌐 REDES OFICIALES:</div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <a href="https://wa.me/573114759768" target="_blank" class="social-icon">🟢 WhatsApp</a>
+            <a href="https://web.facebook.com/MyMsolucionesdetecnologia/" target="_blank" class="social-icon">🔵 Facebook</a>
+            <a href="https://instagram.com" target="_blank" class="social-icon">🟣 Instagram</a>
+            <a href="https://linkedin.com" target="_blank" class="social-icon">💠 LinkedIn</a>
+            <a href="https://youtube.com" target="_blank" class="social-icon">🔴 YouTube</a>
+            <a href="https://x.com" target="_blank" class="social-icon">⚫ X</a>
+        </div>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-# Pie de Página Final (Cierre del Proyecto L.I.N.A.)
+# 5. Pie de Página (Identidad Profesional)
 st.markdown(f"""
 <div style="background-color: rgba(255, 255, 255, 0.8); padding: 20px; border-radius: 10px; 
             border-left: 6px solid #008fb3; margin-top: 20px; margin-bottom: 30px;">
