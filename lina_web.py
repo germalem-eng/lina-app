@@ -210,7 +210,7 @@ if st.session_state.seccion == "PREVENTIVO":
             link_rep = generar_enlace_whatsapp("573114759768", msg_c)
             st.markdown(f'<a href="{link_rep}" target="_blank" class="btn-auto" style="background:#25D366; margin-top:20px;">📲 Enviar Presupuesto vía WhatsApp</a>', unsafe_allow_html=True)
 
-# --- 9. BARRA FINAL (Línea 156 original hacia abajo) ---
+# --- 9. BARRA FINAL
 st.markdown('<div class="alerta-amarilla">⚠️ NOTA: Honorarios por éxito (10% ahorro) o tarifas base de $40.000.</div>', unsafe_allow_html=True)
 
 html_barra = f"""
