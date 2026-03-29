@@ -172,9 +172,8 @@ st.markdown(html_barra_final, unsafe_allow_html=True)
 
 # Pie de Página
 st.markdown(f"""
-<div style="background-color: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 10px; border-left: 6px solid #008fb3; margin-top: 25px;">
-    <p style="text-align:right; color:#444; margin:0; font-size:13px;">
-        <b>LINA Core V20.0</b> | © 2026 <b>ING. Gerardo Martinez Lemus</b>
-    </p>
+<div style="background-color: rgba(255, 255, 255, 0.7); padding: 15px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 20px;">
+    <b>⚠️ Nota:</b> Honorarios por éxito (10% ahorro) o tarifas base de <b>$40.000</b>.
 </div>
+<p style="text-align:center; color:#666;">LINA Core V20.0 | © {ahora.year} Gerardo Martinez Lemus</p>
 """, unsafe_allow_html=True)
