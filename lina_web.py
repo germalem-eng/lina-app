@@ -173,3 +173,24 @@ if st.session_state.seccion in servicios_cotizables:
         
         if total > 0 and mod == "Virtual":
             st.warning("⚠️ Recuerde enviar el pantallazo de pago Nequi para habilitar la conexión remota.")
+
+# --- 8. PIE DE PÁGINA (ESTO VA AL FINAL DE TODO EL SCRIPT) ---
+st.markdown(f"""
+<div style="background-color: rgba(255, 255, 255, 0.7); padding: 15px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 40px;">
+    <table style="width:100%; border:none;">
+        <tr>
+            <td style="width:70%; border:none;">
+                <b style="color:#008fb3;">⚠️ Nota Legal Soluciones MyM:</b><br>
+                Los honorarios por éxito corresponden al 10% del ahorro logrado en procesos legales. 
+                Las tarifas base de revisión técnica inician en <b>$40.000</b>.
+            </td>
+            <td style="text-align:right; border:none; color:#666; font-size: 13px;">
+                <b>LINA Core V20.0</b><br>
+                Desarrollado por:<br>
+                <b>ING. Gerardo Martinez Lemus</b><br>
+                Bogotá, {ahora.year}
+            </td>
+        </tr>
+    </table>
+</div>
+""", unsafe_allow_html=True)
