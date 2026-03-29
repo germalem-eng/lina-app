@@ -160,50 +160,59 @@ if st.session_state.seccion == "PREVENTIVO":
 
 # --- 8. BARRA PLATEADA DE REDES Y PIE DE PÁGINA ---
 
-# Estilo para los iconos de redes sociales
+# Estilos CSS avanzados para la interactividad de las redes
 st.markdown("""
 <style>
+    .silver-bar {
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        padding: 15px 25px; 
+        background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
+        border: 2px solid #666; 
+        border-radius: 12px; 
+        margin-top: 40px; 
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
     .social-icon {
-        text-decoration: none;
-        color: #333;
+        text-decoration: none !important;
+        color: #333 !important;
         background: white;
-        padding: 8px 12px;
-        border-radius: 8px;
+        padding: 8px 15px;
+        border-radius: 10px;
         font-weight: bold;
         font-size: 14px;
-        transition: 0.3s;
+        transition: all 0.3s ease;
         border: 1px solid #ccc;
+        display: inline-block;
     }
     .social-icon:hover {
-        background: #00FFFF;
-        color: black;
-        box-shadow: 0 0 10px #00FFFF;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,255,255,0.4);
+        border-color: #00FFFF;
+        color: #000 !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# 8.1 La Barra Plateada (Ahora al final)
+# Renderizado de la Barra Plateada
 st.markdown(f"""
-<div style="display: flex; justify-content: space-between; align-items: center; 
-            padding: 15px 25px; background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
-            border: 2px solid #666; border-radius: 12px; margin-top: 40px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-    
+<div class="silver-bar">
     <div style="font-family: monospace; font-weight: bold; color: #222; font-size: 14px;">
         🌐 CONECTA CON SOLUCIONES MYM:
     </div>
-    
     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
         <a href="https://wa.me/573114759768" target="_blank" class="social-icon">🟢 WhatsApp</a>
-        <a href="https://facebook.com" target="_blank" class="social-icon">🔵 Facebook</a>
+        <a href="https://facebook.com/SolucionesMyM" target="_blank" class="social-icon">🔵 Facebook</a>
         <a href="https://instagram.com" target="_blank" class="social-icon">🟣 Instagram</a>
         <a href="https://linkedin.com" target="_blank" class="social-icon">💠 LinkedIn</a>
         <a href="https://youtube.com" target="_blank" class="social-icon">🔴 YouTube</a>
-        <a href="https://x.com" target="_blank" class="social-icon">⚫ X (Twitter)</a>
+        <a href="https://x.com" target="_blank" class="social-icon">⚫ X</a>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-# 8.2 Pie de Página Final
+# Pie de Página Final (Cierre del Proyecto L.I.N.A.)
 st.markdown(f"""
 <div style="background-color: rgba(255, 255, 255, 0.8); padding: 20px; border-radius: 10px; 
             border-left: 6px solid #008fb3; margin-top: 20px; margin-bottom: 30px;">
@@ -219,7 +228,7 @@ st.markdown(f"""
                 <b style="font-size: 16px; color: #008fb3;">LINA Core V20.0</b><br>
                 Desarrollado por:<br>
                 <b style="color: #000;">ING. Gerardo Martinez Lemus</b><br>
-                Bogotá, Colombia - {ahora.year}
+                Bogotá, Colombia - 2026
             </td>
         </tr>
     </table>
