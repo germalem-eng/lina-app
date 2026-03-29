@@ -143,7 +143,7 @@ if st.session_state.seccion == "PREVENTIVO":
     </div>
     """, unsafe_allow_html=True)
 
-# --- 8. SECCIÓN MANTENIMIENTO CORRECTIVO ---
+# --- 7. SECCIÓN MANTENIMIENTO CORRECTIVO ---
 elif st.session_state.seccion == "CORRECTIVO":
     st.header("🔧 Mantenimiento Correctivo y Reparación")
     
@@ -205,6 +205,108 @@ elif st.session_state.seccion == "CORRECTIVO":
         msg_c = f"Hola, el diagnóstico de su {tipo_c} {marca_c} es: {detalles_tecnicos}. Presupuesto total: ${total_reparacion:,.0f}. ¿Autoriza el proceso?"
         link_rep = generar_enlace_whatsapp("573114759768", msg_c)
         st.markdown(f'<a href="{link_rep}" target="_blank" class="btn-auto" style="background:#25D366; margin-top:20px;">📲 Enviar Presupuesto vía WhatsApp</a>', unsafe_allow_html=True)
+
+# --- 8. SECCIÓN GESTIÓN (RECUPERACIÓN DE CARTERA Y DEFENSA LEGAL) ---
+elif st.session_state.seccion == "GESTIÓN":
+    st.header("⚖️ Gestión de Cartera y Defensa del Consumidor")
+    st.warning("🛡️ Protocolos basados en Ley 2300/23, Ley 1266/08, Ley 2157/21 y Estatuto del Consumidor.")
+
+    # --- 11.A DATOS DEL CLIENTE (IGUAL AL PREVENTIVO) ---
+    col_g1, col_g2 = st.columns(2)
+    with col_g1:
+        st.subheader("📋 Datos del Solicitante")
+        nom_g = st.text_input("Nombre del Cliente:", key="nom_g")
+        tel_g = st.text_input("Teléfono (WhatsApp):", key="tel_g")
+        entidad_g = st.text_input("Entidad que lo acosa (Ej: ASLEGAL):", key="ent_g")
+    
+    with col_g2:
+        st.subheader("📍 Modalidad de Asesoría")
+        mod_g = st.radio("Seleccione Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True, key="mod_g")
+        dir_g = st.text_input("Dirección (Si aplica):", key="dir_g")
+        f_g = st.date_input("Fecha de Cita:", ahora_bog.date(), key="f_g")
+
+    st.divider()
+
+    tabs = st.tabs(["📊 Liquidación de Honorarios", "🛡️ Defensa ante Cobranzas", "📋 Biblioteca Normativa"])
+
+    # --- PESTAÑA 0: LIQUIDACIÓN (LÓGICA PREVENTIVO APLICADA) ---
+    with tabs[0]:
+        st.subheader("💰 Presupuesto de Gestión M Y M")
+        
+        col_h1, col_h2 = st.columns(2)
+        with col_h1:
+            tipo_serv_g = st.radio("Tipo de Servicio:", 
+                                  ["Solo Consulta/Asesoría Base", "Gestión Integral (10% del Ahorro)"],
+                                  index=0)
+            monto_entidad = st.number_input("Monto que reclama la entidad ($):", min_value=0, value=1851000)
+            capital_real_g = st.number_input("Capital real adeudado ($):", min_value=0, value=150000)
+
+        # Lógica de costos similar al preventivo
+        recargo_dom_g = 20000 if mod_g == "A Domicilio" else 0
+        ahorro_calculado = monto_entidad - capital_real_g
+        
+        if "Solo Consulta" in tipo_serv_g:
+            honorarios_finales = 40000 + recargo_dom_g
+            label_met = "Valor Consulta Base"
+        else:
+            # Si es por éxito, se asume que los 40 no se cobran pero el 10% sí
+            honorarios_finales = (ahorro_calculado * 0.10) + recargo_dom_g
+            label_met = "Honorarios por Éxito (10%)"
+
+        with col_h2:
+            st.metric(label=label_met, value=f"$ {honorarios_finales:,.0f}")
+            if "Gestión Integral" in tipo_serv_g:
+                st.caption(f"Ahorro logrado para el cliente: $ {ahorro_calculado:,.0f}")
+
+        st.divider()
+        
+        # --- CUADRO DE COTIZACIÓN PROFESIONAL ---
+        st.markdown(f"""
+        <div style="background: white; padding: 20px; border-radius: 15px; border: 3px solid #008fb3; text-align: center;">
+            <h3 style="margin:0; color:#444;">Propuesta de Gestión de Cartera</h3>
+            <p style="margin:5px 0;">Cliente: <b>{nom_g}</b> | Modalidad: <b>{mod_g}</b></p>
+            <h1 style="color: #008fb3;">$ {honorarios_finales:,.0f}</h1>
+            <p><b>ING. Gerardo Martinez Lemus</b></p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if st.button("📩 Confirmar y Enviar vía WhatsApp"):
+            msg_g = f"Hola {nom_g}, confirmo asesoría de cartera ({mod_g}) para el {f_g}. Honorarios: ${honorarios_finales:,.0f}. Entidad a tratar: {entidad_g}."
+            link_g = generar_enlace_whatsapp("573114759768", msg_g)
+            st.markdown(f'<a href="{link_g}" target="_blank" class="btn-auto" style="background:#25D366;">📲 Agendar y Enviar Propuesta</a>', unsafe_allow_html=True)
+
+    # --- PESTAÑA 1: DEFENSORÍA (HABEAS DATA PERSONALIZADO) ---
+    with tabs[1]:
+        st.subheader("🚫 Radicación de Reclamación Formal")
+        
+        texto_habeas_full = f"""YO, {nom_g.upper() if nom_g else 'GERARDO MARTINEZ LEMUS'}, IDENTIFICADO CON LA CC 79951815, EN EJERCICIO DEL DERECHO FUNDAMENTAL AL HABEAS DATA (LEY 1266 DE 2008 Y LEY 2157 DE 2021), SOLICITO A {entidad_g.upper() if entidad_g else 'LA ENTIDAD'}:
+
+1. PRESCRIPCIÓN: La mora de la obligación No. 3115 supera los 2.655 días (7 años). Acción ejecutiva prescrita (Art. 789 C. de Co.).
+2. USURA: Cobro de $1.851.000 sobre base de $150.000 excede los límites legales de la Superfinanciera.
+3. REVOCATORIA: Bajo Ley 1581 de 2012, REVOCO autorización de débito automático de forma inmediata.
+4. CADUCIDAD: Exijo eliminación del reporte en DATACRÉDITO y CIFÍN.
+
+DE NO OBTENER RESPUESTA EN 15 DÍAS HÁBILES, PROCEDERÉ CON QUEJA ANTE LA SIC POR APROPIACIÓN INDEBIDA DE FONDOS."""
+
+        st.text_area("📄 Texto para Radicación:", value=texto_habeas_full, height=350)
+        
+        if st.button("📲 Enviar Reclamación Directa"):
+            link_hab_g = generar_enlace_whatsapp("", texto_habeas_full)
+            st.markdown(f'<a href="{link_hab_g}" target="_blank" class="btn-auto" style="background:#25D366;">📲 Enviar por WhatsApp</a>', unsafe_allow_html=True)
+
+    # --- PESTAÑA 2: BIBLIOTECA NORMATIVA ---
+    with tabs[2]:
+        st.subheader("📚 Sustento Legal y Análisis")
+        with st.expander("🚨 Caso ASLEGAL (Muestra de Abuso)"):
+            st.write("Análisis: Amenaza de débito 'irrevocable' tras 2655 días de mora. Viola Ley 1581 (Derecho a revocar) y Ley 2157 (Caducidad del dato).")
+        with st.expander("📌 Leyes Clave en Colombia"):
+            st.markdown("""
+            * **Ley 2300/23:** Horarios de cobro (No domingos).
+            * **Ley 1266/08:** Habeas Data financiero.
+            * **Art. 305 Código Penal:** Delito de Usura (Intereses excesivos).
+            """)
+
+    st.divider()
 
 # --- 9. SECCIÓN PRIVADO (GESTIÓN DE ABONOS Y UTILIDAD) ---
 elif st.session_state.seccion == "PRIVADO":
