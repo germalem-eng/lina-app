@@ -95,3 +95,73 @@ with c2:
 with c3:
     if st.button("⚖️ GESTIÓN", use_container_width=True): st.session_state.seccion = "GESTION"; st.rerun()
 with c4:
+    if st.button("📝 RADICACIÓN", use_container_width=True): st.session_state.seccion = "RADICACION"; st.rerun()
+with c5:
+    if st.button("🛡️ CASO LEGAL", use_container_width=True): st.session_state.seccion = "LEGAL"; st.rerun()
+with c6:
+    if st.button("🏠 PRIVADO", use_container_width=True): st.session_state.seccion = "PRIVADO"; st.rerun()
+
+st.divider()
+
+# --- 7. LÓGICA DE SECCIONES ---
+
+if st.session_state.seccion == "PREVENTIVO":
+    st.subheader("🛠️ Mantenimiento Preventivo Especializado")
+    col_izq, col_der = st.columns([2, 1])
+    
+    with col_izq:
+        st.markdown("#### 🔍 Identificación del Producto")
+        tipo_e = st.selectbox("Tipo de Producto:", ["PC de Mesa", "Todo en Uno", "Portátil", "Tablet", "Electrodoméstico"])
+        marca = st.text_input("Marca del Producto:", placeholder="Ej: HP, Dell, Samsung...")
+        specs = st.text_input("Características / Especificaciones:")
+        
+        st.markdown("#### 📋 Checklist de Entrada (Antes)")
+        col_ch1, col_ch2 = st.columns(2)
+        c_enc = col_ch1.checkbox("¿Enciende correctamente?")
+        c_pnt = col_ch1.checkbox("¿Pantalla OK (sin manchas)?")
+        c_ruido = col_ch2.checkbox("¿Sin ruidos extraños?")
+        c_fisico = col_ch2.checkbox("¿Buen estado físico?")
+
+        st.markdown("#### 🧹 Tareas Realizadas")
+        st.write("- Limpieza de polvo, Borrado de basura, Escaneo Antivirus, Optimización.")
+        resultado = st.text_area("Resultado del mantenimiento (Descripción):", "Todo bien, OK y sale.")
+
+        st.markdown("#### ✅ Verificación de Salida (Después)")
+        s_limpio = st.checkbox("Limpieza verificada")
+        s_vel = st.checkbox("Mejora en velocidad")
+
+    with col_der:
+        mod = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
+        tipo_at = st.radio("Tipo de Atención:", ["Solo Consulta", "Servicio Completo"], index=1)
+        
+        base = 40000
+        extra = 20000 if mod == "A Domicilio" else 0
+        
+        # Lógica de cobro solicitada
+        if tipo_at == "Solo Consulta":
+            total = base + extra
+        else:
+            total = extra if mod == "A Domicilio" else 0
+            if mod in ["Virtual", "En Oficina"] and tipo_at == "Servicio Completo":
+                total = base # Cobro base por el servicio técnico
+
+        st.markdown(f"""
+        <div style="background:white; padding:20px; border-radius:15px; border:3px solid #00FFFF; text-align:center;">
+            <h3 style="margin:0;">Inversión Total</h3>
+            <h1 style="color:#008fb3; font-size:45px;">$ {total:,.0f}</h1>
+            <p style="font-size:12px;">⚠️ MyM Nota: Honorarios base de $40.000</p>
+            <hr>
+            <p style="font-size:12px;"><b>ING. Gerardo Martinez Lemus</b></p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if st.button("💾 Guardar Informe Técnico"):
+            st.success(f"Informe de {tipo_e} {marca} guardado.")
+
+# --- 8. PIE DE PÁGINA ---
+st.markdown(f"""
+<div style="background-color: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 50px;">
+    <p style="margin:0; font-size:14px;">⚠️ <b>Nota:</b> Honorarios por éxito (10% ahorro) o tarifas base de <b>$40.000</b>.</p>
+    <p style="text-align:right; color:#666; margin:0; font-size:12px;">LINA Core V20.0 | © 2026 <b>ING. Gerardo Martinez Lemus</b></p>
+</div>
+""", unsafe_allow_html=True)
