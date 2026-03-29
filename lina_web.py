@@ -65,22 +65,29 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
+# --- 5. ENCABEZADO CENTRADO ---
 col_izq, col_der = st.columns([1, 2])
+
 with col_izq:
-    st.markdown(f'<div style="display:flex; justify-content:center;"><img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final"></div>', unsafe_allow_html=True)
+    # Centrado del Logo
+    st.markdown(f'''
+        <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+            <img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final">
+        </div>
+    ''', unsafe_allow_html=True)
 
 with col_der:
+    # Centrado total del Texto (Horizontal y Vertical)
     st.markdown(f"""
-    <div style="text-align: center;">
-        <h1 class="neon-imponente" style="font-size: 80px;">L.I.N.A.</h1>
-        <p style="color: #008fb3; font-size: 20px; font-weight: bold; background: white; display: inline-block; padding: 5px 15px; border-radius: 10px;">Laboratorio de Inteligencia y Nuevos Algoritmos</p>
-    </div>
-         <div class="resaltado-blanco" style="margin-top: 8px;">
-                <span style="color: #444; font-size: 18px; font-weight: bold;">Soluciones Tecnológicas M Y M</span>
-            </div>
-            <div class="resaltado-blanco">
-                <span style="color: #444; font-size: 16px; font-weight: bold;">Desde 2007</span>
-            </div>
+    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 250px; text-align: center;">
+        <h1 class="neon-imponente" style="font-size: 85px; margin-bottom: 0;">L.I.N.A.</h1>
+        <div style="background: rgba(255, 255, 255, 0.9); padding: 8px 20px; border-radius: 12px; border: 2px solid #00FFFF; margin-top: 10px;">
+            <span style="color: #008fb3; font-size: 20px; font-weight: bold; display: block;">
+                Laboratorio de Inteligencia y Nuevos Algoritmos
+            </span>
+            <span style="color: #444; font-size: 15px; font-weight: bold; display: block; border-top: 1px solid #ccc; margin-top: 5px; padding-top: 5px;">
+                Soluciones Tecnológicas M Y M - Desde 2007
+            </span>
         </div>
     </div>
     """, unsafe_allow_html=True)
