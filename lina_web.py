@@ -4,18 +4,18 @@ import base64
 import datetime
 from streamlit_autorefresh import st_autorefresh
 
-# --- 1. CONFIGURACIÓN DEL SISTEMA ---
+# --- 1. CONFIGURACIÓN MECÁNICA DEL SISTEMA ---
 st.set_page_config(page_title="LINA V20.0 | Soluciones Tecnológicas M Y M", layout="wide", page_icon="🤖")
 st_autorefresh(interval=1000, key="global_refresh")
 
-# Sincronización de hora Bogotá (UTC-5)
+# Sincronización exacta con Bogotá (UTC-5)
 ahora_bog = datetime.datetime.now() - datetime.timedelta(hours=5)
 
-# --- 2. INICIALIZACIÓN DE ESTADO ---
+# --- 2. GESTIÓN DE ESTADO (PERSISTENCIA) ---
 if 'seccion' not in st.session_state: 
     st.session_state.seccion = "INICIO"
 
-# --- 3. RECURSOS VISUALES ---
+# --- 3. PROCESAMIENTO DE IMÁGENES (BASE64) ---
 def get_image_base64(path):
     if os.path.exists(path):
         with open(path, "rb") as img_file:
@@ -25,180 +25,108 @@ def get_image_base64(path):
 fondo_b64 = get_image_base64("Logos/fondo.jpg")
 logo_robot_b64 = get_image_base64("Logos/logo_robot_2007.jpg")
 
-# --- 4. ESTILOS CSS MAESTROS ---
+# --- 4. ARQUITECTURA VISUAL (CSS AISLADO) ---
+# Separamos el CSS para que las llaves {} no choquen con las variables de Python
 st.markdown(f"""
 <style>
     .stApp {{
         background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)),
                           url("data:image/jpeg;base64,{fondo_b64}");
-        background-size: cover;
-        background-attachment: fixed;
+        background-size: cover; background-attachment: fixed;
     }}
-    .logo-redondo-final {{
-        width: 220px; height: 220px;
-        border-radius: 50%; border: 6px solid #00FFFF;
+    .logo-redondo {{
+        width: 220px; height: 220px; border-radius: 50%; border: 6px solid #00FFFF;
         box-shadow: 0 0 35px #00FFFF; object-fit: cover;
     }}
-    .neon-imponente {{
+    .neon-titulo {{
         font-family: 'Comic Sans MS', cursive; color: #FFFFFF;
         text-shadow: 0 0 15px #00FFFF, 0 0 30px #00FFFF;
         line-height: 1; margin: 0; text-align: center;
     }}
-    /* Estilo de Advertencia Amarillo Tenue solicitado */
     .alerta-amarilla {{
-        background-color: #fff9c4;
-        border: 2px solid #fbc02d;
-        color: #444;
-        padding: 15px;
-        border-radius: 10px;
-        margin-top: 30px;
-        margin-bottom: 10px;
-        font-size: 15px;
-        text-align: center;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        background-color: #fff9c4; border: 2px solid #fbc02d; color: #444;
+        padding: 15px; border-radius: 10px; margin-top: 30px; margin-bottom: 10px;
+        font-size: 15px; text-align: center; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }}
     .barra-metalica {{
         background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
-        border: 2px solid #666; border-radius: 15px;
-        padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        border: 2px solid #666; border-radius: 15px; padding: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }}
     .reloj-bogota {{
         font-family: 'Courier New', monospace; font-weight: bold; color: #111;
-        font-size: 16px; border-bottom: 2px solid #888;
-        margin-bottom: 12px; padding-bottom: 10px;
-        display: flex; justify-content: space-between;
+        font-size: 16px; border-bottom: 2px solid #888; margin-bottom: 12px;
+        padding-bottom: 10px; display: flex; justify-content: space-between;
     }}
     .boton-social {{
-        text-decoration: none !important; color: #333 !important;
-        background: white; padding: 8px 15px; border-radius: 10px;
-        font-weight: bold; font-size: 13px; transition: 0.3s ease;
-        border: 1px solid #999; display: inline-block;
+        text-decoration: none !important; color: #333 !important; background: white;
+        padding: 8px 15px; border-radius: 10px; font-weight: bold; font-size: 13px;
+        transition: 0.3s ease; border: 1px solid #999; display: inline-block;
     }}
     .boton-social:hover {{
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0,255,255,0.5);
+        transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,255,255,0.5);
         border-color: #00FFFF;
     }}
 </style>
 """, unsafe_allow_html=True)
 
-# --- 5. ENCABEZADO: L.I.N.A. Y PLACAS ---
-col_h1, col_h2 = st.columns([1, 2.2])
+# --- 5. ENCABEZADO E IDENTIDAD ---
+col1, col2 = st.columns([1, 2.2])
+with col1:
+    st.markdown(f'<div style="text-align:center;"><img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo"></div>', unsafe_allow_html=True)
 
-with col_h1:
-    st.markdown(f'''
-        <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
-            <img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final">
+with col2:
+    st.markdown(f"""
+    <div style="text-align:center; min-height:250px; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+        <h1 class="neon-titulo" style="font-size:85px;">L.I.N.A.</h1>
+        <div style="background:rgba(255,255,255,0.9); padding:10px 20px; border-radius:10px; border:2px solid #00FFFF; margin-top:15px;">
+            <span style="color:#008fb3; font-weight:bold; font-size:20px;">Laboratorio de Inteligencia y Nuevos Algoritmos</span>
         </div>
-    ''', unsafe_allow_html=True)
-
-with col_h2:
-    html_header = f"""
-    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 250px; text-align: center;">
-        <h1 class="neon-imponente" style="font-size: 85px; margin: 0; padding: 0;">L.I.N.A.</h1>
-        <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px; width: 100%; align-items: center;">
-            <div style="background: rgba(255, 255, 255, 0.95); padding: 10px 20px; border-radius: 12px; border: 2px solid #00FFFF; width: fit-content;">
-                <span style="color: #008fb3; font-size: 20px; font-weight: bold; display: block; white-space: nowrap;">
-                    Laboratorio de Inteligencia y Nuevos Algoritmos
-                </span>
-            </div>
-            <div style="background: rgba(255, 255, 255, 0.95); padding: 10px 20px; border-radius: 12px; border: 2px solid #00FFFF; width: fit-content;">
-                <span style="color: #444; font-size: 16px; font-weight: bold; display: block; white-space: nowrap;">
-                    Soluciones Tecnológicas M Y M - Desde 2007
-                </span>
-            </div>
+        <div style="background:rgba(255,255,255,0.9); padding:10px 20px; border-radius:10px; border:2px solid #00FFFF; margin-top:10px;">
+            <span style="color:#444; font-weight:bold; font-size:16px;">Soluciones Tecnológicas M Y M - Desde 2007</span>
         </div>
     </div>
-    """
-    st.markdown(html_header, unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
 st.divider()
 
-# --- 6. PANEL OPERATIVO ---
+# --- 6. PANEL DE CONTROL OPERATIVO ---
 st.write("### 🚀 Panel Operativo:")
-c1, c2, c3, c4, c5, c6 = st.columns(6)
-with c1:
-    if st.button("🛠️ PREVENTIVO", use_container_width=True): st.session_state.seccion = "PREVENTIVO"; st.rerun()
-with c2:
-    if st.button("🔧 CORRECTIVO", use_container_width=True): st.session_state.seccion = "CORRECTIVO"; st.rerun()
-with c3:
-    if st.button("⚖️ GESTIÓN", use_container_width=True): st.session_state.seccion = "GESTION"; st.rerun()
-with c4:
-    if st.button("📝 RADICACIÓN", use_container_width=True): st.session_state.seccion = "RADICACION"; st.rerun()
-with c5:
-    if st.button("🛡️ CASO LEGAL", use_container_width=True): st.session_state.seccion = "LEGAL"; st.rerun()
-with c6:
-    if st.button("🏠 PRIVADO", use_container_width=True): st.session_state.seccion = "PRIVADO"; st.rerun()
+btns = st.columns(6)
+opciones = ["🛠️ PREVENTIVO", "🔧 CORRECTIVO", "⚖️ GESTIÓN", "📝 RADICACIÓN", "🛡️ CASO LEGAL", "🏠 PRIVADO"]
+for i, opcion in enumerate(opciones):
+    if btns[i].button(opcion, use_container_width=True):
+        st.session_state.seccion = opcion.split()[1]
+        st.rerun()
 
 st.divider()
 
-# --- 7. LÓGICA DE SECCIONES (PREVENTIVO) ---
+# --- 7. DESARROLLO DE SECCIONES (EJEMPLO PREVENTIVO) ---
 if st.session_state.seccion == "PREVENTIVO":
-    st.subheader("🛠️ Mantenimiento Preventivo Especializado")
-    col_izq, col_der = st.columns([2, 1])
-    with col_izq:
-        tipo_e = st.selectbox("Tipo de Producto:", ["PC de Mesa", "Todo en Uno", "Portátil", "Tablet", "Electrodoméstico"])
-        st.checkbox("¿Enciende?")
-        st.checkbox("¿Limpieza física realizada?")
-        st.text_area("Descripción del Servicio:")
-    with col_der:
-        mod = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
-        base = 40000
-        st.markdown(f"""
-        <div style="background:white; padding:20px; border-radius:15px; border:3px solid #00FFFF; text-align:center;">
-            <h3>Inversión Base</h3>
-            <h1 style="color:#008fb3;">$ {base:,.0f}</h1>
-            <p><b>ING. Gerardo Martinez Lemus</b></p>
-        </div>
-        """, unsafe_allow_html=True)
+    st.subheader("🛠️ Mantenimiento Preventivo")
+    c_izq, c_der = st.columns([2, 1])
+    with c_izq:
+        st.selectbox("Equipo:", ["PC Mesa", "Portátil", "Todo en Uno"])
+        st.text_area("Detalles del estado inicial:")
+    with c_der:
+        st.info("Tarifa base: $40.000")
 
-# --- 8. BLOQUE FINAL: ADVERTENCIA, BARRA PLATEADA Y PIE DE PÁGINA ---
+# --- 8. BLOQUE FINAL: ADVERTENCIA + CONTACTO + FIRMA ---
 
-# 1. CSS Separado (Evita errores de llaves en f-strings)
+# A. Nota de Honorarios (Amarillo Advertencia)
 st.markdown("""
-<style>
-    .barra-metalica {
-        background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
-        border: 2px solid #666; border-radius: 15px;
-        padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
-    .reloj-bogota {
-        font-family: 'Courier New', monospace; font-weight: bold; color: #111;
-        font-size: 16px; border-bottom: 2px solid #888;
-        margin-bottom: 12px; padding-bottom: 10px;
-        display: flex; justify-content: space-between;
-    }
-    .boton-social {
-        text-decoration: none !important; color: #333 !important;
-        background: white; padding: 8px 15px; border-radius: 10px;
-        font-weight: bold; font-size: 13px; transition: 0.3s ease;
-        border: 1px solid #999; display: inline-block;
-    }
-    .boton-social:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0,255,255,0.5);
-        border-color: #00FFFF;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# 2. Nota de Advertencia (Amarillo Tenue)
-st.markdown("""
-<div style="background-color: #fff9c4; border: 2px solid #fbc02d; color: #444; 
-            padding: 15px; border-radius: 10px; margin-top: 30px; margin-bottom: 10px; 
-            font-size: 15px; text-align: center; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+<div class="alerta-amarilla">
     ⚠️ NOTA: Honorarios por éxito (10% ahorro) o tarifas base de $40.000.
 </div>
 """, unsafe_allow_html=True)
 
-# 3. Contenido de la Barra (Limpio de CSS interno)
-html_barra_final = f"""
+# B. Barra Plateada (Reloj y Redes) - Sin CSS interno para evitar errores
+html_barra = f"""
 <div class="barra-metalica">
     <div class="reloj-bogota">
         <span>📍 BOGOTÁ, COLOMBIA</span>
         <span>📅 {ahora_bog.strftime('%d/%m/%Y')} | 🕒 {ahora_bog.strftime('%H:%M:%S')}</span>
     </div>
-
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
         <div style="font-weight: bold; color: #222;">🌐 REDES OFICIALES:</div>
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -212,4 +140,13 @@ html_barra_final = f"""
     </div>
 </div>
 """
-st.markdown(html_barra_final, unsafe_allow_html=True)
+st.markdown(html_barra, unsafe_allow_html=True)
+
+# C. Footer con Firma Profesional
+st.markdown(f"""
+<div style="background: rgba(255,255,255,0.8); padding:15px; border-radius:10px; border-left:6px solid #008fb3; margin-top:25px; text-align:right;">
+    <p style="color:#444; margin:0; font-size:13px;">
+        <b>LINA Core V20.0</b> | © {ahora_bog.year} <b>ING. Gerardo Martinez Lemus</b>
+    </p>
+</div>
+""", unsafe_allow_html=True)
