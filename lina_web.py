@@ -86,7 +86,6 @@ if st.session_state.seccion == "PREVENTIVO":
         specs = st.text_area("Características / Especificaciones:")
         mod = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
 
-    # Lógica de costos base
     base = 40000
     extra_antivirus = 0
     recargo_domicilio = 20000 if mod == "A Domicilio" else 0
@@ -97,28 +96,25 @@ if st.session_state.seccion == "PREVENTIVO":
         st.checkbox("Limpieza física profunda (Polvo/Componentes)")
         st.checkbox("Borrado de archivos basura / Temporales")
         
-        # --- Lógica Antivirus S/N solicitada ---
         tiene_av = st.radio("¿Tiene Antivirus? (S/N)", ["SÍ", "NO"], horizontal=True)
         if tiene_av == "SÍ":
             st.checkbox("Escaneo Antivirus y Seguridad (Incluido)")
         else:
             instalar_av = st.checkbox("Instalar Antivirus (+ $10.000)")
             if instalar_av:
-                extra_antivirus = 10000 # Incremento automático
+                extra_antivirus = 10000
         
         st.checkbox("Verificación de puertos y carga")
 
     st.divider()
 
-    # --- LÓGICA DE FLUJO Y COBRO FINAL ---
     inversion = base + recargo_domicilio + extra_antivirus
 
     if mod == "Virtual":
         st.info("💻 **Asesoría Virtual**")
         toma_servicio = st.radio("¿Toma servicio técnico?", ["No (Solo asesoría)", "Sí (Agendar Cita)"])
-        
         if toma_servicio == "Sí (Agendar Cita)":
-            inversion = 0 # No cobra si agenda
+            inversion = 0
             st.success("📅 **Datos para agendar:**")
             ca, cb = st.columns(2)
             with ca:
@@ -130,21 +126,15 @@ if st.session_state.seccion == "PREVENTIVO":
                 h_c = st.time_input("Hora:", datetime.time(8, 0))
             
             if nom and tel:
-                st.write("---")
-                c_wa, c_cal = st.columns(2)
-                msg = f"Hola, soy {nom}. Confirmo cita M.P. el {f_c} a las {h_c}. Dirección: {dir_c}. Equipo: {tipo} {marca}."
+                msg = f"Hola, soy {nom}. Confirmo cita M.P. el {f_c} a las {h_c}. Dirección: {dir_c}."
                 link_wa = generar_enlace_whatsapp("573114759768", msg)
-                with c_wa: st.markdown(f'<a href="{link_wa}" target="_blank" class="btn-auto" style="background:#25D366;">📲 Confirmar WhatsApp</a>', unsafe_allow_html=True)
-                start = f"{f_c.strftime('%Y%m%d')}T{h_c.strftime('%H%M%S')}"
-                link_cal = f"https://www.google.com/calendar/render?action=TEMPLATE&text=M.P.+{nom}&details=Equipo:+{tipo}+{marca}&location={dir_c}&dates={start}/{start}"
-                with c_cal: st.markdown(f'<a href="{link_cal}" target="_blank" class="btn-auto" style="background:#4285F4;">🗓️ Google Calendar</a>', unsafe_allow_html=True)
+                st.markdown(f'<a href="{link_wa}" target="_blank" class="btn-auto" style="background:#25D366;">📲 Confirmar WhatsApp</a>', unsafe_allow_html=True)
 
     elif mod == "En Oficina":
         oficina_estado = st.radio("Estado:", ["Evaluación y Ejecución", "Sin equipo (Pasar a Domicilio)"])
         if oficina_estado == "Sin equipo (Pasar a Domicilio)":
-            inversion = base + 20000 + extra_antivirus # Forzamos recargo domicilio
+            inversion = base + 20000 + extra_antivirus
 
-    # --- CUADRO DE INVERSIÓN FINAL ---
     st.markdown(f"""
     <div style="background: white; padding: 20px; border-radius: 15px; border: 3px solid #00FFFF; text-align: center; max-width: 400px; margin: 30px auto;">
         <h4 style="margin:0; color:#444;">Inversión Total del Servicio</h4>
@@ -153,64 +143,60 @@ if st.session_state.seccion == "PREVENTIVO":
     </div>
     """, unsafe_allow_html=True)
 
-    # --- 8. SECCIÓN MANTENIMIENTO CORRECTIVO ---
-    # Este bloque solo se muestra si en el panel superior eligió CORRECTIVO
-    if st.session_state.seccion == "CORRECTIVO":
-        st.header("🔧 Mantenimiento Correctivo y Reparación")
+# --- 8. SECCIÓN MANTENIMIENTO CORRECTIVO (FUERA DEL PREVENTIVO) ---
+elif st.session_state.seccion == "CORRECTIVO":
+    st.header("🔧 Mantenimiento Correctivo y Reparación")
+    
+    col_diag, col_rep = st.columns(2)
+    
+    with col_diag:
+        st.subheader("🔍 Diagnóstico Técnico")
+        tipo_c = st.selectbox("Equipo:", ["PC Mesa", "Portátil", "Todo en Uno", "Tablet", "Electrodoméstico"], key="tc")
+        marca_c = st.text_input("Marca:", key="mc")
+        falla_cliente = st.text_area("Falla reportada por el usuario:")
+        causa = st.selectbox("Causa Probable:", [
+            "Falla de Software / S.O.", "Hardware - Disco Duro / SSD", 
+            "Hardware - Memoria RAM", "Hardware - Fuente de Poder",
+            "Hardware - Pantalla / Video", "Daño por Líquidos / Corto", "Otro"
+        ])
         
-        col_diag, col_rep = st.columns(2)
+        foto_dano = st.file_uploader("📸 Subir evidencia del daño:", type=["jpg", "png", "jpeg"])
+        if foto_dano:
+            st.image(foto_dano, caption="Evidencia cargada", use_container_width=True)
+
+    with col_rep:
+        st.subheader("🛠️ Plan de Reparación")
+        detalles_tecnicos = st.text_area("¿Qué se encontró y qué se hará?")
+        repuesto_necesario = st.radio("¿Requiere Repuestos?", ["SÍ", "NO"], horizontal=True)
+        costo_repuesto = 0
+        nombre_repuesto = ""
         
-        with col_diag:
-            st.subheader("🔍 Diagnóstico Técnico")
-            falla_cliente = st.text_area("Falla reportada por el usuario:")
-            causa = st.selectbox("Causa Probable:", [
-                "Falla de Software / S.O.", 
-                "Hardware - Disco Duro / SSD", 
-                "Hardware - Memoria RAM", 
-                "Hardware - Fuente de Poder",
-                "Hardware - Pantalla / Video",
-                "Daño por Líquidos / Corto",
-                "Otro (Especificar)"
-            ])
-            
-            foto_dano = st.file_uploader("📸 Subir evidencia del daño (Opcional):", type=["jpg", "png", "jpeg"])
-            if foto_dano:
-                st.image(foto_dano, caption="Evidencia cargada", use_container_width=True)
-
-        with col_rep:
-            st.subheader("🛠️ Plan de Reparación")
-            detalles_tecnicos = st.text_area("¿Qué se encontró y qué se hará?")
-            
-            repuesto_necesario = st.radio("¿Requiere Repuestos?", ["SÍ", "NO"], horizontal=True)
-            costo_repuesto = 0
-            nombre_repuesto = ""
-            
-            if repuesto_necesario == "SÍ":
-                nombre_repuesto = st.text_input("Nombre del repuesto:")
-                costo_repuesto = st.number_input("Costo del repuesto ($):", min_value=0, step=1000)
-            
-            mano_obra = st.number_input("Valor Mano de Obra ($):", min_value=40000, step=5000, value=60000)
-
-        st.divider()
-
-        total_reparacion = mano_obra + costo_repuesto
+        if repuesto_necesario == "SÍ":
+            nombre_repuesto = st.text_input("Nombre del repuesto:")
+            costo_repuesto = st.number_input("Costo del repuesto ($):", min_value=0, step=1000)
         
-        st.markdown(f"""
-        <div style="background: white; padding: 20px; border-radius: 15px; border: 3px solid #FF4B4B; text-align: center; max-width: 450px; margin: auto;">
-            <h4 style="margin:0; color:#444;">Presupuesto de Reparación</h4>
-            <h1 style="color: #FF4B4B; margin: 10px 0;">$ {total_reparacion:,.0f}</h1>
-            <p style="font-size:12px;">Mano de Obra: ${mano_obra:,.0f} | Repuestos: ${costo_repuesto:,.0f}</p>
-            <hr>
-            <p><b>ING. Gerardo Martinez Lemus</b></p>
-        </div>
-        """, unsafe_allow_html=True)
+        mano_obra = st.number_input("Valor Mano de Obra ($):", min_value=40000, step=5000, value=60000)
 
-        if total_reparacion > 0:
-            msg_c = f"Hola, soy el Ing. Gerardo. El diagnóstico de su equipo es: {detalles_tecnicos}. Presupuesto: ${total_reparacion:,.0f}. ¿Autoriza el proceso?"
-            link_rep = generar_enlace_whatsapp("573114759768", msg_c)
-            st.markdown(f'<a href="{link_rep}" target="_blank" class="btn-auto" style="background:#25D366; margin-top:20px;">📲 Enviar Presupuesto vía WhatsApp</a>', unsafe_allow_html=True)
+    st.divider()
 
-# --- 9. BARRA FINAL
+    total_reparacion = mano_obra + costo_repuesto
+    
+    st.markdown(f"""
+    <div style="background: white; padding: 20px; border-radius: 15px; border: 3px solid #FF4B4B; text-align: center; max-width: 450px; margin: auto;">
+        <h4 style="margin:0; color:#444;">Presupuesto de Reparación</h4>
+        <h1 style="color: #FF4B4B; margin: 10px 0;">$ {total_reparacion:,.0f}</h1>
+        <p style="font-size:12px;">Mano de Obra: ${mano_obra:,.0f} | Repuestos: ${costo_repuesto:,.0f}</p>
+        <hr>
+        <p><b>ING. Gerardo Martinez Lemus</b></p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    if total_reparacion > 0:
+        msg_c = f"Hola, el diagnóstico de su {tipo_c} {marca_c} es: {detalles_tecnicos}. Presupuesto: ${total_reparacion:,.0f}. ¿Autoriza?"
+        link_rep = generar_enlace_whatsapp("573114759768", msg_c)
+        st.markdown(f'<a href="{link_rep}" target="_blank" class="btn-auto" style="background:#25D366; margin-top:20px;">📲 Enviar Presupuesto vía WhatsApp</a>', unsafe_allow_html=True)
+
+# --- 9. BARRA FINAL (SIEMPRE VISIBLE) ---
 st.markdown('<div class="alerta-amarilla">⚠️ NOTA: Honorarios por éxito (10% ahorro) o tarifas base de $40.000.</div>', unsafe_allow_html=True)
 
 html_barra = f"""
@@ -234,5 +220,4 @@ html_barra = f"""
 </div>
 """
 st.markdown(html_barra, unsafe_allow_html=True)
-st.markdown(f'<p style="text-align:right; font-size:11px; margin-top:10px;">LINA Core V20.0 | © {ahora_bog.year} Gerardo Martinez Lemus</p>', unsafe_allow_html=True)    
-
+st.markdown(f'<p style="text-align:right; font-size:11px; margin-top:10px;">LINA Core V20.0 | © {ahora_bog.year} Gerardo Martinez Lemus</p>', unsafe_allow_html=True)
