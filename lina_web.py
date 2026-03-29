@@ -75,6 +75,14 @@ with col_der:
         <h1 class="neon-imponente" style="font-size: 80px;">L.I.N.A.</h1>
         <p style="color: #008fb3; font-size: 20px; font-weight: bold; background: white; display: inline-block; padding: 5px 15px; border-radius: 10px;">Laboratorio de Inteligencia y Nuevos Algoritmos</p>
     </div>
+    <div class="resaltado-blanco" style="margin-top: 8px;">
+                <span style="color: #444; font-size: 18px; font-weight: bold;">Soluciones Tecnológicas M Y M</span>
+            </div>
+            <div class="resaltado-blanco">
+                <span style="color: #444; font-size: 16px; font-weight: bold;">Desde 2007</span>
+            </div>
+        </div>
+    </div>
     """, unsafe_allow_html=True)
 
 st.divider()
