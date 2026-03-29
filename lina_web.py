@@ -66,7 +66,8 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # --- 5. ENCABEZADO CENTRADO ---
-col_izq, col_der = st.columns([1, 2])
+# --- 5. ENCABEZADO CENTRADO CON RESALTADOS INDIVIDUALES ---
+col_izq, col_der = st.columns([1, 2.2]) # Ajustamos proporción para dar más espacio al texto
 
 with col_izq:
     # Centrado del Logo
@@ -77,17 +78,34 @@ with col_izq:
     ''', unsafe_allow_html=True)
 
 with col_der:
-    # Centrado total del Texto (Horizontal y Vertical)
+    # Centrado total del Texto (Horizontal y Vertical) con Flexbox
+    # El contenedor principal está centrado verticalmente respecto al logo
     st.markdown(f"""
     <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 250px; text-align: center;">
+        
+        # TÍTULO PRINCIPAL L.I.N.A.
         <h1 class="neon-imponente" style="font-size: 85px; margin-bottom: 0;">L.I.N.A.</h1>
-        <div style="background: rgba(255, 255, 255, 0.9); padding: 8px 20px; border-radius: 12px; border: 2px solid #00FFFF; margin-top: 10px;">
-            <span style="color: #008fb3; font-size: 20px; font-weight: bold; display: block;">
-                Laboratorio de Inteligencia y Nuevos Algoritmos
-            </span>
-            <span style="color: #444; font-size: 15px; font-weight: bold; display: block; border-top: 1px solid #ccc; margin-top: 5px; padding-top: 5px;">
-                Soluciones Tecnológicas M Y M - Desde 2007
-            </span>
+        
+        # CONTENEDOR DE PLACAS INDIVIDUALES
+        # Usamos Flexbox para alinear las placas una debajo de la otra
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+            
+            # --- PLACA 1: Laboratorio de Inteligencia ---
+            # Cada placa tiene su propio fondo, borde y relleno individual
+            <div style="background: rgba(255, 255, 255, 0.95); padding: 8px 18px; border-radius: 10px; border: 2px solid #00FFFF; box-shadow: 0 0 10px rgba(0,255,255,0.3);">
+                <span style="color: #008fb3; font-size: 19px; font-weight: bold; display: block;">
+                    Laboratorio de Inteligencia y Nuevos Algoritmos
+                </span>
+            </div>
+            
+            # --- PLACA 2: Soluciones Tecnológicas M Y M ---
+            # Esta placa es independiente y separada
+            <div style="background: rgba(255, 255, 255, 0.95); padding: 8px 18px; border-radius: 10px; border: 2px solid #00FFFF; box-shadow: 0 0 10px rgba(0,255,255,0.3);">
+                <span style="color: #444; font-size: 15px; font-weight: bold; display: block;">
+                    Soluciones Tecnológicas M Y M - Desde 2007
+                </span>
+            </div>
+            
         </div>
     </div>
     """, unsafe_allow_html=True)
