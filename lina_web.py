@@ -162,13 +162,7 @@ if st.session_state.seccion in servicios_cotizables:
         <div style="background-color: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 15px; border: 3px solid #00d4ff; text-align: center;">
             <h3 style="color: #333; margin-bottom: 0;">Inversión Total</h3>
             <h1 style="color: #008fb3; font-size: 45px; margin-top: 10px;">$ {total:,.0f}</h1>
-            <p style="font-size: 13px; color: #666;">
-            <b>⚠️ MyM Nota:</b> Honorarios por éxito (10% ahorro) o tarifas base de $40.000.<br>
-            <hr>
-            <b>LINA Core V20.0</b><br>
-            © {ahora.year} <b>ING. Gerardo Martinez Lemus</b>
-            </p>
-        </div>
+            <p style="font-size: 13px; color: #666;">        
         """, unsafe_allow_html=True)
         
         if total > 0 and mod == "Virtual":
