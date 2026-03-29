@@ -152,16 +152,19 @@ if st.session_state.seccion == "PREVENTIVO":
         </div>
         """, unsafe_allow_html=True)
 
-# --- 8. AVISO LEGAL Y BARRA PLATEADA ---
+# --- 8. BLOQUE FINAL: ADVERTENCIA, BARRA PLATEADA Y PIE DE PÁGINA ---
 
-# Nota de Advertencia Amarilla (Fuera de la barra)
+# Nota de Advertencia Amarilla Tenue (Fuera de la barra)
 st.markdown("""
-<div class="alerta-amarilla">
-    <b>⚠️ NOTA:</b> Honorarios por éxito (10% ahorro) o tarifas base de <b>$40.000</b>.
+<div style="background-color: #fff9c4; border: 2px solid #fbc02d; color: #444; 
+            padding: 15px; border-radius: 10px; margin-top: 30px; margin-bottom: 10px; 
+            font-size: 15px; text-align: center; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+    ⚠️ NOTA: Honorarios por éxito (10% ahorro) o tarifas base de $40.000.
 </div>
 """, unsafe_allow_html=True)
 
-# Barra Plateada con Reloj y Redes
+# Barra Plateada con Reloj Bogotá y Redes Sociales
+# Usamos f-string para insertar la fecha y hora calculada previamente
 html_barra_final = f"""
 <div class="barra-metalica">
     <div class="reloj-bogota">
@@ -184,9 +187,10 @@ html_barra_final = f"""
 """
 st.markdown(html_barra_final, unsafe_allow_html=True)
 
-# Pie de Página
+# Pie de Página Profesional
 st.markdown(f"""
-<div style="background-color: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 10px; border-left: 6px solid #008fb3; margin-top: 25px;">
+<div style="background-color: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 10px; 
+            border-left: 6px solid #008fb3; margin-top: 25px;">
     <p style="text-align:right; color:#444; margin:0; font-size:13px;">
         <b>LINA Core V20.0</b> | © {ahora_bog.year} <b>ING. Gerardo Martinez Lemus</b>
     </p>
