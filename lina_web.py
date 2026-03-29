@@ -53,18 +53,6 @@ st.markdown(f"""
 </style>
 """, unsafe_allow_html=True)
 
-# --- 5. ENCABEZADO ---
-st.markdown(f"""
-<div class="nav-bar-silver">
-    <div style="font-family: monospace; font-weight: bold; color: #333;">
-        📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')} | S T M Y M
-    </div>
-    <div style="display: flex; gap: 10px;">
-        <a href="https://wa.me/573114759768" target="_blank" style="text-decoration:none; color:white; background:#25D366; padding:5px 10px; border-radius:8px; font-weight:bold;">WhatsApp</a>
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
 # --- 5. ENCABEZADO CENTRADO CON PLACAS INDIVIDUALES (CORREGIDO) ---
 col_izq, col_der = st.columns([1, 2.2])
 
