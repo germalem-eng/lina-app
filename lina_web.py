@@ -158,10 +158,70 @@ if st.session_state.seccion == "PREVENTIVO":
         if st.button("💾 Guardar Informe Técnico"):
             st.success(f"Informe de {tipo_e} {marca} guardado.")
 
-# --- 8. PIE DE PÁGINA ---
+# --- 8. BARRA PLATEADA DE REDES Y PIE DE PÁGINA ---
+
+# Estilo para los iconos de redes sociales
+st.markdown("""
+<style>
+    .social-icon {
+        text-decoration: none;
+        color: #333;
+        background: white;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 14px;
+        transition: 0.3s;
+        border: 1px solid #ccc;
+    }
+    .social-icon:hover {
+        background: #00FFFF;
+        color: black;
+        box-shadow: 0 0 10px #00FFFF;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# 8.1 La Barra Plateada (Ahora al final)
 st.markdown(f"""
-<div style="background-color: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 50px;">
-    <p style="margin:0; font-size:14px;">⚠️ <b>Nota:</b> Honorarios por éxito (10% ahorro) o tarifas base de <b>$40.000</b>.</p>
-    <p style="text-align:right; color:#666; margin:0; font-size:12px;">LINA Core V20.0 | © 2026 <b>ING. Gerardo Martinez Lemus</b></p>
+<div style="display: flex; justify-content: space-between; align-items: center; 
+            padding: 15px 25px; background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
+            border: 2px solid #666; border-radius: 12px; margin-top: 40px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+    
+    <div style="font-family: monospace; font-weight: bold; color: #222; font-size: 14px;">
+        🌐 CONECTA CON SOLUCIONES MYM:
+    </div>
+    
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <a href="https://wa.me/573114759768" target="_blank" class="social-icon">🟢 WhatsApp</a>
+        <a href="https://facebook.com" target="_blank" class="social-icon">🔵 Facebook</a>
+        <a href="https://instagram.com" target="_blank" class="social-icon">🟣 Instagram</a>
+        <a href="https://linkedin.com" target="_blank" class="social-icon">💠 LinkedIn</a>
+        <a href="https://youtube.com" target="_blank" class="social-icon">🔴 YouTube</a>
+        <a href="https://x.com" target="_blank" class="social-icon">⚫ X (Twitter)</a>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# 8.2 Pie de Página Final
+st.markdown(f"""
+<div style="background-color: rgba(255, 255, 255, 0.8); padding: 20px; border-radius: 10px; 
+            border-left: 6px solid #008fb3; margin-top: 20px; margin-bottom: 30px;">
+    <table style="width:100%; border:none;">
+        <tr>
+            <td style="width:65%; border:none; vertical-align: top;">
+                <p style="margin:0; font-size:15px; color:#333;">
+                    ⚠️ <b>Nota Legal:</b> Los honorarios por éxito corresponden al 10% del ahorro logrado en procesos legales. 
+                    Las tarifas base de revisión técnica o consulta inician en <b>$40.000</b>.
+                </p>
+            </td>
+            <td style="text-align:right; border:none; color:#555; font-size: 13px;">
+                <b style="font-size: 16px; color: #008fb3;">LINA Core V20.0</b><br>
+                Desarrollado por:<br>
+                <b style="color: #000;">ING. Gerardo Martinez Lemus</b><br>
+                Bogotá, Colombia - {ahora.year}
+            </td>
+        </tr>
+    </table>
 </div>
 """, unsafe_allow_html=True)
