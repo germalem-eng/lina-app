@@ -158,38 +158,37 @@ if st.session_state.seccion == "PREVENTIVO":
         if st.button("💾 Guardar Informe Técnico"):
             st.success(f"Informe de {tipo_e} {marca} guardado.")
 
-# --- 8. BARRA PLATEADA CON FECHA/HORA BOGOTÁ Y REDES ---
+# --- 8. BARRA PLATEADA FINAL: FECHA, HORA BOGOTÁ Y REDES ---
 
-# 1. Lógica de Autorefresh (Sincronización cada segundo)
-st_autorefresh(interval=1000, key="global_refresh")
+# Sincronización automática cada segundo
+st_autorefresh(interval=1000, key="refresh_bogota")
 
-# 2. Ajuste de Zona Horaria Bogotá (UTC-5)
-# Obtenemos la hora del servidor y restamos 5 horas para Colombia
-ahora_bogota = datetime.datetime.now() - datetime.timedelta(hours=5)
+# Cálculo de hora exacta para Bogotá (UTC-5)
+ahora_bog = datetime.datetime.now() - datetime.timedelta(hours=5)
 
-# 3. Estilos de la Barra y Botones
+# Estilos CSS para que los botones brillen y se eleven
 st.markdown("""
 <style>
-    .silver-bar {
+    .barra-metalica {
         background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
         border: 2px solid #666;
-        border-radius: 12px;
-        padding: 15px 25px;
+        border-radius: 15px;
+        padding: 20px;
         margin-top: 40px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
-    .time-display {
-        font-family: 'Courier New', Courier, monospace;
+    .reloj-bogota {
+        font-family: 'Courier New', monospace;
         font-weight: bold;
-        color: #222;
+        color: #111;
         font-size: 16px;
-        border-bottom: 1px solid #999;
-        margin-bottom: 12px;
-        padding-bottom: 5px;
+        border-bottom: 2px solid #888;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
         display: flex;
         justify-content: space-between;
     }
-    .social-icon {
+    .boton-social {
         text-decoration: none !important;
         color: #333 !important;
         background: white;
@@ -197,59 +196,49 @@ st.markdown("""
         border-radius: 10px;
         font-weight: bold;
         font-size: 13px;
-        transition: all 0.3s ease;
-        border: 1px solid #ccc;
+        transition: 0.3s ease;
+        border: 1px solid #999;
         display: inline-block;
     }
-    .social-icon:hover {
+    .boton-social:hover {
         transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0,255,255,0.4);
+        box-shadow: 0 5px 15px rgba(0,255,255,0.5);
         border-color: #00FFFF;
+        color: #000 !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# 4. Renderizado de la Barra Completa
-st.markdown(f"""
-<div class="silver-bar">
-    <div class="time-display">
+# Construcción del HTML en una sola variable para evitar errores de renderizado
+html_barra = f"""
+<div class="barra-metalica">
+    <div class="reloj-bogota">
         <span>📍 BOGOTÁ, COLOMBIA</span>
-        <span>📅 {ahora_bogota.strftime('%d/%m/%Y')} | 🕒 {ahora_bogota.strftime('%H:%M:%S')}</span>
+        <span>📅 {ahora_bog.strftime('%d/%m/%Y')} | 🕒 {ahora_bog.strftime('%H:%M:%S')}</span>
     </div>
     
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-        <div style="font-weight: bold; color: #222; font-size: 14px;">🌐 REDES OFICIALES:</div>
-        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <a href="https://wa.me/573114759768" target="_blank" class="social-icon">🟢 WhatsApp</a>
-            <a href="https://web.facebook.com/MyMsolucionesdetecnologia/" target="_blank" class="social-icon">🔵 Facebook</a>
-            <a href="https://instagram.com" target="_blank" class="social-icon">🟣 Instagram</a>
-            <a href="https://linkedin.com" target="_blank" class="social-icon">💠 LinkedIn</a>
-            <a href="https://youtube.com" target="_blank" class="social-icon">🔴 YouTube</a>
-            <a href="https://x.com" target="_blank" class="social-icon">⚫ X</a>
+        <div style="font-weight: bold; color: #222;">🌐 REDES OFICIALES:</div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="https://wa.me/573114759768" target="_blank" class="boton-social">🟢 WhatsApp</a>
+            <a href="https://web.facebook.com/MyMsolucionesdetecnologia/" target="_blank" class="boton-social">🔵 Facebook</a>
+            <a href="https://instagram.com" target="_blank" class="boton-social">🟣 Instagram</a>
+            <a href="https://linkedin.com" target="_blank" class="boton-social">💠 LinkedIn</a>
+            <a href="https://youtube.com" target="_blank" class="boton-social">🔴 YouTube</a>
+            <a href="https://x.com" target="_blank" class="boton-social">⚫ X</a>
         </div>
     </div>
 </div>
-""", unsafe_allow_html=True)
+"""
 
-# 5. Pie de Página (Identidad Profesional)
+# Renderizado final de la barra
+st.markdown(html_barra, unsafe_allow_html=True)
+
+# Pie de página con firma del Ingeniero
 st.markdown(f"""
-<div style="background-color: rgba(255, 255, 255, 0.8); padding: 20px; border-radius: 10px; 
-            border-left: 6px solid #008fb3; margin-top: 20px; margin-bottom: 30px;">
-    <table style="width:100%; border:none;">
-        <tr>
-            <td style="width:65%; border:none; vertical-align: top;">
-                <p style="margin:0; font-size:15px; color:#333;">
-                    ⚠️ <b>Nota Legal:</b> Los honorarios por éxito corresponden al 10% del ahorro logrado en procesos legales. 
-                    Las tarifas base de revisión técnica o consulta inician en <b>$40.000</b>.
-                </p>
-            </td>
-            <td style="text-align:right; border:none; color:#555; font-size: 13px;">
-                <b style="font-size: 16px; color: #008fb3;">LINA Core V20.0</b><br>
-                Desarrollado por:<br>
-                <b style="color: #000;">ING. Gerardo Martinez Lemus</b><br>
-                Bogotá, Colombia - 2026
-            </td>
-        </tr>
-    </table>
+<div style="background-color: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 10px; border-left: 6px solid #008fb3; margin-top: 25px;">
+    <p style="text-align:right; color:#444; margin:0; font-size:13px;">
+        <b>LINA Core V20.0</b> | © 2026 <b>ING. Gerardo Martinez Lemus</b>
+    </p>
 </div>
 """, unsafe_allow_html=True)
