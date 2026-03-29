@@ -205,7 +205,56 @@ elif st.session_state.seccion == "CORRECTIVO":
         msg_c = f"Hola, el diagnóstico de su {tipo_c} {marca_c} es: {detalles_tecnicos}. Presupuesto total: ${total_reparacion:,.0f}. ¿Autoriza el proceso?"
         link_rep = generar_enlace_whatsapp("573114759768", msg_c)
         st.markdown(f'<a href="{link_rep}" target="_blank" class="btn-auto" style="background:#25D366; margin-top:20px;">📲 Enviar Presupuesto vía WhatsApp</a>', unsafe_allow_html=True)
-# --- 9. BARRA FINAL (SIEMPRE VISIBLE) ---
+
+# --- 9. SECCIÓN PRIVADO (GESTIÓN DE ABONOS Y UTILIDAD) ---
+elif st.session_state.seccion == "PRIVADO":
+    st.header("🏠 Gestión Privada de Cuentas")
+    st.info("📊 Esta sección es solo para su control interno de gastos y utilidades.")
+
+    col_cta1, col_cta2 = st.columns(2)
+
+    with col_cta1:
+        st.subheader("💰 Registro de Abonos")
+        cliente_pago = st.text_input("Nombre del Cliente:")
+        total_servicio = st.number_input("Total Cobrado al Cliente ($):", min_value=0, step=5000)
+        abono_recibido = st.number_input("Monto Recibido (Abono) ($):", min_value=0, step=5000)
+        metodo_pago = st.selectbox("Método de Pago:", ["Efectivo", "Nequi", "Daviplata", "Transferencia Bancaria"])
+
+    with col_cta2:
+        st.subheader("📉 Control de Costos")
+        costo_real_repuesto = st.number_input("Costo Real del Repuesto (Lo que usted pagó) $:", min_value=0, step=1000)
+        gastos_extra = st.number_input("Otros Gastos (Pasajes, Envío, etc.) $:", min_value=0, step=500)
+        
+        # --- CÁLCULO DE SALDOS Y GANANCIA ---
+        saldo_pendiente = total_servicio - abono_recibido
+        utilidad_neta = total_servicio - costo_real_repuesto - gastos_extra
+
+    st.divider()
+
+    # --- TABLERO DE RESULTADOS PRIVADO ---
+    c1, c2, c3 = st.columns(3)
+    
+    with c1:
+        st.metric(label="💵 Saldo por Cobrar", value=f"$ {saldo_pendiente:,.0f}", delta=f"-{saldo_pendiente:,.0f}", delta_color="inverse")
+    
+    with c2:
+        st.metric(label="📈 Utilidad Real (Ganancia)", value=f"$ {utilidad_neta:,.0f}")
+        
+    with c3:
+        # Estado del servicio basado en el pago
+        if saldo_pendiente <= 0 and total_servicio > 0:
+            st.success("✅ SERVICIO PAGADO TOTALMENTE")
+        elif abono_recibido > 0:
+            st.warning("⏳ PAGO PARCIAL (ABONADO)")
+        else:
+            st.error("❌ SIN PAGO REGISTRADO")
+
+    # Botón para guardar en un historial (Simulado por ahora con un log visual)
+    if st.button("💾 Registrar Movimiento en Log"):
+        st.write(f"📝 **Registro guardado:** Cliente {cliente_pago} | Total: ${total_servicio:,.0f} | Abono: ${abono_recibido:,.0f} | Saldo: ${saldo_pendiente:,.0f}")
+        st.balloons()
+
+# --- 10. BARRA FINAL (SIEMPRE VISIBLE) ---
 st.markdown('<div class="alerta-amarilla">⚠️ NOTA: Honorarios por éxito (10% ahorro) o tarifas base de $40.000.</div>', unsafe_allow_html=True)
 
 html_barra = f"""
