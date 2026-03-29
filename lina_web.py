@@ -110,5 +110,12 @@ html_barra = f"""
     </div>
 </div>
 """
-st.markdown(html_inf, unsafe_allow_html=True)
-st.markdown(f'<p style="text-align:right; font-size:12px;">LINA Core V20.0 | © {ahora_bog.year} Gerardo Martinez</p>', unsafe_allow_html=True)
+st.markdown(html_barra, unsafe_allow_html=True)
+
+st.markdown(f"""
+<div style="background: rgba(255,255,255,0.8); padding:15px; border-radius:10px; border-left:6px solid #008fb3; margin-top:25px; text-align:right;">
+    <p style="color:#444; margin:0; font-size:13px;">
+        <b>LINA Core V20.0</b> | © {ahora_bog.year} <b>ING. Gerardo Martinez Lemus</b>
+    </p>
+</div>
+""", unsafe_allow_html=True)
