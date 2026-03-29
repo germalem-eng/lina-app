@@ -133,6 +133,9 @@ if st.session_state.seccion == "PREVENTIVO":
     if mod == "A Domicilio":
         st.subheader("🏠 Proceso en Domicilio")
         st.text_input("Dirección de visita:")
+        st.text_input("Telefono:")
+        st.text_input("e-Mail:")
+        st.text_input("S/N se traslada a oficina equipo:")
         inversion = 60000 
 
     # --- CUADRO DE INVERSIÓN FINAL ---
