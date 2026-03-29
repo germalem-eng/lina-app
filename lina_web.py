@@ -65,7 +65,6 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-# --- 5. ENCABEZADO CENTRADO ---
 # --- 5. ENCABEZADO CENTRADO CON RESALTADOS INDIVIDUALES ---
 col_izq, col_der = st.columns([1, 2.2]) # Ajustamos proporción para dar más espacio al texto
 
