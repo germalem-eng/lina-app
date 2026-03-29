@@ -2,30 +2,34 @@ import streamlit as st
 import os
 import base64
 import datetime
+import urllib.parse
 from streamlit_autorefresh import st_autorefresh
 
-# ==========================================
-# LINA CORE V20.0 - VERSIÓN ESTABLE DE RESCATE
-# ==========================================
-
-# --- 1. CONFIGURACIÓN DEL SISTEMA ---
-st.set_page_config(page_title="LINA V20.0 | Soluciones Tecnológicas M Y M", layout="wide", page_icon="🤖")
+# --- 1. CONFIGURACIÓN MECÁNICA DEL SISTEMA ---
+st.set_page_config(page_title="LINA V20.0 | M Y M Soluciones", layout="wide", page_icon="🤖")
 st_autorefresh(interval=1000, key="global_refresh")
+
+# Sincronización Bogotá (UTC-5)
 ahora_bog = datetime.datetime.now() - datetime.timedelta(hours=5)
 
-# --- 2. GESTIÓN DE ESTADO ---
-if 'seccion' not in st.session_state: 
-    st.session_state.seccion = "PREVENTIVO"
-
-# --- 3. PROCESAMIENTO DE IMÁGENES ---
+# --- 2. FUNCIONES DE APOYO ---
 def get_image_base64(path):
     if os.path.exists(path):
         with open(path, "rb") as img_file:
             return base64.b64encode(img_file.read()).decode()
     return ""
 
+def generar_enlace_whatsapp(tel, mensaje):
+    msg_encoded = urllib.parse.quote(mensaje)
+    return f"https://wa.me/{tel}?text={msg_encoded}"
+
+# Carga de recursos
 fondo_b64 = get_image_base64("Logos/fondo.jpg")
 logo_robot_b64 = get_image_base64("Logos/logo_robot_2007.jpg")
+
+# --- 3. GESTIÓN DE ESTADO ---
+if 'seccion' not in st.session_state:
+    st.session_state.seccion = "PREVENTIVO"
 
 # --- 4. ARQUITECTURA VISUAL (CSS AISLADO) ---
 st.markdown(f"""
@@ -40,16 +44,18 @@ st.markdown(f"""
     .alerta-amarilla {{ background-color: #fff9c4; border: 2px solid #fbc02d; color: #444; padding: 15px; border-radius: 10px; margin-top: 20px; font-weight: bold; text-align: center; }}
     .barra-metalica {{ background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%); border: 2px solid #666; border-radius: 15px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }}
     .reloj-bogota {{ font-family: 'Courier New', monospace; font-weight: bold; color: #111; display: flex; justify-content: space-between; border-bottom: 2px solid #888; padding-bottom: 8px; margin-bottom: 12px; }}
-    .boton-social {{ text-decoration: none !important; color: #333 !important; background: white; padding: 8px 15px; border-radius: 10px; font-weight: bold; border: 1px solid #999; display: inline-block; }}
+    .boton-social {{ text-decoration: none !important; color: #333 !important; background: white; padding: 6px 10px; border-radius: 8px; font-weight: bold; font-size: 11px; border: 1px solid #999; display: inline-block; margin: 2px; }}
+    .btn-auto {{ text-decoration: none; color: white !important; padding: 12px; border-radius: 10px; text-align: center; font-weight: bold; display: block; margin-top: 10px; }}
 </style>
 """, unsafe_allow_html=True)
 
 # --- 5. ENCABEZADO ---
-c_l, c_t = st.columns([1, 2.5])
-with c_l: st.markdown(f'<div style="text-align:center;"><img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo"></div>', unsafe_allow_html=True)
-with c_t:
-    st.markdown('<h1 class="neon-titulo" style="font-size:75px;">L.I.N.A.</h1>', unsafe_allow_html=True)
-    st.markdown('<p style="text-align:center; font-weight:bold; color:#008fb3;">Soluciones Tecnológicas M Y M - Desde 2007</p>', unsafe_allow_html=True)
+c_logo, c_tit = st.columns([1, 2.5])
+with c_logo:
+    st.markdown(f'<div style="text-align:center;"><img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo"></div>', unsafe_allow_html=True)
+with c_tit:
+    st.markdown('<h1 class="neon-titulo" style="font-size:70px;">L.I.N.A.</h1>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align:center; font-weight:bold; color:#008fb3; font-size:18px;">Soluciones Tecnológicas M Y M - Desde 2007</p>', unsafe_allow_html=True)
 
 st.divider()
 
@@ -63,34 +69,83 @@ for i, o in enumerate(ops):
 
 st.divider()
 
-# --- 7. SECCIÓN: MANTENIMIENTO PREVENTIVO ---
+# --- 7. MANTENIMIENTO PREVENTIVO ---
 if st.session_state.seccion == "PREVENTIVO":
-    st.header("🛠️ Mantenimiento Preventivo")
+    st.header("🛠️ Mantenimiento Preventivo Especializado")
+    
     col_a, col_b = st.columns(2)
     with col_a:
-        tipo = st.selectbox("Producto:", ["Computador de Mesa", "Portátil", "Todo en Uno", "Tablet", "Electrodoméstico"])
-        marca = st.text_input("Marca:")
-        specs = st.text_area("Especificaciones Técnicas:")
+        st.subheader("📋 Datos del Equipo")
+        tipo = st.selectbox("Producto:", ["PC Mesa", "Portátil", "Todo en Uno", "Tablet", "Electrodoméstico"])
+        marca = st.text_input("Marca del Producto:")
+        specs = st.text_area("Características / Especificaciones:")
         mod = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
+
     with col_b:
-        st.subheader("✅ Checklist")
-        st.checkbox("Limpieza física profunda")
-        st.checkbox("Borrado archivos basura")
-        st.checkbox("Antivirus y Seguridad")
-        res = st.radio("Resultado:", ["Todo OK", "Requiere Correctivo"])
-        if res == "Requiere Correctivo": st.text_area("Descripción:")
-    
-    # Cálculo
-    total = 40000 + (20000 if mod == "A Domicilio" else 0)
-    st.markdown(f'<div style="background:white; padding:15px; border:3px solid #00FFFF; border-radius:15px; text-align:center; max-width:350px; margin:auto;"><h3>Total: $ {total:,.0f}</h3><p>ING. Gerardo Martinez</p></div>', unsafe_allow_html=True)
+        st.subheader("✅ Checklist Obligatorio")
+        st.checkbox("Encendido inicial OK")
+        st.checkbox("Limpieza física profunda (Polvo/Componentes)")
+        st.checkbox("Borrado de archivos basura / Temporales")
+        st.checkbox("Escaneo Antivirus y Seguridad")
+        st.checkbox("Verificación de puertos y carga")
 
-# --- 8. BLOQUE FINAL: ADVERTENCIA + CONTACTO + FIRMA ---
+    st.divider()
 
-st.markdown("""
-<div class="alerta-amarilla">
-    ⚠️ NOTA: Honorarios por éxito (10% ahorro) o tarifas base de $40.000.
-</div>
-""", unsafe_allow_html=True)
+    # --- LÓGICA POR MODALIDAD ---
+    inversion = 40000 
+
+    if mod == "Virtual":
+        st.info("💻 **Asesoría Virtual**")
+        toma_servicio = st.radio("¿Toma servicio técnico?", ["No (Solo asesoría)", "Sí (Agendar Cita)"])
+        
+        if toma_servicio == "Sí (Agendar Cita)":
+            inversion = 0 
+            st.success("📅 **Datos para agendar:**")
+            ca, cb = st.columns(2)
+            with ca:
+                nom = st.text_input("Nombre del Cliente:")
+                tel = st.text_input("Teléfono (WhatsApp):")
+                dir_c = st.text_input("Dirección de la Cita:")
+            with cb:
+                f_c = st.date_input("Fecha:", ahora_bog.date())
+                h_c = st.time_input("Hora:", datetime.time(8, 0))
+            
+            if nom and tel:
+                st.write("---")
+                c_wa, c_cal = st.columns(2)
+                msg = f"Hola, soy {nom}. Confirmo cita M.P. el {f_c} a las {h_c}. Dirección: {dir_c}. Equipo: {tipo} {marca}."
+                link_wa = generar_enlace_whatsapp("573114759768", msg)
+                with c_wa:
+                    st.markdown(f'<a href="{link_wa}" target="_blank" class="btn-auto" style="background:#25D366;">📲 WhatsApp Confirmar</a>', unsafe_allow_html=True)
+                start = f"{f_c.strftime('%Y%m%d')}T{h_c.strftime('%H%M%S')}"
+                link_cal = f"https://www.google.com/calendar/render?action=TEMPLATE&text=M.P.+{nom}&details=Equipo:+{tipo}+{marca}&location={dir_c}&dates={start}/{start}"
+                with c_cal:
+                    st.markdown(f'<a href="{link_cal}" target="_blank" class="btn-auto" style="background:#4285F4;">🗓️ Google Calendar</a>', unsafe_allow_html=True)
+
+    elif mod == "En Oficina":
+        oficina_estado = st.radio("Estado:", ["Evaluación y Ejecución", "Sin equipo (Pasar a Domicilio)"])
+        if oficina_estado == "Sin equipo (Pasar a Domicilio)":
+            mod = "A Domicilio"
+            inversion = 60000
+        else:
+            inversion = 40000
+
+    if mod == "A Domicilio":
+        st.subheader("🏠 Proceso en Domicilio")
+        st.text_input("Dirección de visita:")
+        inversion = 60000 
+
+    # --- CUADRO DE INVERSIÓN FINAL ---
+    st.markdown(f"""
+    <div style="background: white; padding: 20px; border-radius: 15px; border: 3px solid #00FFFF; text-align: center; max-width: 400px; margin: 30px auto;">
+        <h4 style="margin:0; color:#444;">Inversión del Servicio</h4>
+        <h1 style="color: #008fb3; margin: 10px 0;">$ {inversion:,.0f}</h1>
+        <p><b>ING. Gerardo Martinez Lemus</b></p>
+    </div>
+    """, unsafe_allow_html=True)
+
+# --- 8. BLOQUE FINAL: ADVERTENCIA + BARRA PLATEADA CON TODAS LAS REDES ---
+st.markdown('<div class="alerta-amarilla">⚠️ NOTA: Honorarios por éxito (10% ahorro) o tarifas base de $40.000.</div>', unsafe_allow_html=True)
 
 html_barra = f"""
 <div class="barra-metalica">
@@ -98,24 +153,20 @@ html_barra = f"""
         <span>📍 BOGOTÁ, COLOMBIA</span>
         <span>📅 {ahora_bog.strftime('%d/%m/%Y')} | 🕒 {ahora_bog.strftime('%H:%M:%S')}</span>
     </div>
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-        <div style="font-weight: bold; color: #222;">🌐 REDES OFICIALES:</div>
-        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+        <div style="font-weight: bold; color: #222; font-size: 13px;">🌐 REDES OFICIALES:</div>
+        <div style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
             <a href="https://wa.me/573114759768" target="_blank" class="boton-social">🟢 WhatsApp</a>
             <a href="https://web.facebook.com/MyMsolucionesdetecnologia/" target="_blank" class="boton-social">🔵 Facebook</a>
             <a href="https://instagram.com" target="_blank" class="boton-social">🟣 Instagram</a>
-            <a href="https://linkedin.com" target="_blank" class="boton-social">💠 LinkedIn</a>
             <a href="https://youtube.com" target="_blank" class="boton-social">🔴 YouTube</a>
+            <a href="https://t.me" target="_blank" class="boton-social">✈️ Telegram</a>
+            <a href="https://tiktok.com" target="_blank" class="boton-social">🎵 TikTok</a>
+            <a href="https://x.com" target="_blank" class="boton-social">⚫ X</a>
         </div>
     </div>
 </div>
 """
 st.markdown(html_barra, unsafe_allow_html=True)
 
-st.markdown(f"""
-<div style="background: rgba(255,255,255,0.8); padding:15px; border-radius:10px; border-left:6px solid #008fb3; margin-top:25px; text-align:right;">
-    <p style="color:#444; margin:0; font-size:13px;">
-        <b>LINA Core V20.0</b> | © {ahora_bog.year} <b>ING. Gerardo Martinez Lemus</b>
-    </p>
-</div>
-""", unsafe_allow_html=True)
+st.markdown(f'<p style="text-align:right; font-size:12px; margin-top:10px;">LINA Core V20.0 | © {ahora_bog.year} Gerardo Martinez Lemus</p>', unsafe_allow_html=True)
