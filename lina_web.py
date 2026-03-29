@@ -76,7 +76,7 @@ if st.session_state.seccion == "PREVENTIVO":
     col_a, col_b = st.columns(2)
     with col_a:
         st.subheader("📋 Datos del Equipo")
-        tipo = st.selectbox("Producto:", ["PC Mesa", "Portátil", "Todo en Uno", "Tablet", "Electrodoméstico"])
+        tipo = st.selectbox("Producto:", ["PC Mesa", "Portátil", "Todo en Uno", "Tablet", "Componente electrónico", "Electrodoméstico", "Componente del electrodoméstico",])
         marca = st.text_input("Marca del Producto:")
         specs = st.text_area("Características / Especificaciones:")
         mod = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
@@ -86,6 +86,7 @@ if st.session_state.seccion == "PREVENTIVO":
         st.checkbox("Encendido inicial OK")
         st.checkbox("Limpieza física profunda (Polvo/Componentes)")
         st.checkbox("Borrado de archivos basura / Temporales")
+        st.checkbox("Tiene Antivirus? S/N")
         st.checkbox("Escaneo Antivirus y Seguridad")
         st.checkbox("Verificación de puertos y carga")
 
