@@ -254,4 +254,13 @@ html_barra = f"""
         <div style="font-weight: bold; color: #222; font-size: 13px;">🌐 REDES OFICIALES:</div>
         <div style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
             <a href="https://wa.me/573114759768" target="_blank" class="boton-social">🟢 WhatsApp</a>
-            <a href="
+            <a href="https://web.facebook.com/MyMsolucionesdetecnologia/" target="_blank" class="boton-social">🔵 Facebook</a>
+            <a href="https://youtube.com" target="_blank" class="boton-social">🔴 YouTube</a>
+            <a href="https://tiktok.com" target="_blank" class="boton-social">🎵 TikTok</a>
+            <a href="https://x.com" target="_blank" class="boton-social">⚫ X</a>
+        </div>
+    </div>
+</div>
+"""
+st.markdown(html_barra, unsafe_allow_html=True)
+st.markdown(f'<p style="text-align:right; font-size:11px; margin-top:10px;">LINA Core V20.0 | © {ahora_bog.year} Gerardo Martinez Lemus</p>', unsafe_allow_html=True)
