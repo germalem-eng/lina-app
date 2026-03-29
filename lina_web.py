@@ -91,86 +91,85 @@ with col_der:
 
 st.divider()
 
-# --- 6. PANEL OPERATIVO (BOTONES FUNCIONALES) ---
-st.write("### 🚀 Panel Operativo:")
-c1, c2, c3, c4, c5 = st.columns(5)
+# --- 6. NUEVO PANEL OPERATIVO (6 BOTONES INDEPENDIENTES) ---
+st.write("### 🚀 Seleccione el Servicio Requerido:")
 
-with c1:
-    if st.button("💰 COTIZADOR", use_container_width=True):
-        st.session_state.seccion = "COTIZADOR"
-        st.rerun()
-with c2:
-    if st.button("⚖️ GESTIÓN", use_container_width=True):
-        st.session_state.seccion = "GESTION"
-        st.rerun()
-with c3:
-    if st.button("📝 RADICACIÓN", use_container_width=True):
+# Creamos dos filas de 3 columnas para que los botones se vean grandes y claros
+fila1_c1, fila1_c2, fila1_c3 = st.columns(3)
+fila2_c1, fila2_c2, fila2_c3 = st.columns(3)
+
+with fila1_c1:
+    if st.button("🛠️ Mantenimiento Preventivo", use_container_width=True):
+        st.session_state.seccion = "PREVENTIVO"
+with fila1_c2:
+    if st.button("🔧 Mantenimiento Correctivo", use_container_width=True):
+        st.session_state.seccion = "CORRECTIVO"
+with fila1_c3:
+    if st.button("⚖️ Gestión Legal", use_container_width=True):
+        st.session_state.seccion = "GESTION_LEGAL"
+
+with fila2_c1:
+    if st.button("📝 Radicación", use_container_width=True):
         st.session_state.seccion = "RADICACION"
-        st.rerun()
-with c4:
-    if st.button("🏠 PRIVADO MyM", use_container_width=True):
-        st.session_state.seccion = "FINANZAS"
-        st.rerun()
-with c5:
-    if st.button("🛡️ CASO LEGAL", use_container_width=True):
-        st.session_state.seccion = "LEGAL"
-        st.rerun()
+with fila2_c2:
+    if st.button("🛡️ Casos Legales", use_container_width=True):
+        st.session_state.seccion = "CASOS_LEGALES"
+with fila2_c3:
+    if st.button("📁 Archivo", use_container_width=True):
+        st.session_state.seccion = "ARCHIVO"
 
 st.divider()
 
-# --- 7. LÓGICA DE SECCIONES ---
+# --- 7. LÓGICA DE COTIZACIÓN SEGÚN SERVICIO SELECCIONADO ---
 
-if st.session_state.seccion == "COTIZADOR":
-    st.subheader("💰 Cotizador Inteligente")
-    col_calc, col_info = st.columns([2, 1])
-    with col_calc:
-        ser = st.selectbox("Servicio:", ["Mantenimiento Preventivo", "Mantenimiento Correctivo", "Asesoría Legal"])
-        mod = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
-        base = 40000
-        extra = 20000 if mod == "A Domicilio" else 0
-        st.metric("Inversión Total", f"$ {(base + extra):,.0f}".replace(",", "."))
-    with col_info:
-        st.info("Tarifa base: $40.000\nDomicilio: +$20.000")
+# Lista de secciones que comparten la misma lógica de cotización
+servicios_cotizables = ["PREVENTIVO", "CORRECTIVO", "GESTION_LEGAL", "RADICACION", "CASOS_LEGALES", "ARCHIVO"]
 
-elif st.session_state.seccion == "GESTION":
-    st.subheader("⚖️ Historial de Casos")
-    st.info("Buscando base de datos 'database_casos_mym.csv'...")
-    st.warning("No hay casos registrados actualmente.")
-
-elif st.session_state.seccion == "RADICACION":
-    st.subheader("📝 Generador de Peticiones Legales")
-    u_nom = st.text_input("Nombre del Titular:", value="LINA PAOLA MOJICA").upper()
-    u_ced = st.text_input("Cédula:")
-    if st.button("Generar Borrador"):
-        doc = f"Bogotá D.C., {ahora.strftime('%d/%m/%Y')}\n\nYo, {u_nom}, con C.C. {u_ced}..."
-        st.text_area("📄 Documento:", value=doc, height=150)
-
-elif st.session_state.seccion == "FINANZAS":
-    st.subheader("🏠 Control Privado MyM")
-    st.metric("Meta Sistecrédito", "$898.771")
-    st.progress(0.4, text="Progreso de Pago")
-
-elif st.session_state.seccion == "LEGAL":
-    st.subheader("🛡️ Caso Nómina: Lina vs RapiCredit")
-    cap, deb = 200000, 502837
-    dif = deb - cap
+if st.session_state.seccion in servicios_cotizables:
+    st.subheader(f"💰 Cotizador: {st.session_state.seccion.replace('_', ' ')}")
     
-    col1, col2 = st.columns(2)
-    col1.metric("Capital Solicitado", "$ 200.000")
-    col2.error(f"Excedente Cobrado: $ {dif:,.0f}".replace(",", "."))
+    col_inputs, col_resultado = st.columns([2, 1])
     
-    if st.button("📝 Generar Argumentos para Radicado"):
-        doc = f"""HECHOS PARA LA SUPERINTENDENCIA:
-1. Oferta vinculante por SMS el 27/03 por $200.000.
-2. Débito automático por $502.837 realizado el mismo día.
-3. Factura No. RCC6205119 emitida el 28/03/2026.
-4. Afectación de cuenta de nómina de LINA MOJICA CC 1016026492."""
-        st.text_area("Copia este resumen:", value=doc, height=180)
+    with col_inputs:
+        # Selección de Modalidad
+        mod = st.radio("Modalidad del Servicio:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
+        
+        # Tipo de atención
+        tipo_atencion = st.radio("Tipo de Atención:", ["Solo Consulta", "Tomar Asesoría/Servicio Completo"], horizontal=True)
+        
+        # Bloque condicional para Dirección y Horario
+        if mod == "A Domicilio":
+            st.info("📍 Ingrese los detalles para la visita técnica:")
+            dir_visita = st.text_input("Dirección completa:")
+            col_fecha, col_hora = st.columns(2)
+            with col_fecha:
+                fecha_visita = st.date_input("Fecha sugerida:", min_value=datetime.date.today())
+            with col_hora:
+                hora_visita = st.time_input("Hora sugerida:")
 
-# --- 8. PIE DE PÁGINA ---
-st.markdown(f"""
-<div style="background-color: rgba(255, 255, 255, 0.7); padding: 10px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 30px;">
-    <b>⚠️ MyM Nota:</b> Honorarios por éxito (10% ahorro) o tarifas base de <b>$40.000</b>.
-</div>
-<p style="text-align:center; color:#666; font-size: 12px; margin-top: 10px;">LINA Core V20.0 | © {ahora.year} Gerardo Martinez Lemus</p>
-""", unsafe_allow_html=True)
+        # --- CÁLCULO DE VALORES ---
+        base_consulta = 40000
+        valor_domicilio = 20000
+        total = 0
+
+        if mod in ["Virtual", "En Oficina"]:
+            total = base_consulta if tipo_atencion == "Solo Consulta" else 0
+        elif mod == "A Domicilio":
+            total = (base_consulta + valor_domicilio) if tipo_atencion == "Solo Consulta" else valor_domicilio
+
+    with col_resultado:
+        st.markdown(f"""
+        <div style="background-color: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 15px; border: 3px solid #00d4ff; text-align: center;">
+            <h3 style="color: #333; margin-bottom: 0;">Inversión Total</h3>
+            <h1 style="color: #008fb3; font-size: 45px; margin-top: 10px;">$ {total:,.0f}</h1>
+            <p style="font-size: 13px; color: #666;">
+            <b>⚠️ MyM Nota:</b> Honorarios por éxito (10% ahorro) o tarifas base de $40.000.<br>
+            <hr>
+            <b>LINA Core V20.0</b><br>
+            © {ahora.year} <b>ING. Gerardo Martinez Lemus</b>
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if total > 0 and mod == "Virtual":
+            st.warning("⚠️ Recuerde enviar el pantallazo de pago Nequi para habilitar la conexión remota.")
