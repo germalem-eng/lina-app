@@ -6,10 +6,10 @@ from streamlit_autorefresh import st_autorefresh
 
 # --- 1. CONFIGURACIÓN DEL SISTEMA ---
 st.set_page_config(page_title="LINA V20.0 | Soluciones Tecnológicas M Y M", layout="wide", page_icon="🤖")
-st_autorefresh(interval=1000, key="daterefresh")
+st_autorefresh(interval=1000, key="global_refresh")
 
-# Ajuste de hora Colombia (UTC-5)
-ahora = datetime.datetime.now() - datetime.timedelta(hours=5)
+# Ajuste de hora Bogotá (UTC-5)
+ahora_bog = datetime.datetime.now() - datetime.timedelta(hours=5)
 
 # --- 2. INICIALIZACIÓN DE ESTADO ---
 if 'seccion' not in st.session_state: 
@@ -25,7 +25,7 @@ def get_image_base64(path):
 fondo_b64 = get_image_base64("Logos/fondo.jpg")
 logo_robot_b64 = get_image_base64("Logos/logo_robot_2007.jpg")
 
-# --- 4. ESTILOS CSS ---
+# --- 4. ESTILOS CSS MAESTROS ---
 st.markdown(f"""
 <style>
     .stApp {{
@@ -33,11 +33,6 @@ st.markdown(f"""
                           url("data:image/jpeg;base64,{fondo_b64}");
         background-size: cover;
         background-attachment: fixed;
-    }}
-    .nav-bar-silver {{
-        display: flex; justify-content: space-between; align-items: center;
-        padding: 10px 20px; background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
-        border-bottom: 3px solid #666; border-radius: 12px; margin-bottom: 25px;
     }}
     .logo-redondo-final {{
         width: 220px; height: 220px;
@@ -49,30 +44,52 @@ st.markdown(f"""
         text-shadow: 0 0 15px #00FFFF, 0 0 30px #00FFFF;
         line-height: 1; margin: 0; text-align: center;
     }}
+    .barra-metalica {{
+        background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
+        border: 2px solid #666; border-radius: 15px;
+        padding: 20px; margin-top: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }}
+    .reloj-bogota {{
+        font-family: 'Courier New', monospace; font-weight: bold; color: #111;
+        font-size: 16px; border-bottom: 2px solid #888;
+        margin-bottom: 15px; padding-bottom: 10px;
+        display: flex; justify-content: space-between;
+    }}
+    .boton-social {{
+        text-decoration: none !important; color: #333 !important;
+        background: white; padding: 8px 15px; border-radius: 10px;
+        font-weight: bold; font-size: 13px; transition: 0.3s ease;
+        border: 1px solid #999; display: inline-block;
+    }}
+    .boton-social:hover {{
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,255,255,0.5);
+        border-color: #00FFFF;
+    }}
 </style>
 """, unsafe_allow_html=True)
 
-# --- 5. ENCABEZADO: L.I.N.A. Y PLACAS RESALTADAS ---
-col_head1, col_head2 = st.columns([1, 2.2])
+# --- 5. ENCABEZADO: L.I.N.A. Y PLACAS ---
+col_h1, col_h2 = st.columns([1, 2.2])
 
-with col_head1:
+with col_h1:
     st.markdown(f'''
         <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
             <img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo-final">
         </div>
     ''', unsafe_allow_html=True)
 
-with col_head2:
-    contenido_html = f"""
+with col_h2:
+    html_header = f"""
     <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 250px; text-align: center;">
         <h1 class="neon-imponente" style="font-size: 85px; margin: 0; padding: 0;">L.I.N.A.</h1>
         <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px; width: 100%; align-items: center;">
-            <div style="background: rgba(255, 255, 255, 0.95); padding: 10px 20px; border-radius: 12px; border: 2px solid #00FFFF; box-shadow: 0 0 15px rgba(0,255,255,0.2); width: fit-content;">
+            <div style="background: rgba(255, 255, 255, 0.95); padding: 10px 20px; border-radius: 12px; border: 2px solid #00FFFF; width: fit-content;">
                 <span style="color: #008fb3; font-size: 20px; font-weight: bold; display: block; white-space: nowrap;">
                     Laboratorio de Inteligencia y Nuevos Algoritmos
                 </span>
             </div>
-            <div style="background: rgba(255, 255, 255, 0.95); padding: 10px 20px; border-radius: 12px; border: 2px solid #00FFFF; box-shadow: 0 0 15px rgba(0,255,255,0.2); width: fit-content;">
+            <div style="background: rgba(255, 255, 255, 0.95); padding: 10px 20px; border-radius: 12px; border: 2px solid #00FFFF; width: fit-content;">
                 <span style="color: #444; font-size: 16px; font-weight: bold; display: block; white-space: nowrap;">
                     Soluciones Tecnológicas M Y M - Desde 2007
                 </span>
@@ -80,7 +97,7 @@ with col_head2:
         </div>
     </div>
     """
-    st.markdown(contenido_html, unsafe_allow_html=True)
+    st.markdown(html_header, unsafe_allow_html=True)
 
 st.divider()
 
@@ -103,120 +120,41 @@ with c6:
 
 st.divider()
 
-# --- 7. LÓGICA DE SECCIONES ---
-
+# --- 7. LÓGICA DE SECCIONES (MANTENIMIENTO PREVENTIVO) ---
 if st.session_state.seccion == "PREVENTIVO":
     st.subheader("🛠️ Mantenimiento Preventivo Especializado")
     col_izq, col_der = st.columns([2, 1])
     
     with col_izq:
-        st.markdown("#### 🔍 Identificación del Producto")
         tipo_e = st.selectbox("Tipo de Producto:", ["PC de Mesa", "Todo en Uno", "Portátil", "Tablet", "Electrodoméstico"])
-        marca = st.text_input("Marca del Producto:", placeholder="Ej: HP, Dell, Samsung...")
-        specs = st.text_input("Características / Especificaciones:")
-        
-        st.markdown("#### 📋 Checklist de Entrada (Antes)")
-        col_ch1, col_ch2 = st.columns(2)
-        c_enc = col_ch1.checkbox("¿Enciende correctamente?")
-        c_pnt = col_ch1.checkbox("¿Pantalla OK (sin manchas)?")
-        c_ruido = col_ch2.checkbox("¿Sin ruidos extraños?")
-        c_fisico = col_ch2.checkbox("¿Buen estado físico?")
-
-        st.markdown("#### 🧹 Tareas Realizadas")
-        st.write("- Limpieza de polvo, Borrado de basura, Escaneo Antivirus, Optimización.")
-        resultado = st.text_area("Resultado del mantenimiento (Descripción):", "Todo bien, OK y sale.")
-
-        st.markdown("#### ✅ Verificación de Salida (Después)")
-        s_limpio = st.checkbox("Limpieza verificada")
-        s_vel = st.checkbox("Mejora en velocidad")
+        marca = st.text_input("Marca del Producto:")
+        st.markdown("#### 📋 Checklist de Verificación")
+        c1 = st.checkbox("¿Enciende?")
+        c2 = st.checkbox("¿Limpieza física realizada?")
+        diag = st.text_area("Descripción del Servicio:")
 
     with col_der:
         mod = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
         tipo_at = st.radio("Tipo de Atención:", ["Solo Consulta", "Servicio Completo"], index=1)
-        
         base = 40000
         extra = 20000 if mod == "A Domicilio" else 0
+        total = base + extra if tipo_at == "Solo Consulta" else (base + extra if mod == "A Domicilio" else base)
         
-        # Lógica de cobro solicitada
-        if tipo_at == "Solo Consulta":
-            total = base + extra
-        else:
-            total = extra if mod == "A Domicilio" else 0
-            if mod in ["Virtual", "En Oficina"] and tipo_at == "Servicio Completo":
-                total = base # Cobro base por el servicio técnico
-
         st.markdown(f"""
         <div style="background:white; padding:20px; border-radius:15px; border:3px solid #00FFFF; text-align:center;">
-            <h3 style="margin:0;">Inversión Total</h3>
-            <h1 style="color:#008fb3; font-size:45px;">$ {total:,.0f}</h1>
-            <p style="font-size:12px;">⚠️ MyM Nota: Honorarios base de $40.000</p>
-            <hr>
-            <p style="font-size:12px;"><b>ING. Gerardo Martinez Lemus</b></p>
+            <h3>Inversión Total</h3>
+            <h1 style="color:#008fb3;">$ {total:,.0f}</h1>
+            <p><b>ING. Gerardo Martinez Lemus</b></p>
         </div>
         """, unsafe_allow_html=True)
-        
-        if st.button("💾 Guardar Informe Técnico"):
-            st.success(f"Informe de {tipo_e} {marca} guardado.")
 
-# --- 8. BARRA PLATEADA FINAL: FECHA, HORA BOGOTÁ Y REDES ---
-
-# Sincronización automática cada segundo
-st_autorefresh(interval=1000, key="refresh_bogota")
-
-# Cálculo de hora exacta para Bogotá (UTC-5)
-ahora_bog = datetime.datetime.now() - datetime.timedelta(hours=5)
-
-# Estilos CSS para que los botones brillen y se eleven
-st.markdown("""
-<style>
-    .barra-metalica {
-        background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
-        border: 2px solid #666;
-        border-radius: 15px;
-        padding: 20px;
-        margin-top: 40px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
-    .reloj-bogota {
-        font-family: 'Courier New', monospace;
-        font-weight: bold;
-        color: #111;
-        font-size: 16px;
-        border-bottom: 2px solid #888;
-        margin-bottom: 15px;
-        padding-bottom: 10px;
-        display: flex;
-        justify-content: space-between;
-    }
-    .boton-social {
-        text-decoration: none !important;
-        color: #333 !important;
-        background: white;
-        padding: 8px 15px;
-        border-radius: 10px;
-        font-weight: bold;
-        font-size: 13px;
-        transition: 0.3s ease;
-        border: 1px solid #999;
-        display: inline-block;
-    }
-    .boton-social:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0,255,255,0.5);
-        border-color: #00FFFF;
-        color: #000 !important;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# Construcción del HTML en una sola variable para evitar errores de renderizado
-html_barra = f"""
+# --- 8. BARRA PLATEADA FINAL CON RELOJ BOGOTÁ Y REDES ---
+html_barra_final = f"""
 <div class="barra-metalica">
     <div class="reloj-bogota">
         <span>📍 BOGOTÁ, COLOMBIA</span>
         <span>📅 {ahora_bog.strftime('%d/%m/%Y')} | 🕒 {ahora_bog.strftime('%H:%M:%S')}</span>
     </div>
-    
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
         <div style="font-weight: bold; color: #222;">🌐 REDES OFICIALES:</div>
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -230,11 +168,9 @@ html_barra = f"""
     </div>
 </div>
 """
+st.markdown(html_barra_final, unsafe_allow_html=True)
 
-# Renderizado final de la barra
-st.markdown(html_barra, unsafe_allow_html=True)
-
-# Pie de página con firma del Ingeniero
+# Pie de Página
 st.markdown(f"""
 <div style="background-color: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 10px; border-left: 6px solid #008fb3; margin-top: 25px;">
     <p style="text-align:right; color:#444; margin:0; font-size:13px;">
