@@ -173,7 +173,7 @@ elif st.session_state.seccion == "CORRECTIVO":
         
         if repuesto_necesario == "SÍ":
             nombre_repuesto = st.text_input("Nombre del repuesto:")
-            costo_repuesto = st.number_input("Costo del repuesto ($):", min_value=0, step=1000)
+            costo_repuesto = st.number_input("Costo del repuesto + 30% + 19% IVA ($):", min_value=0, step=1000)
         
         mano_obra = st.number_input("Valor Mano de Obra ($):", min_value=40000, step=5000, value=60000)
 
