@@ -99,8 +99,76 @@ fila1_c1, fila1_c2, fila1_c3 = st.columns(3)
 fila2_c1, fila2_c2, fila2_c3 = st.columns(3)
 
 with fila1_c1:
-    if st.button("🛠️ Mantenimiento Preventivo", use_container_width=True):
-        st.session_state.seccion = "PREVENTIVO"
+    elif st.session_state.seccion == "PREVENTIVO":
+    st.subheader("🛠️ Mantenimiento Preventivo Especializado")
+    
+    col_izq, col_der = st.columns([2, 1])
+    
+    with col_izq:
+        # 1. Identificación del Producto
+        st.markdown("### 🔍 Identificación del Equipo")
+        tipo_equipo = st.selectbox("Tipo de Producto:", 
+            ["PC de Mesa", "PC Todo en Uno (All-in-One)", "Portátil", "Tablet", "Electrodoméstico"])
+        
+        col_m1, col_m2 = st.columns(2)
+        with col_m1:
+            marca = st.text_input("Marca del Producto:", placeholder="Ej: HP, Dell, LG...")
+        with col_m2:
+            specs = st.text_input("Especificaciones (Modelo/Procesador):")
+
+        # 2. Modalidad y Regla de Cobro
+        mod = st.radio("Modalidad del Servicio:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
+        tipo_atencion = st.radio("¿Qué requiere?", ["Solo Consulta", "Servicio de Limpieza Completa ($40.000)"], horizontal=True)
+
+        # 3. Lista de Chequeo ANTES (Entrada)
+        st.markdown("### 📋 Lista de Chequeo (Entrada)")
+        c_encendido = st.checkbox("¿El equipo enciende correctamente?")
+        c_ruido = st.checkbox("¿Presenta ruidos extraños (Ventiladores/Discos)?")
+        c_pantalla = st.checkbox("¿Pantalla en buen estado (Sin manchas/rayas)?")
+        c_suciedad = st.select_slider("Nivel de suciedad aparente:", options=["Bajo", "Medio", "Crítico"])
+
+        # 4. Descripción del Proceso (Lo que mencionaste)
+        st.markdown("### 🧹 Detalles del Mantenimiento")
+        if st.checkbox("Ver tareas incluidas en el Preventivo"):
+            st.write("""
+            - **Limpieza Física:** Soplado de polvo, limpieza de contactos RAM, cambio de pasta térmica (si aplica).
+            - **Optimización de Software:** Borrado de archivos temporales/basura y desfragmentación.
+            - **Seguridad:** Escaneo rápido de antivirus y eliminación de malware.
+            - **Hardware:** Revisión de voltajes de fuente y estado de salud de disco duro.
+            """)
+        
+        resultado_prev = st.text_area("Resultado del Mantenimiento / Descripción Técnica:", 
+                                     placeholder="Ej: Se realizó limpieza profunda. El equipo se encuentra en óptimas condiciones.")
+
+    with col_der:
+        # --- CÁLCULO DE INVERSIÓN ---
+        base = 40000
+        transporte = 20000 if mod == "A Domicilio" else 0
+        total = base + transporte if tipo_atencion == "Servicio de Limpieza Completa ($40.000)" else base
+
+        st.markdown(f"""
+        <div style="background-color: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 15px; border: 3px solid #00FFFF; text-align: center;">
+            <h4 style="color: #333;">Resumen de Cobro</h4>
+            <h1 style="color: #008fb3;">$ {total:,.0f}</h1>
+            <p style="font-size: 12px; color: #666;">Incluye informe técnico y limpieza física/lógica.</p>
+            <hr>
+            <p style="font-size: 11px;"><b>ING. Gerardo Martinez Lemus</b><br>Soluciones MyM</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # 5. Lista de Chequeo DESPUÉS (Salida)
+        st.markdown("### ✅ Verificación de Salida")
+        s_limpio = st.checkbox("Limpieza física verificada")
+        s_temp = st.checkbox("Temperaturas estables")
+        s_vel = st.checkbox("Mejora en velocidad de inicio")
+
+        if st.button("💾 Guardar Informe Técnico"):
+            st.success(f"Informe de mantenimiento para {marca} guardado correctamente.")
+
+    # Botón para agendar si es domicilio
+    if mod == "A Domicilio":
+        msg = f"Ing. Gerardo, agendar mantenimiento preventivo para un {tipo_equipo} {marca}."
+        st.link_button("📅 Agendar Visita", f"https://wa.me/573114759768?text={msg.replace(' ', '%20')}")
 with fila1_c2:
     if st.button("🔧 Mantenimiento Correctivo", use_container_width=True):
         st.session_state.seccion = "CORRECTIVO"
