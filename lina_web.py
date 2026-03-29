@@ -150,15 +150,17 @@ if st.session_state.seccion == "PREVENTIVO":
         st.text_input("S/N se traslada a oficina equipo:")
         inversion = 60000 
 
-    # --- CUADRO DE INVERSIÓN FINAL ---
-    st.markdown(f"""
-    <div style="background: white; padding: 20px; border-radius: 15px; border: 3px solid #00FFFF; text-align: center; max-width: 400px; margin: 30px auto;">
-        <h4 style="margin:0; color:#444;">Inversión del Servicio</h4>
-        <h1 style="color: #008fb3; margin: 10px 0;">$ {inversion:,.0f}</h1>
-        <p><b>ING. Gerardo Martinez Lemus</b></p>
-    </div>
-    """, unsafe_allow_html=True)
+    # --- FÓRMULA DE CÁLCULO AUTOMÁTICO ---
+base = 40000
+recargo_domicilio = 20000 if mod == "A Domicilio" else 0
 
+# La inversión suma la base, el domicilio y el extra de antivirus (S/N)
+inversion = base + recargo_domicilio + extra_antivirus
+
+# Si es Virtual y agendó, la inversión se mantiene en 0 como acordamos
+if mod == "Virtual" and toma_servicio == "Sí (Agendar Cita)":
+    inversion = 0
+    
 # --- 8. BLOQUE FINAL: ADVERTENCIA + BARRA PLATEADA CON TODAS LAS REDES ---
 st.markdown('<div class="alerta-amarilla">⚠️ NOTA: Honorarios por éxito (10% ahorro) o tarifas base de $40.000.</div>', unsafe_allow_html=True)
 
