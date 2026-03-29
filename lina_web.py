@@ -173,9 +173,15 @@ elif st.session_state.seccion == "CORRECTIVO":
         
         if repuesto_necesario == "SÍ":
             nombre_repuesto = st.text_input("Nombre del repuesto:")
-            costo_repuesto = st.number_input("Costo del repuesto + 30% + 19% IVA ($):", min_value=0, step=1000)
-        
-        mano_obra = st.number_input("Valor Mano de Obra ($):", min_value=40000, step=5000, value=60000)
+            # El usuario ingresa el costo base (lo que le costó el repuesto)
+            costo_base_repuesto = st.number_input("Costo base del repuesto ($):", min_value=0, step=1000)
+            
+            # --- FÓRMULA SOLICITADA ---
+            # 1. Se le suma el 30% de utilidad (costo * 1.30)
+            # 2. Se le suma el 19% de IVA al resultado (resultado * 1.19)
+            costo_repuesto = (costo_base_repuesto * 1.30) * 1.19
+            
+            st.warning(f"💰 Precio Final Cliente (Inc. 30% utilidad + 19% IVA): $ {costo_repuesto:,.0f}")
 
     st.divider()
 
