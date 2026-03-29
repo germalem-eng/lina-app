@@ -46,12 +46,21 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # --- 4. ENCABEZADO ---
-c_logo, c_tit = st.columns([1, 2.5])
-with c_logo:
+col_logo, col_text = st.columns([1, 2.5])
+with col_logo:
     st.markdown(f'<div style="text-align:center;"><img src="data:image/jpeg;base64,{logo_robot_b64}" class="logo-redondo"></div>', unsafe_allow_html=True)
-with c_tit:
-    st.markdown('<h1 class="neon-titulo" style="font-size:70px;">L.I.N.A.</h1>', unsafe_allow_html=True)
-    st.markdown('<p style="text-align:center; font-weight:bold; color:#008fb3; font-size:18px;">Soluciones Tecnológicas M Y M - Desde 2007</p>', unsafe_allow_html=True)
+with col_text:
+    st.markdown(f"""
+    <div style="text-align:center; min-height:200px; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+        <h1 class="neon-titulo" style="font-size:75px;">L.I.N.A.</h1>
+        <div style="background:rgba(255,255,255,0.9); padding:8px 15px; border-radius:10px; border:2px solid #00FFFF; margin-top:10px;">
+            <span style="color:#008fb3; font-weight:bold; font-size:18px;">Laboratorio de Inteligencia y Nuevos Algoritmos</span>
+        </div>
+        <div style="background:rgba(255,255,255,0.9); padding:8px 15px; border-radius:10px; border:2px solid #00FFFF; margin-top:8px;">
+            <span style="color:#444; font-weight:bold; font-size:14px;">Soluciones Tecnológicas M Y M - Desde 2007</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 st.divider()
 
