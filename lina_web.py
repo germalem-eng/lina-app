@@ -6,7 +6,7 @@ import pandas as pd
 from streamlit_autorefresh import st_autorefresh
 
 # --- 1. CONFIGURACIÓN DEL SISTEMA ---
-st.set_page_config(page_title="L.I.N.A V20.0 | Soluciones Tecnológicas M Y M", layout="wide", page_icon="🤖")
+st.set_page_config(page_title="LINA V20.0 | Soluciones Tecnológicas M Y M", layout="wide", page_icon="🤖")
 st_autorefresh(interval=1000, key="daterefresh")
 
 # Ajuste de hora Colombia (UTC-5)
@@ -14,7 +14,7 @@ ahora = datetime.datetime.now() - datetime.timedelta(hours=5)
 
 # --- 2. INICIALIZACIÓN DE ESTADO ---
 if 'seccion' not in st.session_state: 
-    st.session_state.seccion = "COTIZADOR"
+    st.session_state.seccion = "INICIO"
 
 # --- 3. RECURSOS VISUALES ---
 def get_image_base64(path):
@@ -30,7 +30,7 @@ logo_robot_b64 = get_image_base64("Logos/logo_robot_2007.jpg")
 st.markdown(f"""
 <style>
     .stApp {{
-        background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
+        background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)),
                           url("data:image/jpeg;base64,{fondo_b64}");
         background-size: cover !important;
         background-attachment: fixed !important;
@@ -41,23 +41,14 @@ st.markdown(f"""
         border-bottom: 3px solid #666; border-radius: 12px; margin-bottom: 25px;
     }}
     .logo-redondo-final {{
-        width: 250px; height: 250px;
+        width: 220px; height: 220px;
         border-radius: 50%; border: 6px solid #00FFFF;
         box-shadow: 0 0 35px #00FFFF; object-fit: cover;
-    }}
-    .resaltado-blanco {{
-        background-color: rgba(255, 255, 255, 0.85);
-        border-radius: 8px; padding: 5px 15px; margin: 3px 0;
-        display: inline-block; box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
     }}
     .neon-imponente {{
         font-family: 'Comic Sans MS', cursive; color: #FFFFFF;
         text-shadow: 0 0 15px #00FFFF, 0 0 30px #00FFFF;
         line-height: 0.85; margin: 0; text-align: center;
-    }}
-    .social-tag {{
-        padding: 5px 10px; border-radius: 10px; text-decoration: none !important;
-        color: white !important; font-weight: bold; font-size: 11px; margin-left: 5px;
     }}
 </style>
 """, unsafe_allow_html=True)
@@ -68,10 +59,8 @@ st.markdown(f"""
     <div style="font-family: monospace; font-weight: bold; color: #333;">
         📅 {ahora.strftime('%d/%m/%Y')} | 🕒 {ahora.strftime('%H:%M:%S')} | S T M Y M
     </div>
-    <div style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
-        <a href="https://wa.me/573114759768" target="_blank" class="social-tag" style="background-color: #25D366;">WhatsApp</a>
-        <a href="https://web.facebook.com/MyMsolucionesdetecnologia" target="_blank" class="social-tag" style="background-color: #4267B2;">Facebook</a>
-        <a href="https://www.youtube.com/@gerardomartinezlemus7969" target="_blank" class="social-tag" style="background-color: #FF0000;">YouTube</a>
+    <div style="display: flex; gap: 10px;">
+        <a href="https://wa.me/573114759768" target="_blank" style="text-decoration:none; color:white; background:#25D366; padding:5px 10px; border-radius:8px; font-weight:bold;">WhatsApp</a>
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -82,177 +71,90 @@ with col_izq:
 
 with col_der:
     st.markdown(f"""
-    <div style="text-align: center; margin-top: -10px;">
-        <h1 class="neon-imponente" style="font-size: 90px;">L.I.N.A</h1>
-        <div class="resaltado-blanco"><span style="color: #008fb3; font-size: 22px; font-weight: bold;">Laboratorio de Inteligencia y Nuevos Algoritmos</span></div><br>
-        <div class="resaltado-blanco"><span style="color: #444; font-size: 16px; font-weight: bold;">Soluciones Tecnológicas M Y M - Desde 2007</span></div>
+    <div style="text-align: center;">
+        <h1 class="neon-imponente" style="font-size: 80px;">L.I.N.A.</h1>
+        <p style="color: #008fb3; font-size: 20px; font-weight: bold; background: white; display: inline-block; padding: 5px 15px; border-radius: 10px;">Laboratorio de Inteligencia y Nuevos Algoritmos</p>
     </div>
     """, unsafe_allow_html=True)
 
 st.divider()
 
-# --- 6. NUEVO PANEL OPERATIVO (6 BOTONES INDEPENDIENTES) ---
+# --- 6. PANEL OPERATIVO (BOTONES) ---
 st.write("### 🚀 Seleccione el Servicio Requerido:")
+f1c1, f1c2, f1c3 = st.columns(3)
+f2c1, f2c2, f2c3 = st.columns(3)
 
-# Creamos dos filas de 3 columnas para que los botones se vean grandes y claros
-fila1_c1, fila1_c2, fila1_c3 = st.columns(3)
-fila2_c1, fila2_c2, fila2_c3 = st.columns(3)
-
-with fila1_c1:
-    elif st.session_state.seccion == "PREVENTIVO":
-    st.subheader("🛠️ Mantenimiento Preventivo Especializado")
-    
-    col_izq, col_der = st.columns([2, 1])
-    
-    with col_izq:
-        # 1. Identificación del Producto
-        st.markdown("### 🔍 Identificación del Equipo")
-        tipo_equipo = st.selectbox("Tipo de Producto:", 
-            ["PC de Mesa", "PC Todo en Uno (All-in-One)", "Portátil", "Tablet", "Electrodoméstico"])
-        
-        col_m1, col_m2 = st.columns(2)
-        with col_m1:
-            marca = st.text_input("Marca del Producto:", placeholder="Ej: HP, Dell, LG...")
-        with col_m2:
-            specs = st.text_input("Especificaciones (Modelo/Procesador):")
-
-        # 2. Modalidad y Regla de Cobro
-        mod = st.radio("Modalidad del Servicio:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
-        tipo_atencion = st.radio("¿Qué requiere?", ["Solo Consulta", "Servicio de Limpieza Completa ($40.000)"], horizontal=True)
-
-        # 3. Lista de Chequeo ANTES (Entrada)
-        st.markdown("### 📋 Lista de Chequeo (Entrada)")
-        c_encendido = st.checkbox("¿El equipo enciende correctamente?")
-        c_ruido = st.checkbox("¿Presenta ruidos extraños (Ventiladores/Discos)?")
-        c_pantalla = st.checkbox("¿Pantalla en buen estado (Sin manchas/rayas)?")
-        c_suciedad = st.select_slider("Nivel de suciedad aparente:", options=["Bajo", "Medio", "Crítico"])
-
-        # 4. Descripción del Proceso (Lo que mencionaste)
-        st.markdown("### 🧹 Detalles del Mantenimiento")
-        if st.checkbox("Ver tareas incluidas en el Preventivo"):
-            st.write("""
-            - **Limpieza Física:** Soplado de polvo, limpieza de contactos RAM, cambio de pasta térmica (si aplica).
-            - **Optimización de Software:** Borrado de archivos temporales/basura y desfragmentación.
-            - **Seguridad:** Escaneo rápido de antivirus y eliminación de malware.
-            - **Hardware:** Revisión de voltajes de fuente y estado de salud de disco duro.
-            """)
-        
-        resultado_prev = st.text_area("Resultado del Mantenimiento / Descripción Técnica:", 
-                                     placeholder="Ej: Se realizó limpieza profunda. El equipo se encuentra en óptimas condiciones.")
-
-    with col_der:
-        # --- CÁLCULO DE INVERSIÓN ---
-        base = 40000
-        transporte = 20000 if mod == "A Domicilio" else 0
-        total = base + transporte if tipo_atencion == "Servicio de Limpieza Completa ($40.000)" else base
-
-        st.markdown(f"""
-        <div style="background-color: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 15px; border: 3px solid #00FFFF; text-align: center;">
-            <h4 style="color: #333;">Resumen de Cobro</h4>
-            <h1 style="color: #008fb3;">$ {total:,.0f}</h1>
-            <p style="font-size: 12px; color: #666;">Incluye informe técnico y limpieza física/lógica.</p>
-            <hr>
-            <p style="font-size: 11px;"><b>ING. Gerardo Martinez Lemus</b><br>Soluciones MyM</p>
-        </div>
-        """, unsafe_allow_html=True)
-
-        # 5. Lista de Chequeo DESPUÉS (Salida)
-        st.markdown("### ✅ Verificación de Salida")
-        s_limpio = st.checkbox("Limpieza física verificada")
-        s_temp = st.checkbox("Temperaturas estables")
-        s_vel = st.checkbox("Mejora en velocidad de inicio")
-
-        if st.button("💾 Guardar Informe Técnico"):
-            st.success(f"Informe de mantenimiento para {marca} guardado correctamente.")
-
-    # Botón para agendar si es domicilio
-    if mod == "A Domicilio":
-        msg = f"Ing. Gerardo, agendar mantenimiento preventivo para un {tipo_equipo} {marca}."
-        st.link_button("📅 Agendar Visita", f"https://wa.me/573114759768?text={msg.replace(' ', '%20')}")
-with fila1_c2:
-    if st.button("🔧 Mantenimiento Correctivo", use_container_width=True):
-        st.session_state.seccion = "CORRECTIVO"
-with fila1_c3:
-    if st.button("⚖️ Gestión Legal", use_container_width=True):
-        st.session_state.seccion = "GESTION_LEGAL"
-
-with fila2_c1:
-    if st.button("📝 Radicación", use_container_width=True):
-        st.session_state.seccion = "RADICACION"
-with fila2_c2:
-    if st.button("🛡️ Casos Legales", use_container_width=True):
-        st.session_state.seccion = "CASOS_LEGALES"
-with fila2_c3:
-    if st.button("📁 Archivo", use_container_width=True):
-        st.session_state.seccion = "ARCHIVO"
+with f1c1:
+    if st.button("🛠️ Mant. Preventivo", use_container_width=True): st.session_state.seccion = "PREVENTIVO"; st.rerun()
+with f1c2:
+    if st.button("🔧 Mant. Correctivo", use_container_width=True): st.session_state.seccion = "CORRECTIVO"; st.rerun()
+with f1c3:
+    if st.button("⚖️ Gestión Legal", use_container_width=True): st.session_state.seccion = "GESTION_LEGAL"; st.rerun()
+with f2c1:
+    if st.button("📝 Radicación", use_container_width=True): st.session_state.seccion = "RADICACION"; st.rerun()
+with f2c2:
+    if st.button("🛡️ Casos Legales", use_container_width=True): st.session_state.seccion = "CASOS_LEGALES"; st.rerun()
+with f2c3:
+    if st.button("📁 Archivo", use_container_width=True): st.session_state.seccion = "ARCHIVO"; st.rerun()
 
 st.divider()
 
-# --- 7. LÓGICA DE COTIZACIÓN SEGÚN SERVICIO SELECCIONADO ---
+# --- 7. LÓGICA DE SECCIONES (CONTENIDO) ---
 
-# Lista de secciones que comparten la misma lógica de cotización
-servicios_cotizables = ["PREVENTIVO", "CORRECTIVO", "GESTION_LEGAL", "RADICACION", "CASOS_LEGALES", "ARCHIVO"]
-
-if st.session_state.seccion in servicios_cotizables:
-    st.subheader(f"💰 Cotizador: {st.session_state.seccion.replace('_', ' ')}")
+# --- SECCIÓN: MANTENIMIENTO PREVENTIVO ---
+if st.session_state.seccion == "PREVENTIVO":
+    st.subheader("🛠️ Mantenimiento Preventivo Especializado")
+    col_izq, col_der = st.columns([2, 1])
     
-    col_inputs, col_resultado = st.columns([2, 1])
-    
-    with col_inputs:
-        # Selección de Modalidad
-        mod = st.radio("Modalidad del Servicio:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
+    with col_izq:
+        st.markdown("#### 🔍 Datos del Equipo")
+        tipo_e = st.selectbox("Tipo de Producto:", ["PC de Mesa", "Todo en Uno", "Portátil", "Tablet", "Electrodoméstico"])
+        marca = st.text_input("Marca y Modelo:")
         
-        # Tipo de atención
-        tipo_atencion = st.radio("Tipo de Atención:", ["Solo Consulta", "Tomar Asesoría/Servicio Completo"], horizontal=True)
+        mod = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
+        tipo_at = st.radio("Atención:", ["Solo Consulta", "Servicio Completo (Limpieza + Optimización)"], horizontal=True)
         
-        # Bloque condicional para Dirección y Horario
         if mod == "A Domicilio":
-            st.info("📍 Ingrese los detalles para la visita técnica:")
-            dir_visita = st.text_input("Dirección completa:")
-            col_fecha, col_hora = st.columns(2)
-            with col_fecha:
-                fecha_visita = st.date_input("Fecha sugerida:", min_value=datetime.date.today())
-            with col_hora:
-                hora_visita = st.time_input("Hora sugerida:")
+            dir_v = st.text_input("Dirección de visita:")
+            col_f, col_h = st.columns(2)
+            fecha_v = col_f.date_input("Fecha sugerida:")
+            hora_v = col_h.time_input("Hora sugerida:")
 
-        # --- CÁLCULO DE VALORES ---
-        base_consulta = 40000
-        valor_domicilio = 20000
-        total = 0
+        st.markdown("#### 📋 Checklist de Entrada")
+        c1 = st.checkbox("¿Enciende correctamente?")
+        c2 = st.checkbox("¿Ruidos extraños?")
+        diag = st.text_area("Descripción inicial / Estado actual del equipo:")
 
-        if mod in ["Virtual", "En Oficina"]:
-            total = base_consulta if tipo_atencion == "Solo Consulta" else 0
-        elif mod == "A Domicilio":
-            total = (base_consulta + valor_domicilio) if tipo_atencion == "Solo Consulta" else valor_domicilio
-
-    with col_resultado:
+    with col_der:
+        base = 40000
+        extra = 20000 if mod == "A Domicilio" else 0
+        total = (base + extra) if tipo_at == "Solo Consulta" else (base + extra if mod == "A Domicilio" else base)
+        
         st.markdown(f"""
-        <div style="background-color: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 15px; border: 3px solid #00d4ff; text-align: center;">
-            <h3 style="color: #333; margin-bottom: 0;">Inversión Total</h3>
-            <h1 style="color: #008fb3; font-size: 45px; margin-top: 10px;">$ {total:,.0f}</h1>
-            <p style="font-size: 13px; color: #666;">        
+        <div style="background:white; padding:20px; border-radius:15px; border:3px solid #00FFFF; text-align:center;">
+            <h3>Inversión</h3>
+            <h1 style="color:#008fb3;">$ {total:,.0f}</h1>
+            <p><b>ING. Gerardo Martinez Lemus</b></p>
+        </div>
         """, unsafe_allow_html=True)
         
-        if total > 0 and mod == "Virtual":
-            st.warning("⚠️ Recuerde enviar el pantallazo de pago Nequi para habilitar la conexión remota.")
+        if st.button("💾 Guardar Informe"):
+            st.success("Informe Técnico generado con éxito.")
 
-# --- 8. PIE DE PÁGINA (ESTO VA AL FINAL DE TODO EL SCRIPT) ---
+# --- SECCIÓN: LEGAL / RAPICREDIT (TU CASO ESPECÍFICO) ---
+elif st.session_state.seccion == "CASOS_LEGALES":
+    st.subheader("🛡️ Defensa Legal: Lina vs RapiCredit")
+    cap, deb = 200000, 502837
+    st.error(f"⚠️ Alerta: Excedente detectado de $ {(deb-cap):,.0f}".replace(",", "."))
+    
+    if st.button("📝 Generar Argumentos para SIC"):
+        doc = f"HECHOS:\n1. Oferta SMS: $200.000\n2. Débito: $502.837\n3. Factura No. RCC6205119 emitida el 28/03/2026 posterior al cobro."
+        st.text_area("Copia este texto:", value=doc, height=150)
+
+# --- 8. PIE DE PÁGINA (SIEMPRE VISIBLE) ---
 st.markdown(f"""
-<div style="background-color: rgba(255, 255, 255, 0.7); padding: 15px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 40px;">
-    <table style="width:100%; border:none;">
-        <tr>
-            <td style="width:70%; border:none;">
-                <b style="color:#008fb3;">⚠️ Nota Legal Soluciones MyM:</b><br>
-                Los honorarios por éxito corresponden al 10% del ahorro logrado en procesos legales. 
-                Las tarifas base de revisión técnica inician en <b>$40.000</b>.
-            </td>
-            <td style="text-align:right; border:none; color:#666; font-size: 13px;">
-                <b>LINA Core V20.0</b><br>
-                Desarrollado por:<br>
-                <b>ING. Gerardo Martinez Lemus</b><br>
-                Bogotá, {ahora.year}
-            </td>
-        </tr>
-    </table>
+<div style="background-color: rgba(255, 255, 255, 0.7); padding: 15px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 50px;">
+    <p style="margin:0;"><b>⚠️ MyM Nota:</b> Honorarios por éxito (10% ahorro) o tarifas base de <b>$40.000</b>.</p>
+    <p style="text-align:right; color:#666; margin:0;">LINA Core V20.0 | © {ahora.year} <b>ING. Gerardo Martinez Lemus</b></p>
 </div>
 """, unsafe_allow_html=True)
