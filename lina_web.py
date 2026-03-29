@@ -154,7 +154,35 @@ if st.session_state.seccion == "PREVENTIVO":
 
 # --- 8. BLOQUE FINAL: ADVERTENCIA, BARRA PLATEADA Y PIE DE PÁGINA ---
 
-# Nota de Advertencia Amarilla Tenue (Fuera de la barra)
+# 1. CSS Separado (Evita errores de llaves en f-strings)
+st.markdown("""
+<style>
+    .barra-metalica {
+        background: linear-gradient(180deg, #e0e0e0 0%, #b3b3b3 100%);
+        border: 2px solid #666; border-radius: 15px;
+        padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .reloj-bogota {
+        font-family: 'Courier New', monospace; font-weight: bold; color: #111;
+        font-size: 16px; border-bottom: 2px solid #888;
+        margin-bottom: 12px; padding-bottom: 10px;
+        display: flex; justify-content: space-between;
+    }
+    .boton-social {
+        text-decoration: none !important; color: #333 !important;
+        background: white; padding: 8px 15px; border-radius: 10px;
+        font-weight: bold; font-size: 13px; transition: 0.3s ease;
+        border: 1px solid #999; display: inline-block;
+    }
+    .boton-social:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,255,255,0.5);
+        border-color: #00FFFF;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# 2. Nota de Advertencia (Amarillo Tenue)
 st.markdown("""
 <div style="background-color: #fff9c4; border: 2px solid #fbc02d; color: #444; 
             padding: 15px; border-radius: 10px; margin-top: 30px; margin-bottom: 10px; 
@@ -163,8 +191,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Barra Plateada con Reloj Bogotá y Redes Sociales
-# Usamos f-string para insertar la fecha y hora calculada previamente
+# 3. Contenido de la Barra (Limpio de CSS interno)
 html_barra_final = f"""
 <div class="barra-metalica">
     <div class="reloj-bogota">
@@ -186,13 +213,3 @@ html_barra_final = f"""
 </div>
 """
 st.markdown(html_barra_final, unsafe_allow_html=True)
-
-# Pie de Página Profesional
-st.markdown(f"""
-<div style="background-color: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 10px; 
-            border-left: 6px solid #008fb3; margin-top: 25px;">
-    <p style="text-align:right; color:#444; margin:0; font-size:13px;">
-        <b>LINA Core V20.0</b> | © {ahora_bog.year} <b>ING. Gerardo Martinez Lemus</b>
-    </p>
-</div>
-""", unsafe_allow_html=True)
