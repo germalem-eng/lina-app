@@ -8,7 +8,7 @@ from streamlit_autorefresh import st_autorefresh
 st.set_page_config(page_title="LINA V20.0 | Soluciones Tecnológicas M Y M", layout="wide", page_icon="🤖")
 st_autorefresh(interval=1000, key="global_refresh")
 
-# Ajuste de hora Bogotá (UTC-5)
+# Sincronización de hora Bogotá (UTC-5)
 ahora_bog = datetime.datetime.now() - datetime.timedelta(hours=5)
 
 # --- 2. INICIALIZACIÓN DE ESTADO ---
@@ -22,6 +22,7 @@ def get_image_base64(path):
             return base64.b64encode(img_file.read()).decode()
     return ""
 
+# Asegúrese de que estas rutas sean correctas en su repositorio de GitHub
 fondo_b64 = get_image_base64("Logos/fondo.jpg")
 logo_robot_b64 = get_image_base64("Logos/logo_robot_2007.jpg")
 
@@ -129,13 +130,15 @@ if st.session_state.seccion == "PREVENTIVO":
         tipo_e = st.selectbox("Tipo de Producto:", ["PC de Mesa", "Todo en Uno", "Portátil", "Tablet", "Electrodoméstico"])
         marca = st.text_input("Marca del Producto:")
         st.markdown("#### 📋 Checklist de Verificación")
-        c1 = st.checkbox("¿Enciende?")
-        c2 = st.checkbox("¿Limpieza física realizada?")
+        c1_check = st.checkbox("¿Enciende?")
+        c2_check = st.checkbox("¿Limpieza física realizada?")
         diag = st.text_area("Descripción del Servicio:")
 
     with col_der:
         mod = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
         tipo_at = st.radio("Tipo de Atención:", ["Solo Consulta", "Servicio Completo"], index=1)
+        
+        # Cálculo de costos según reglas del Ing. Gerardo
         base = 40000
         extra = 20000 if mod == "A Domicilio" else 0
         total = base + extra if tipo_at == "Solo Consulta" else (base + extra if mod == "A Domicilio" else base)
@@ -170,10 +173,11 @@ html_barra_final = f"""
 """
 st.markdown(html_barra_final, unsafe_allow_html=True)
 
-# Pie de Página
+# Pie de Página (Aquí se corrigió el error de NameError)
 st.markdown(f"""
-<div style="background-color: rgba(255, 255, 255, 0.7); padding: 15px; border-radius: 10px; border-left: 5px solid #008fb3; margin-top: 20px;">
-    <b>⚠️ Nota:</b> Honorarios por éxito (10% ahorro) o tarifas base de <b>$40.000</b>.
+<div style="background-color: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: 10px; border-left: 6px solid #008fb3; margin-top: 25px;">
+    <p style="text-align:right; color:#444; margin:0; font-size:13px;">
+        <b>LINA Core V20.0</b> | © {ahora_bog.year} <b>ING. Gerardo Martinez Lemus</b>
+    </p>
 </div>
-<p style="text-align:center; color:#666;">LINA Core V20.0 | © {ahora.year} Gerardo Martinez Lemus</p>
 """, unsafe_allow_html=True)
