@@ -86,8 +86,19 @@ if st.session_state.seccion == "PREVENTIVO":
         st.checkbox("Encendido inicial OK")
         st.checkbox("Limpieza física profunda (Polvo/Componentes)")
         st.checkbox("Borrado de archivos basura / Temporales")
-        st.checkbox("Tiene Antivirus? S/N")
-        st.checkbox("Escaneo Antivirus y Seguridad")
+        
+        # --- Lógica de Antivirus (S/N) con Incremento Automático ---
+        tiene_av = st.radio("¿Tiene Antivirus? (S/N)", ["SÍ", "NO"], horizontal=True)
+        
+        extra_antivirus = 0 # Inicializa el incremento en cero
+        
+        if tiene_av == "SÍ":
+            st.checkbox("Escaneo Antivirus y Seguridad (Incluido)")
+        else:
+            instalar_av = st.checkbox("Instalar Antivirus (+ $10.000)")
+            if instalar_av:
+                extra_antivirus = 10000 # Se activa la fórmula de incremento
+        
         st.checkbox("Verificación de puertos y carga")
 
     st.divider()
