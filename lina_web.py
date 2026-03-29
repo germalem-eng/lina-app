@@ -6,7 +6,7 @@ import pandas as pd
 from streamlit_autorefresh import st_autorefresh
 
 # --- 1. CONFIGURACIÓN DEL SISTEMA ---
-st.set_page_config(page_title="LINA V20.0 | Soluciones Tecnológicas M Y M", layout="wide", page_icon="🤖")
+st.set_page_config(page_title="L.I.N.A V20.0 | Soluciones Tecnológicas M Y M", layout="wide", page_icon="🤖")
 st_autorefresh(interval=1000, key="daterefresh")
 
 # Ajuste de hora Colombia (UTC-5)
@@ -83,7 +83,7 @@ with col_izq:
 with col_der:
     st.markdown(f"""
     <div style="text-align: center; margin-top: -10px;">
-        <h1 class="neon-imponente" style="font-size: 90px;">L.I.N.A.</h1>
+        <h1 class="neon-imponente" style="font-size: 90px;">LINA</h1>
         <div class="resaltado-blanco"><span style="color: #008fb3; font-size: 22px; font-weight: bold;">Laboratorio de Inteligencia y Nuevos Algoritmos</span></div><br>
         <div class="resaltado-blanco"><span style="color: #444; font-size: 16px; font-weight: bold;">Soluciones Tecnológicas M Y M - Desde 2007</span></div>
     </div>
