@@ -203,7 +203,7 @@ st.markdown(f"""
     </div>
     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
         <a href="https://wa.me/573114759768" target="_blank" class="social-icon">🟢 WhatsApp</a>
-        <a href="https://facebook.com/SolucionesMyM" target="_blank" class="social-icon">🔵 Facebook</a>
+        <a href="https://https://web.facebook.com/MyMsolucionesdetecnologia/" target="_blank" class="social-icon">🔵 Facebook</a>
         <a href="https://instagram.com" target="_blank" class="social-icon">🟣 Instagram</a>
         <a href="https://linkedin.com" target="_blank" class="social-icon">💠 LinkedIn</a>
         <a href="https://youtube.com" target="_blank" class="social-icon">🔴 YouTube</a>
