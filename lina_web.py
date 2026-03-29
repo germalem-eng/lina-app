@@ -143,7 +143,7 @@ if st.session_state.seccion == "PREVENTIVO":
     </div>
     """, unsafe_allow_html=True)
 
-# --- 8. SECCIÓN MANTENIMIENTO CORRECTIVO (FUERA DEL PREVENTIVO) ---
+# --- 8. SECCIÓN MANTENIMIENTO CORRECTIVO ---
 elif st.session_state.seccion == "CORRECTIVO":
     st.header("🔧 Mantenimiento Correctivo y Reparación")
     
@@ -167,24 +167,28 @@ elif st.session_state.seccion == "CORRECTIVO":
     with col_rep:
         st.subheader("🛠️ Plan de Reparación")
         detalles_tecnicos = st.text_area("¿Qué se encontró y qué se hará?")
-        repuesto_necesario = st.radio("¿Requiere Repuestos?", ["SÍ", "NO"], horizontal=True)
+        
+        repuesto_necesario = st.radio("¿Requiere Repuestos?", ["SÍ", "NO"], horizontal=True, index=1)
+        
+        # Inicializamos las variables para que no den error NameError
         costo_repuesto = 0
         nombre_repuesto = ""
         
         if repuesto_necesario == "SÍ":
             nombre_repuesto = st.text_input("Nombre del repuesto:")
-            # El usuario ingresa el costo base (lo que le costó el repuesto)
-            costo_base_repuesto = st.number_input("Costo base del repuesto ($):", min_value=0, step=1000)
+            costo_base = st.number_input("Costo base del repuesto (Lo que le costó) $:", min_value=0, step=1000)
             
-            # --- FÓRMULA SOLICITADA ---
-            # 1. Se le suma el 30% de utilidad (costo * 1.30)
-            # 2. Se le suma el 19% de IVA al resultado (resultado * 1.19)
-            costo_repuesto = (costo_base_repuesto * 1.30) * 1.19
+            # --- FÓRMULA SOLICITADA: COSTO + 30% UTILIDAD + 19% IVA ---
+            costo_repuesto = (costo_base * 1.30) * 1.19
             
-            st.warning(f"💰 Precio Final Cliente (Inc. 30% utilidad + 19% IVA): $ {costo_repuesto:,.0f}")
+            st.success(f"💰 Precio Final Repuesto: $ {costo_repuesto:,.0f}")
+            st.caption("(Incluye 30% de utilidad y 19% de IVA)")
+        
+        mano_obra = st.number_input("Valor Mano de Obra ($):", min_value=0, step=5000, value=60000)
 
     st.divider()
 
+    # Ahora la suma siempre funcionará porque costo_repuesto siempre vale algo (0 o el calculado)
     total_reparacion = mano_obra + costo_repuesto
     
     st.markdown(f"""
@@ -198,10 +202,9 @@ elif st.session_state.seccion == "CORRECTIVO":
     """, unsafe_allow_html=True)
 
     if total_reparacion > 0:
-        msg_c = f"Hola, el diagnóstico de su {tipo_c} {marca_c} es: {detalles_tecnicos}. Presupuesto: ${total_reparacion:,.0f}. ¿Autoriza?"
+        msg_c = f"Hola, el diagnóstico de su {tipo_c} {marca_c} es: {detalles_tecnicos}. Presupuesto total: ${total_reparacion:,.0f}. ¿Autoriza el proceso?"
         link_rep = generar_enlace_whatsapp("573114759768", msg_c)
         st.markdown(f'<a href="{link_rep}" target="_blank" class="btn-auto" style="background:#25D366; margin-top:20px;">📲 Enviar Presupuesto vía WhatsApp</a>', unsafe_allow_html=True)
-
 # --- 9. BARRA FINAL (SIEMPRE VISIBLE) ---
 st.markdown('<div class="alerta-amarilla">⚠️ NOTA: Honorarios por éxito (10% ahorro) o tarifas base de $40.000.</div>', unsafe_allow_html=True)
 
