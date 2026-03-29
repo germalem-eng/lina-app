@@ -84,20 +84,28 @@ if st.session_state.seccion == "PREVENTIVO":
     total = 40000 + (20000 if mod == "A Domicilio" else 0)
     st.markdown(f'<div style="background:white; padding:15px; border:3px solid #00FFFF; border-radius:15px; text-align:center; max-width:350px; margin:auto;"><h3>Total: $ {total:,.0f}</h3><p>ING. Gerardo Martinez</p></div>', unsafe_allow_html=True)
 
-# --- 8. BLOQUE FINAL (BARRA PLATEADA) ---
-st.markdown('<div class="alerta-amarilla">⚠️ NOTA: Honorarios por éxito (10% ahorro) o tarifas base de $40.000.</div>', unsafe_allow_html=True)
+# --- 8. BLOQUE FINAL: ADVERTENCIA + CONTACTO + FIRMA ---
 
-html_inf = f"""
+st.markdown("""
+<div class="alerta-amarilla">
+    ⚠️ NOTA: Honorarios por éxito (10% ahorro) o tarifas base de $40.000.
+</div>
+""", unsafe_allow_html=True)
+
+html_barra = f"""
 <div class="barra-metalica">
     <div class="reloj-bogota">
         <span>📍 BOGOTÁ, COLOMBIA</span>
         <span>📅 {ahora_bog.strftime('%d/%m/%Y')} | 🕒 {ahora_bog.strftime('%H:%M:%S')}</span>
     </div>
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div style="font-weight: bold;">🌐 REDES:</div>
-        <div style="display: flex; gap: 8px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="font-weight: bold; color: #222;">🌐 REDES OFICIALES:</div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
             <a href="https://wa.me/573114759768" target="_blank" class="boton-social">🟢 WhatsApp</a>
             <a href="https://web.facebook.com/MyMsolucionesdetecnologia/" target="_blank" class="boton-social">🔵 Facebook</a>
+            <a href="https://instagram.com" target="_blank" class="boton-social">🟣 Instagram</a>
+            <a href="https://linkedin.com" target="_blank" class="boton-social">💠 LinkedIn</a>
+            <a href="https://youtube.com" target="_blank" class="boton-social">🔴 YouTube</a>
         </div>
     </div>
 </div>
