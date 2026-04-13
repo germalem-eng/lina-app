@@ -158,42 +158,32 @@ elif st.session_state.seccion == "CORRECTIVO":
 # --- BLOQUE 8: SECCIÓN GESTIÓN (CARTERA Y DEFENSA) ---
 elif st.session_state.seccion == "GESTIÓN":
     st.header("⚖️ Gestión de Cartera y Defensa del Consumidor")
-    st.warning("🛡️ Protocolos basados en Ley 2300/23, Ley 1266/08, Ley 2157/21 y Estatuto del Consumidor.")
     
-    tabs = st.tabs(["📊 Liquidación", "🛡️ Habeas Data", "📚 Normativa"])
+    # NUEVO: Comparador para cerrar ventas
+    with st.expander("🧐 COMPARADOR DE AHORRO (MyM vs Reparadoras)"):
+        d_total = st.number_input("Deuda Total Actual ($):", value=10000000)
+        a_estimado = d_total * 0.50
+        com_rep = a_estimado * 0.15
+        com_mym = a_estimado * 0.10
+        st.write(f"❌ Una reparadora externa te cobraría: **${com_rep:,.0f}**")
+        st.write(f"✅ Gestión MyM te cobra solo el 10%: **${com_mym:,.0f}**")
+        st.success(f"¡El cliente ahorra ${com_rep - com_mym:,.0f} adicionales contigo!")
+
+    pestanas = st.tabs(["📊 Liquidación", "🛡️ Habeas Data", "📚 Normativa"])
     
-    with tabs[0]:
+    with pestanas[0]:
         col_g1, col_g2 = st.columns(2)
         with col_g1:
             st.subheader("📋 Datos del Caso")
-            nom_g = st.text_input("Nombre del Cliente:", key="nom_g")
-            tel_g = st.text_input("WhatsApp Cliente:", key="tel_g")
-            entidad_g = st.text_input("Entidad (Ej: ASLEGAL):")
+            nom_g = st.text_input("Nombre del Cliente:", key="nom_g_v21")
             monto_deuda = st.number_input("Monto que reclaman ($):", value=1851000)
             capital_real = st.number_input("Capital Real Adeudado ($):", value=150000)
         with col_g2:
-            st.subheader("📍 Configuración")
-            tipo_g = st.radio("Tipo de Cobro:", ["Solo Consulta ($40.000)", "Gestión Integral (10% del Ahorro)"])
-            mod_g = st.radio("Modalidad:", ["Virtual", "Oficina", "Domicilio"], horizontal=True, key="mod_g")
-            
-        ahorro = monto_deuda - capital_real
-        hon_base = 40000 if "Solo Consulta" in tipo_g else (ahorro * 0.10)
-        total_g = hon_base + (20000 if mod_g == "Domicilio" else 0)
-        
-        st.markdown(f"""<div class="cuadro-inversion" style="border-color:#008fb3;"><h4>Propuesta de Gestión M Y M</h4><h1 style="color:#008fb3;">$ {total_g:,.0f}</h1><p>Ahorro estimado para cliente: ${ahorro:,.0f}</p></div>""", unsafe_allow_html=True)
-        
-        if st.button("📲 Enviar Cotización"):
-            msg_g = f"Hola {nom_g}, presupuesto para gestión ante {entidad_g}: ${total_g:,.0f}."
-            st.markdown(f'<a href="{generar_enlace_whatsapp("573114759768", msg_g)}" target="_blank" class="boton-social" style="background:#25D366; display:block; text-align:center;">📲 Enviar por WhatsApp</a>', unsafe_allow_html=True)
-
-    with tabs[1]:
-        st.subheader("🚫 Radicación de Reclamación Formal")
-        texto_h = f"""YO, {nom_g.upper() if nom_g else 'EL CLIENTE'}, IDENTIFICADO CON LA CC 79951815, EXIJO A {entidad_g.upper() if entidad_g else 'LA ENTIDAD'} LA ELIMINACIÓN DEL REPORTE NEGATIVO POR PRESCRIPCIÓN (MORA SUPERIOR A 7 AÑOS - LEY 2157/21). REVOCATORIA DE DÉBITO AUTOMÁTICO LEY 1581."""
-        st.text_area("📄 Texto para Radicación:", texto_h, height=200)
-        if st.button("📲 Enviar Reclamación Directa"):
-            st.markdown(f'<a href="{generar_enlace_whatsapp(tel_g, texto_h)}" target="_blank" class="boton-social" style="background:#25D366; display:block; text-align:center;">📲 Enviar por WhatsApp</a>', unsafe_allow_html=True)
-
-    with tabs[2]:
+            st.subheader("📍 Propuesta")
+            ahorro = monto_deuda - capital_real
+            total_g = (ahorro * 0.10)
+            st.metric("Tu Comisión (10%)", f"$ {total_g:,.0f}")
+            st.metric("Ahorro Cliente", f"$ {ahorro:,.0f}")
         # --- BLOQUE 9: SUSTENTO LEGAL ---
         st.subheader("📚 Sustento Legal")
         st.markdown("""
