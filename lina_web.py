@@ -91,80 +91,71 @@ for i, opcion in enumerate(opciones):
 
 st.divider()
 
-# --- 7. LÓGICA DE SECCIONES ---
-
-# --- SECCIÓN PREVENTIVO ---
+# --- 7. MANTENIMIENTO PREVENTIVO (DETALLE TÉCNICO) ---
 if st.session_state.seccion == "PREVENTIVO":
     st.header("🛠️ Mantenimiento Preventivo Especializado")
+    
     col_info, col_check = st.columns(2)
+    
     with col_info:
         st.subheader("📋 Datos del Equipo")
-        tipo_equipo = st.selectbox("Tipo de Producto:", ["Computador de Mesa", "Portátil", "Todo en Uno"], key="p_tipo")
-        marca = st.text_input("Marca del Producto:", key="p_marca")
-        modalidad = st.radio("Modalidad del Servicio:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True, key="p_mod")
-    
+        tipo_equipo = st.selectbox("Tipo de Producto:", ["Computador de Mesa", "Portátil", "Todo en Uno", "Tablet", "Electrodoméstico"], key="prev_tipo")
+        marca = st.text_input("Marca del Producto:", key="prev_marca")
+        specs = st.text_area("Especificaciones:", key="prev_specs")
+        modalidad = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True, key="prev_mod")
+
     with col_check:
         st.subheader("✅ Checklist")
-        st.checkbox("¿Enciende correctamente?", key="c1")
-        st.checkbox("Limpieza de polvo", key="c2")
-        resultado = st.radio("Estado Final:", ["Todo OK", "Requiere Correctivo"], key="p_res")
-
-    total_prev = 40000 + (20000 if modalidad == "A Domicilio" else 0)
-    st.markdown(f'<div class="cuadro-total"><h4>Inversión Total</h4><h1 style="color:#008fb3;">$ {total_prev:,.0f}</h1></div>', unsafe_allow_html=True)
-
-# --- SECCIÓN GESTIÓN (MEJORADA) ---
-elif st.session_state.seccion == "GESTIÓN":
-    t_liq, t_hab = st.tabs(["📊 Liquidación Honorarios", "🛡️ Habeas Data & PDF"])
-    
-    with t_liq:
-        st.subheader("📊 Liquidación de Honorarios M Y M")
-        cg1, cg2 = st.columns(2)
-        with cg1:
-            nom_c = st.text_input("Nombre del Cliente:", key="g_nom", value="CLIENTE GENERAL")
-            m_deuda = st.number_input("Valor de la deuda ($):", value=1851000, key="g_deuda")
-            c_real = st.number_input("Capital Real ($):", value=150000, key="g_cap")
-        with cg2:
-            tipo_c = st.radio("Criterio:", ["Consulta ($40.000)", "Éxito (10% Ahorro)"], key="g_tipo")
-            mod_c = st.radio("Sede:", ["Oficina", "Domicilio"], horizontal=True, key="g_mod")
+        st.checkbox("¿Enciende correctamente?", key="chk_1")
+        st.checkbox("Limpieza interna", key="chk_2")
+        st.checkbox("Software / Temporales", key="chk_3")
         
-        ahorro = m_deuda - c_real
-        base_h = 40000 if "Consulta" in tipo_c else (ahorro * 0.10)
-        total_g = base_h + (20000 if mod_c == "Domicilio" else 0)
+        st.subheader("🔍 Diagnóstico")
+        resultado = st.radio("Estado:", ["Todo está OK", "Requiere Mantenimiento Correctivo"], key="prev_res")
+        
+        if resultado == "Requiere Mantenimiento Correctivo":
+            st.warning("⚠️ Se recomienda pasar a la sección CORRECTIVO para cotizar reparación.")
 
-        st.markdown(f"""
-        <div class="cuadro-total">
-            <h3 style="margin:0; color:#444;">TOTAL A PAGAR A M Y M</h3>
-            <h1 style="color:#008fb3; font-size:60px;">$ {total_g:,.0f}</h1>
-            <p style="color:green; font-weight:bold;">Ahorro para el cliente: ${ahorro:,.0f}</p>
+    # Cálculo Preventivo
+    total = 40000 + (20000 if modalidad == "A Domicilio" else 0)
+    st.markdown(f'<div class="cuadro-total"><h4>Inversión Preventivo</h4><h1 style="color:#008fb3;">$ {total:,.0f}</h1></div>', unsafe_allow_html=True)
+
+# --- NUEVA SECCIÓN: MANTENIMIENTO CORRECTIVO ---
+elif st.session_state.seccion == "CORRECTIVO":
+    st.header("🔧 Mantenimiento Correctivo y Reparación")
+    
+    col_diag, col_cotiza = st.columns(2)
+    
+    with col_diag:
+        st.subheader("🛠️ Informe Técnico de Falla")
+        falla_reportada = st.text_area("Descripción de la Falla:", placeholder="Ej: No da video, pantalla azul, bisagras rotas...")
+        repuestos = st.text_area("Repuestos Requeridos:", placeholder="Ej: Disco SSD 480GB, Pantalla LED 14'', Teclado...")
+        mod_corr = st.radio("Modalidad del Servicio:", ["En Oficina", "A Domicilio"], horizontal=True, key="corr_mod")
+
+    with col_cotiza:
+        st.subheader("💰 Cotización de Reparación")
+        costo_mano_obra = st.number_input("Valor Mano de Obra ($):", min_value=0, value=60000, step=5000)
+        costo_repuestos = st.number_input("Valor Total Repuestos ($):", min_value=0, value=0, step=10000)
+        recargo_corr = 20000 if mod_corr == "A Domicilio" else 0
+        
+        total_correctivo = costo_mano_obra + costo_repuestos + recargo_corr
+        
+        st.info(f"El valor de los repuestos es un estimado basado en el mercado actual.")
+
+    # Cuadro visual del Correctivo
+    st.markdown(f"""
+    <div style="background: white; padding: 25px; border-radius: 15px; border: 3px solid #FF4B4B; text-align: center; max-width: 500px; margin: 20px auto; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+        <h4 style="margin:0; color:#444;">Presupuesto de Reparación (Correctivo)</h4>
+        <h1 style="color: #FF4B4B; margin: 10px 0;">$ {total_correctivo:,.0f}</h1>
+        <div style="border-top: 1px solid #eee; padding-top: 10px; font-size: 14px; color: #666;">
+            Mano de Obra: ${costo_mano_obra:,.0f} | Repuestos: ${costo_repuestos:,.0f}
         </div>
-        """, unsafe_allow_html=True)
+        <p style="margin-top:10px; font-size: 13px;"><b>ING. Gerardo Martinez Lemus</b></p>
+    </div>
+    """, unsafe_allow_html=True)
 
-    with t_hab:
-        st.subheader("📝 Generador de Derechos de Petición")
-        pdf_ent = st.text_input("Entidad:", key="h_ent", placeholder="Ej: Rapicredit")
-        pdf_asu = st.text_input("Asunto:", key="h_asu", placeholder="Ej: Solicitud Prescripción")
-        pdf_firma = st.file_uploader("Subir foto de la firma:", type=['png','jpg','jpeg'], key="h_firma")
-        pdf_body = st.text_area("Cuerpo:", key="h_body", value=f"Yo, {nom_c}, solicito cordialmente...")
-
-        if st.button("🚀 Generar PDF Firmado", key="h_btn"):
-            if pdf_ent and pdf_asu:
-                pdf = FPDF()
-                pdf.add_page()
-                pdf.set_font("Arial", 'B', 16)
-                pdf.cell(0, 10, "DERECHO DE PETICIÓN", ln=True, align='C')
-                pdf.ln(10)
-                pdf.set_font("Arial", '', 12)
-                pdf.cell(0, 10, f"Bogotá, {ahora_bog.strftime('%d/%m/%Y')}", ln=True)
-                pdf.cell(0, 10, f"A: {pdf_ent.upper()}", ln=True)
-                pdf.cell(0, 10, f"Asunto: {pdf_asu.upper()}", ln=True)
-                pdf.ln(10)
-                pdf.multi_cell(0, 7, pdf_body)
-                if pdf_firma:
-                    with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp:
-                        tmp.write(pdf_firma.getvalue())
-                        pdf.image(tmp.name, x=10, y=pdf.get_y()+5, w=40)
-                st.download_button("📥 Descargar PDF", data=pdf.output(dest='S'), file_name=f"Peticion_{pdf_ent}.pdf", mime="application/pdf")
-
+    if st.button("📁 Registrar Orden de Reparación"):
+        st.success("Orden de mantenimiento correctivo registrada en el sistema L.I.N.A.")
 # --- 8. BLOQUE FINAL (BARRA Y FIRMA) ---
 st.divider()
 st.markdown(f"""
