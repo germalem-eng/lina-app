@@ -99,21 +99,46 @@ if st.session_state.seccion == "PREVENTIVO":
         st.markdown(f'<a href="{generar_enlace_whatsapp("573114759768", msg_p)}" target="_blank" class="btn-auto" style="background:#25D366;">📲 Confirmar WhatsApp</a>', unsafe_allow_html=True)
 
 # --- 7. SECCIÓN CORRECTIVO (RESTAURADA) ---
-elif st.session_state.seccion == "CORRECTIVO":
-    st.header("🔧 Mantenimiento Correctivo")
-    col_c1, col_c2 = st.columns(2)
-    with col_c1:
-        st.subheader("🔍 Diagnóstico")
-        costo_base_rep = st.number_input("Costo Base Repuesto $:", min_value=0, step=1000)
-        precio_final_rep = (costo_base_rep * 1.30) * 1.19
-        st.info(f"💰 Precio Final Repuesto: $ {precio_final_rep:,.0f}")
-    with col_c2:
-        st.subheader("🛠️ Plan de Acción")
-        mano_obra = st.number_input("Mano de Obra ($):", min_value=0, value=60000)
-        total_corr = mano_obra + precio_final_rep
+if st.session_state.seccion == "PREVENTIVO":
+    st.header("🛠️ Mantenimiento Preventivo Especializado")
     
-    st.markdown(f'<div class="cuadro-inversion" style="border-color:#FF4B4B;"><h4>Presupuesto</h4><h1 style="color:#FF4B4B;">$ {total_corr:,.0f}</h1></div>', unsafe_allow_html=True)
+    col_info, col_check = st.columns(2)
+    
+    with col_info:
+        st.subheader("📋 Datos del Equipo")
+        tipo_equipo = st.selectbox("Tipo de Producto:", ["Computador de Mesa", "Portátil", "Todo en Uno", "Tablet", "Electrodoméstico"])
+        marca = st.text_input("Marca del Producto:")
+        specs = st.text_area("Características y Especificaciones (Procesador, RAM, etc.):")
+        modalidad = st.radio("Modalidad del Servicio:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True)
 
+    with col_check:
+        st.subheader("✅ Checklist (Antes/Después)")
+        st.checkbox("¿Enciende correctamente?")
+        st.checkbox("Limpieza de polvo (Componentes internos)")
+        st.checkbox("Borrado de archivos basura / Temporales")
+        st.checkbox("Escaneo de Antivirus / Seguridad")
+        st.checkbox("Verificación de puertos (USB, Carga, Video)")
+        
+        st.subheader("🔍 Diagnóstico Final")
+        resultado = st.radio("Estado del Equipo:", ["Todo está OK", "Requiere Mantenimiento Correctivo"], index=0)
+        
+        if resultado == "Requiere Mantenimiento Correctivo":
+            st.text_area("Descripción de la necesidad detectada:")
+        else:
+            st.success("Diagnóstico: Equipo en óptimas condiciones.")
+
+    # Cálculo de Inversión
+    base = 40000
+    recargo = 20000 if modalidad == "A Domicilio" else 0
+    total = base + recargo
+
+    st.markdown(f"""
+    <div style="background: white; padding: 20px; border-radius: 15px; border: 3px solid #00FFFF; text-align: center; max-width: 450px; margin: 20px auto;">
+        <h4 style="margin:0; color:#444;">Inversión Total del Servicio</h4>
+        <h1 style="color: #008fb3; margin: 10px 0;">$ {total:,.0f}</h1>
+        <p style="font-size: 13px;"><b>ING. Gerardo Martinez Lemus</b></p>
+    </div>
+    """, unsafe_allow_html=True)
 # --- 8. SECCIÓN GESTIÓN (INTEGRADA CON COMPARADOR) ---
 elif st.session_state.seccion == "GESTIÓN":
     st.header("⚖️ Consultoría de Deuda")
