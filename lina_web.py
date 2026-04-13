@@ -98,7 +98,7 @@ if st.session_state.seccion == "PREVENTIVO":
         msg_p = f"Confirmo preventivo para {tipo} {marca}. Total: ${total_prev:,.0f}"
         st.markdown(f'<a href="{generar_enlace_whatsapp("573114759768", msg_p)}" target="_blank" class="btn-auto" style="background:#25D366;">📲 Confirmar WhatsApp</a>', unsafe_allow_html=True)
 
-# --- 7. SECCIÓN CORRECTIVO (RESTAURADA) ---
+# --- 7. MANTENIMIENTO PREVENTIVO (DETALLE TÉCNICO) ---
 if st.session_state.seccion == "PREVENTIVO":
     st.header("🛠️ Mantenimiento Preventivo Especializado")
     
@@ -139,7 +139,8 @@ if st.session_state.seccion == "PREVENTIVO":
         <p style="font-size: 13px;"><b>ING. Gerardo Martinez Lemus</b></p>
     </div>
     """, unsafe_allow_html=True)
-# --- 8. SECCIÓN GESTIÓN (INTEGRADA CON COMPARADOR) ---
+    
+    # --- 8. SECCIÓN GESTIÓN (INTEGRADA CON COMPARADOR) ---
 elif st.session_state.seccion == "GESTIÓN":
     st.header("⚖️ Consultoría de Deuda")
     with st.expander("🧐 COMPARADOR: ¿REPARADORA O GESTIÓN MyM?"):
