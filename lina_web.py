@@ -156,20 +156,113 @@ elif st.session_state.seccion == "CORRECTIVO":
 
     if st.button("📁 Registrar Orden de Reparación"):
         st.success("Orden de mantenimiento correctivo registrada en el sistema L.I.N.A.")
-# --- 8. BLOQUE FINAL (BARRA Y FIRMA) ---
+# --- 8. SECCIÓN GESTIÓN (CARTERA Y DEFENSA) ---
+elif st.session_state.seccion == "GESTIÓN":
+    st.header("⚖️ Gestión de Cartera y Defensa del Consumidor")
+    st.warning("🛡️ Protocolos basados en Ley 2300/23, Ley 1266/08, Ley 2157/21 y Estatuto del Consumidor.")
+    
+    tabs = st.tabs(["📊 Liquidación", "🛡️ Habeas Data", "📚 Normativa"])
+    
+    with tabs[0]:
+        col_g1, col_g2 = st.columns(2)
+        with col_g1:
+            st.subheader("📋 Datos del Caso")
+            nom_g = st.text_input("Nombre del Cliente:", key="nom_g")
+            tel_g = st.text_input("WhatsApp Cliente:", key="tel_g")
+            entidad_g = st.text_input("Entidad (Ej: ASLEGAL):")
+            monto_deuda = st.number_input("Monto que reclaman ($):", value=1851000)
+            capital_real = st.number_input("Capital Real Adeudado ($):", value=150000)
+        
+        with col_g2:
+            st.subheader("📍 Configuración")
+            tipo_g = st.radio("Tipo de Cobro:", ["Solo Consulta ($40.000)", "Gestión Integral (10% del Ahorro)"])
+            mod_g = st.radio("Modalidad:", ["Virtual", "Oficina", "Domicilio"], horizontal=True, key="mod_g")
+            
+        ahorro = monto_deuda - capital_real
+        hon_base = 40000 if "Solo Consulta" in tipo_g else (ahorro * 0.10)
+        total_g = hon_base + (20000 if mod_g == "Domicilio" else 0)
+        
+        st.markdown(f"""<div class="cuadro-inversion" style="border-color:#008fb3;"><h4>Propuesta de Gestión M Y M</h4><h1 style="color:#008fb3;">$ {total_g:,.0f}</h1><p>Ahorro estimado para cliente: ${ahorro:,.0f}</p></div>""", unsafe_allow_html=True)
+        
+        if st.button("📲 Enviar Cotización"):
+            msg_g = f"Hola {nom_g}, presupuesto para gestión ante {entidad_g}: ${total_g:,.0f}."
+            st.markdown(f'<a href="{generar_enlace_whatsapp("573114759768", msg_g)}" target="_blank" class="btn-auto" style="background:#25D366;">📲 Enviar por WhatsApp</a>', unsafe_allow_html=True)
+
+    with tabs[1]:
+        st.subheader("🚫 Radicación de Reclamación Formal")
+        texto_h = f"""YO, {nom_g.upper() if nom_g else 'EL CLIENTE'}, IDENTIFICADO CON LA CC 79951815, EXIJO A {entidad_g.upper() if entidad_g else 'LA ENTIDAD'} LA ELIMINACIÓN DEL REPORTE NEGATIVO POR PRESCRIPCIÓN (MORA SUPERIOR A 7 AÑOS - LEY 2157/21). REVOCATORIA DE DÉBITO AUTOMÁTICO LEY 1581."""
+        st.text_area("📄 Texto para Radicación:", texto_h, height=200)
+        if st.button("📲 Enviar Reclamación Directa"):
+            st.markdown(f'<a href="{generar_enlace_whatsapp("", texto_h)}" target="_blank" class="btn-auto" style="background:#25D366;">📲 Enviar por WhatsApp</a>', unsafe_allow_html=True)
+
+    with tabs[2]:
+        st.subheader("📚 Sustento Legal")
+        st.markdown("""
+        * **Ley 2300/23:** Dejen de fregar (Horarios de cobro y canales).
+        * **Ley 2157/21:** Borrón y cuenta nueva (Caducidad del dato).
+        * **Ley 1266/08:** Habeas Data financiero.
+        * **Art. 305 CP:** Delito de Usura (Intereses por encima del tope legal).
+        """)
+
+# --- 9. SECCIÓN PRIVADO ---
+elif st.session_state.seccion == "PRIVADO":
+    st.header("🏠 Gestión Privada de Cuentas")
+    st.info("📊 Control interno de utilidades y saldos.")
+    pin = st.text_input("Introduzca PIN de Seguridad:", type="password")
+    if pin == "2007":
+        st.success("Acceso Autorizado")
+        col_v1, col_v2 = st.columns(2)
+        with col_v1:
+            st.subheader("💰 Ingresos")
+            cliente_p = st.text_input("Nombre del Cliente:")
+            cobrado = st.number_input("Total Cobrado al Cliente ($):", min_value=0)
+            abono = st.number_input("Abono Recibido ($):", min_value=0)
+            metodo = st.selectbox("Método:", ["Efectivo", "Nequi", "Daviplata", "Transferencia"])
+        with col_v2:
+            st.subheader("📉 Egresos")
+            costo_r = st.number_input("Costo Real Repuesto (Su costo) $:", min_value=0)
+            gastos = st.number_input("Otros Gastos (Pasajes/Envío) $:", min_value=0)
+        
+        utilidad = cobrado - costo_r - gastos
+        saldo_p = cobrado - abono
+        
+        st.divider()
+        c1, c2, c3 = st.columns(3)
+        c1.metric("📈 Utilidad Real", f"$ {utilidad:,.0f}")
+        c2.metric("💵 Saldo Pendiente", f"$ {saldo_p:,.0f}", delta=f"-{saldo_p:,.0f}", delta_color="inverse")
+        with c3:
+            if saldo_p <= 0 and cobrado > 0: st.success("✅ PAGADO")
+            elif abono > 0: st.warning("⏳ ABONADO")
+            else: st.error("❌ PENDIENTE")
+            
+        if st.button("💾 Registrar en Log"):
+            st.write(f"📝 **Registro:** {cliente_p} | Utilidad: ${utilidad:,.0f} | Saldo: ${saldo_p:,.0f}")
+            st.balloons()
+            
+    elif pin != "":
+        st.error("PIN Incorrecto")
+
+# --- 10. BARRA FINAL (RELOJ Y REDES) ---
 st.divider()
-st.markdown(f"""
+st.markdown('<div class="alerta-amarilla">⚠️ NOTA: Honorarios por éxito (10% ahorro) o tarifas base de $40.000.</div>', unsafe_allow_html=True)
+
+html_barra = f"""
 <div class="barra-metalica">
-    <div style="display: flex; justify-content: space-between; font-family: monospace; font-weight: bold; margin-bottom: 10px;">
+    <div class="reloj-bogota">
         <span>📍 BOGOTÁ, COLOMBIA</span>
         <span>📅 {ahora_bog.strftime('%d/%m/%Y')} | 🕒 {ahora_bog.strftime('%H:%M:%S')}</span>
     </div>
-    <div style="display: flex; justify-content: space-around;">
-        <a href="https://wa.me/573114759768" target="_blank" class="boton-social">🟢 WhatsApp</a>
-        <a href="https://web.facebook.com/MyMsolucionesdetecnologia/" target="_blank" class="boton-social">🔵 Facebook</a>
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+        <div style="font-weight: bold; color: #222; font-size: 13px;">🌐 REDES OFICIALES:</div>
+        <div style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
+            <a href="https://wa.me/573114759768" target="_blank" class="boton-social">🟢 WhatsApp</a>
+            <a href="https://web.facebook.com/MyMsolucionesdetecnologia/" target="_blank" class="boton-social">🔵 Facebook</a>
+            <a href="https://youtube.com" target="_blank" class="boton-social">🔴 YouTube</a>
+            <a href="https://tiktok.com" target="_blank" class="boton-social">🎵 TikTok</a>
+            <a href="https://x.com" target="_blank" class="boton-social">⚫ X</a>
+        </div>
     </div>
 </div>
-<div style="text-align:right; margin-top:20px;">
-    <p style="color:#444; font-size:13px;"><b>LINA Core V20.0</b> | © {ahora_bog.year} <b>ING. Gerardo Martinez Lemus</b></p>
-</div>
-""", unsafe_allow_html=True)
+"""
+st.markdown(html_barra, unsafe_allow_html=True)
+st.markdown(f'<p style="text-align:right; font-size:11px; margin-top:10px;">LINA Core V20.0 | © {ahora_bog.year} Gerardo Martinez Lemus</p>', unsafe_allow_html=True)
