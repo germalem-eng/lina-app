@@ -2,7 +2,7 @@ import streamlit as st
 import os
 import base64
 import datetime
-import tempfile
+import urllib.parse
 from streamlit_autorefresh import st_autorefresh
 from fpdf import FPDF # Recuerda instalar: pip install fpdf2
 
@@ -23,6 +23,10 @@ def get_image_base64(path):
         with open(path, "rb") as img_file:
             return base64.b64encode(img_file.read()).decode()
     return ""
+
+def generar_enlace_whatsapp(telefono, mensaje):
+    mensaje_codificado = urllib.parse.quote(mensaje)
+    return f"https://wa.me/{telefono}?text={mensaje_codificado}"
 
 fondo_b64 = get_image_base64("Logos/fondo.jpg")
 logo_robot_b64 = get_image_base64("Logos/logo_robot_2007.jpg")
@@ -54,10 +58,15 @@ st.markdown(f"""
         border: 2px solid #666; border-radius: 15px; padding: 20px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }}
-    .cuadro-total {{
+    .cuadro-total, .cuadro-inversion {{
         background: white; padding: 25px; border-radius: 15px; border: 4px solid #00FFFF;
         text-align: center; max-width: 500px; margin: 20px auto;
         box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }}
+    .boton-social {{
+        text-decoration: none; color: white !important; padding: 8px 15px;
+        border-radius: 8px; font-size: 13px; margin: 5px; display: inline-block;
+        font-weight: bold;
     }}
 </style>
 """, unsafe_allow_html=True)
@@ -91,58 +100,47 @@ for i, opcion in enumerate(opciones):
 
 st.divider()
 
-# --- 7. MANTENIMIENTO PREVENTIVO (DETALLE TÉCNICO) ---
+# --- 7. SECCIONES DINÁMICAS ---
+
+# --- MANTENIMIENTO PREVENTIVO ---
 if st.session_state.seccion == "PREVENTIVO":
     st.header("🛠️ Mantenimiento Preventivo Especializado")
-    
     col_info, col_check = st.columns(2)
-    
     with col_info:
         st.subheader("📋 Datos del Equipo")
         tipo_equipo = st.selectbox("Tipo de Producto:", ["Computador de Mesa", "Portátil", "Todo en Uno", "Tablet", "Electrodoméstico"], key="prev_tipo")
         marca = st.text_input("Marca del Producto:", key="prev_marca")
         specs = st.text_area("Especificaciones:", key="prev_specs")
         modalidad = st.radio("Modalidad:", ["Virtual", "En Oficina", "A Domicilio"], horizontal=True, key="prev_mod")
-
     with col_check:
         st.subheader("✅ Checklist")
         st.checkbox("¿Enciende correctamente?", key="chk_1")
         st.checkbox("Limpieza interna", key="chk_2")
         st.checkbox("Software / Temporales", key="chk_3")
-        
-        st.subheader("🔍 Diagnóstico")
         resultado = st.radio("Estado:", ["Todo está OK", "Requiere Mantenimiento Correctivo"], key="prev_res")
-        
         if resultado == "Requiere Mantenimiento Correctivo":
             st.warning("⚠️ Se recomienda pasar a la sección CORRECTIVO para cotizar reparación.")
 
-    # Cálculo Preventivo
     total = 40000 + (20000 if modalidad == "A Domicilio" else 0)
     st.markdown(f'<div class="cuadro-total"><h4>Inversión Preventivo</h4><h1 style="color:#008fb3;">$ {total:,.0f}</h1></div>', unsafe_allow_html=True)
 
-# --- NUEVA SECCIÓN: MANTENIMIENTO CORRECTIVO ---
+# --- MANTENIMIENTO CORRECTIVO ---
 elif st.session_state.seccion == "CORRECTIVO":
     st.header("🔧 Mantenimiento Correctivo y Reparación")
-    
     col_diag, col_cotiza = st.columns(2)
-    
     with col_diag:
         st.subheader("🛠️ Informe Técnico de Falla")
-        falla_reportada = st.text_area("Descripción de la Falla:", placeholder="Ej: No da video, pantalla azul, bisagras rotas...")
-        repuestos = st.text_area("Repuestos Requeridos:", placeholder="Ej: Disco SSD 480GB, Pantalla LED 14'', Teclado...")
+        falla_reportada = st.text_area("Descripción de la Falla:", placeholder="Ej: No da video...")
+        repuestos = st.text_area("Repuestos Requeridos:", placeholder="Ej: Disco SSD...")
         mod_corr = st.radio("Modalidad del Servicio:", ["En Oficina", "A Domicilio"], horizontal=True, key="corr_mod")
-
     with col_cotiza:
         st.subheader("💰 Cotización de Reparación")
         costo_mano_obra = st.number_input("Valor Mano de Obra ($):", min_value=0, value=60000, step=5000)
         costo_repuestos = st.number_input("Valor Total Repuestos ($):", min_value=0, value=0, step=10000)
         recargo_corr = 20000 if mod_corr == "A Domicilio" else 0
-        
         total_correctivo = costo_mano_obra + costo_repuestos + recargo_corr
-        
         st.info(f"El valor de los repuestos es un estimado basado en el mercado actual.")
 
-    # Cuadro visual del Correctivo
     st.markdown(f"""
     <div style="background: white; padding: 25px; border-radius: 15px; border: 3px solid #FF4B4B; text-align: center; max-width: 500px; margin: 20px auto; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
         <h4 style="margin:0; color:#444;">Presupuesto de Reparación (Correctivo)</h4>
@@ -155,8 +153,9 @@ elif st.session_state.seccion == "CORRECTIVO":
     """, unsafe_allow_html=True)
 
     if st.button("📁 Registrar Orden de Reparación"):
-        st.success("Orden de mantenimiento correctivo registrada en el sistema L.I.N.A.")
-# --- 8. SECCIÓN GESTIÓN (CARTERA Y DEFENSA) ---
+        st.success("Orden registrada en el sistema L.I.N.A.")
+
+# --- BLOQUE 8: SECCIÓN GESTIÓN (CARTERA Y DEFENSA) ---
 elif st.session_state.seccion == "GESTIÓN":
     st.header("⚖️ Gestión de Cartera y Defensa del Consumidor")
     st.warning("🛡️ Protocolos basados en Ley 2300/23, Ley 1266/08, Ley 2157/21 y Estatuto del Consumidor.")
@@ -172,7 +171,6 @@ elif st.session_state.seccion == "GESTIÓN":
             entidad_g = st.text_input("Entidad (Ej: ASLEGAL):")
             monto_deuda = st.number_input("Monto que reclaman ($):", value=1851000)
             capital_real = st.number_input("Capital Real Adeudado ($):", value=150000)
-        
         with col_g2:
             st.subheader("📍 Configuración")
             tipo_g = st.radio("Tipo de Cobro:", ["Solo Consulta ($40.000)", "Gestión Integral (10% del Ahorro)"])
@@ -186,16 +184,17 @@ elif st.session_state.seccion == "GESTIÓN":
         
         if st.button("📲 Enviar Cotización"):
             msg_g = f"Hola {nom_g}, presupuesto para gestión ante {entidad_g}: ${total_g:,.0f}."
-            st.markdown(f'<a href="{generar_enlace_whatsapp("573114759768", msg_g)}" target="_blank" class="btn-auto" style="background:#25D366;">📲 Enviar por WhatsApp</a>', unsafe_allow_html=True)
+            st.markdown(f'<a href="{generar_enlace_whatsapp("573114759768", msg_g)}" target="_blank" class="boton-social" style="background:#25D366; display:block; text-align:center;">📲 Enviar por WhatsApp</a>', unsafe_allow_html=True)
 
     with tabs[1]:
         st.subheader("🚫 Radicación de Reclamación Formal")
         texto_h = f"""YO, {nom_g.upper() if nom_g else 'EL CLIENTE'}, IDENTIFICADO CON LA CC 79951815, EXIJO A {entidad_g.upper() if entidad_g else 'LA ENTIDAD'} LA ELIMINACIÓN DEL REPORTE NEGATIVO POR PRESCRIPCIÓN (MORA SUPERIOR A 7 AÑOS - LEY 2157/21). REVOCATORIA DE DÉBITO AUTOMÁTICO LEY 1581."""
         st.text_area("📄 Texto para Radicación:", texto_h, height=200)
         if st.button("📲 Enviar Reclamación Directa"):
-            st.markdown(f'<a href="{generar_enlace_whatsapp("", texto_h)}" target="_blank" class="btn-auto" style="background:#25D366;">📲 Enviar por WhatsApp</a>', unsafe_allow_html=True)
+            st.markdown(f'<a href="{generar_enlace_whatsapp(tel_g, texto_h)}" target="_blank" class="boton-social" style="background:#25D366; display:block; text-align:center;">📲 Enviar por WhatsApp</a>', unsafe_allow_html=True)
 
     with tabs[2]:
+        # --- BLOQUE 9: SUSTENTO LEGAL ---
         st.subheader("📚 Sustento Legal")
         st.markdown("""
         * **Ley 2300/23:** Dejen de fregar (Horarios de cobro y canales).
@@ -204,10 +203,9 @@ elif st.session_state.seccion == "GESTIÓN":
         * **Art. 305 CP:** Delito de Usura (Intereses por encima del tope legal).
         """)
 
-# --- 9. SECCIÓN PRIVADO ---
+# --- SECCIÓN PRIVADO ---
 elif st.session_state.seccion == "PRIVADO":
     st.header("🏠 Gestión Privada de Cuentas")
-    st.info("📊 Control interno de utilidades y saldos.")
     pin = st.text_input("Introduzca PIN de Seguridad:", type="password")
     if pin == "2007":
         st.success("Acceso Autorizado")
@@ -215,30 +213,21 @@ elif st.session_state.seccion == "PRIVADO":
         with col_v1:
             st.subheader("💰 Ingresos")
             cliente_p = st.text_input("Nombre del Cliente:")
-            cobrado = st.number_input("Total Cobrado al Cliente ($):", min_value=0)
+            cobrado = st.number_input("Total Cobrado ($):", min_value=0)
             abono = st.number_input("Abono Recibido ($):", min_value=0)
-            metodo = st.selectbox("Método:", ["Efectivo", "Nequi", "Daviplata", "Transferencia"])
         with col_v2:
             st.subheader("📉 Egresos")
-            costo_r = st.number_input("Costo Real Repuesto (Su costo) $:", min_value=0)
-            gastos = st.number_input("Otros Gastos (Pasajes/Envío) $:", min_value=0)
-        
+            costo_r = st.number_input("Costo Real Repuesto ($):", min_value=0)
+            gastos = st.number_input("Otros Gastos ($):", min_value=0)
         utilidad = cobrado - costo_r - gastos
         saldo_p = cobrado - abono
-        
         st.divider()
         c1, c2, c3 = st.columns(3)
         c1.metric("📈 Utilidad Real", f"$ {utilidad:,.0f}")
-        c2.metric("💵 Saldo Pendiente", f"$ {saldo_p:,.0f}", delta=f"-{saldo_p:,.0f}", delta_color="inverse")
+        c2.metric("💵 Saldo Pendiente", f"$ {saldo_p:,.0f}")
         with c3:
             if saldo_p <= 0 and cobrado > 0: st.success("✅ PAGADO")
-            elif abono > 0: st.warning("⏳ ABONADO")
             else: st.error("❌ PENDIENTE")
-            
-        if st.button("💾 Registrar en Log"):
-            st.write(f"📝 **Registro:** {cliente_p} | Utilidad: ${utilidad:,.0f} | Saldo: ${saldo_p:,.0f}")
-            st.balloons()
-            
     elif pin != "":
         st.error("PIN Incorrecto")
 
@@ -248,18 +237,16 @@ st.markdown('<div class="alerta-amarilla">⚠️ NOTA: Honorarios por éxito (10
 
 html_barra = f"""
 <div class="barra-metalica">
-    <div class="reloj-bogota">
-        <span>📍 BOGOTÁ, COLOMBIA</span>
-        <span>📅 {ahora_bog.strftime('%d/%m/%Y')} | 🕒 {ahora_bog.strftime('%H:%M:%S')}</span>
+    <div style="text-align:center; font-family:monospace; font-weight:bold; color:#333; margin-bottom:10px;">
+        📍 BOGOTÁ, COLOMBIA | 📅 {ahora_bog.strftime('%d/%m/%Y')} | 🕒 {ahora_bog.strftime('%H:%M:%S')}
     </div>
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
         <div style="font-weight: bold; color: #222; font-size: 13px;">🌐 REDES OFICIALES:</div>
-        <div style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
-            <a href="https://wa.me/573114759768" target="_blank" class="boton-social">🟢 WhatsApp</a>
-            <a href="https://web.facebook.com/MyMsolucionesdetecnologia/" target="_blank" class="boton-social">🔵 Facebook</a>
-            <a href="https://youtube.com" target="_blank" class="boton-social">🔴 YouTube</a>
-            <a href="https://tiktok.com" target="_blank" class="boton-social">🎵 TikTok</a>
-            <a href="https://x.com" target="_blank" class="boton-social">⚫ X</a>
+        <div style="display: flex; flex-wrap: wrap;">
+            <a href="https://wa.me/573114759768" target="_blank" class="boton-social" style="background:#25D366;">WhatsApp</a>
+            <a href="https://web.facebook.com/MyMsolucionesdetecnologia/" target="_blank" class="boton-social" style="background:#1877F2;">Facebook</a>
+            <a href="#" target="_blank" class="boton-social" style="background:#FF0000;">YouTube</a>
+            <a href="#" target="_blank" class="boton-social" style="background:#000000;">TikTok</a>
         </div>
     </div>
 </div>
